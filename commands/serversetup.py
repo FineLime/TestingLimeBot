@@ -14,7 +14,7 @@ class ServerSetup(commands.Cog):
     async def muterole(self, ctx, muterole:str): 
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
-            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", "None", "")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "")
         
         server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         mutedrole = get(ctx.guild.roles, id=int(muterole))
@@ -36,7 +36,7 @@ class ServerSetup(commands.Cog):
     async def logschannel(self, ctx, ch:str): 
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
-            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", "None", "")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "")
         
         server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         logsc = get(ctx.guild.channels, id=int(ch))
@@ -58,7 +58,7 @@ class ServerSetup(commands.Cog):
     async def banword(self, ctx, word):
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
-            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", "None", "")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, banned_words) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "")
         
         server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         banned_words = server['banned_words']
