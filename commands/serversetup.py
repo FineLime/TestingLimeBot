@@ -78,7 +78,7 @@ class ServerSetup(commands.Cog):
             return
         server = server[0]
         for word in server['banned_words'].split(): 
-            if word in message.content: 
+            if word in message.content.lower(): 
                 await message.delete()
                 break;
         
