@@ -51,13 +51,13 @@ class RR(commands.Cog):
 
         if random.randint(1, 5) > 0: 
             if role != "None":
-                await ctx.send(f":gun: BANG! It was the bullet, I'll revive you but it may take some time!")
+                await ctx.send(f":gun: BANG! I put {ctx.author.mention} out of their misery, i'll revive them soon.")
                 await ctx.author.add_roles(role)
                 await asyncio.sleep(300)
                 await ctx.author.remove_roles(role)
                 await ctx.send(f"{ctx.author.mention} has been revived!")
             else:    
-                await ctx.send(f":gun: BANG! It was the bullet but don't worry, I revived you!")
+                await ctx.send(f":gun: BANG! I put you out of your misery but I have to revive you.")
             
        
         
