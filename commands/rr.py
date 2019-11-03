@@ -37,7 +37,7 @@ class RR(commands.Cog):
         else:
             await ctx.send(f":gun: BANG! The gods want you to live another day, it was a blank!")
     
-    @command.command(asliases=["kms", "killme"])
+    @commands.command(asliases=["kms", "killme"])
     @commands.cooldown(1, 10, BucketType.user)
     async def suicide(self, ctx): 
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
