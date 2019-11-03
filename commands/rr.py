@@ -23,7 +23,7 @@ class RR(commands.Cog):
             role = get(ctx.guild.roles, id=int(server['mutedrole'])) 
         else:
             role = "None"
-
+      
         if random.randint(1, 5) == 3: 
             if role != "None":
                 await ctx.send(f":gun: BANG! It was the bullet, I'll revive you but it may take some time!")
@@ -36,6 +36,30 @@ class RR(commands.Cog):
                 
         else:
             await ctx.send(f":gun: BANG! The gods want you to live another day, it was a blank!")
+    
+    @command.command(asliases=["kms", "killme"])
+    @commands.cooldown(1, 10, BucketType.user)
+    async def suicide(self, ctx): 
+        server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        if len(server) == 0: 
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", "None")
+        server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id)) 
+        if server['mutedrole'] != "None": 
+            role = get(ctx.guild.roles, id=int(server['mutedrole'])) 
+        else:
+            role = "None"
+
+        if random.randint(1, 5) > 0: 
+            if role != "None":
+                await ctx.send(f":gun: BANG! It was the bullet, I'll revive you but it may take some time!")
+                await ctx.author.add_roles(role)
+                await asyncio.sleep(300)
+                await ctx.author.remove_roles(role)
+                await ctx.send(f"{ctx.author.mention} has been revived!")
+            else:    
+                await ctx.send(f":gun: BANG! It was the bullet but don't worry, I revived you!")
+            
+       
         
 def setup(client):
     client.add_cog(RR(client))
