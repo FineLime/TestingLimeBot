@@ -11,7 +11,10 @@ class Slots(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def slots(self, ctx): 
-
+        
+        if ctx.author.id == 421830300637593601:
+            await ctx.send("Unblock Lime and stop being a bully to use this command!") 
+            return
         choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
         choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
         choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
