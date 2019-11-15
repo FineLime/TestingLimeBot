@@ -17,9 +17,9 @@ class Slots(commands.Cog):
             await self.client.pg_con.execute("INSERT INTO users (id, coins, inventory, slotwins) VALUES ($1, 0, '', 0)", str(ctx.author.id))
         user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         try: 
-            await ctx.send(f"{ctx.mention}, you have {int(user['slotwins'])} wins")
+            await ctx.send(f"{ctx.author.mention}, you have {int(user['slotwins'])} wins")
         except: 
-            await ctx.send(f"{ctx.mention}, you don't have any wins! Hurry up and get some!")
+            await ctx.send(f"{ctx.author.mention}, you don't have any wins! Hurry up and get some!")
                            
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
