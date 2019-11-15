@@ -2,16 +2,33 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 import random
+import asyncpg 
 
 class Slots(commands.Cog): 
 
     def __init__(self, client):
         self.client = client
-
+    
+    @command.command()
+    @command.cooldown(1, 10, BucketType.user) 
+    async def slotswins(self, ctx): 
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
+        if not user: 
+            await self.client.pg_con.execute("INSERT INTO users (id, coins, inventory, slotwins) VALUES ($1, 0, '', 0)", str(ctx.author.id))
+        user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
+        try: 
+            await ctx.send(f"{ctx.mention}, you have {int(user['slotwins'])} wins")
+        except: 
+            await ctx.send(f"{ctx.mention}, you don't have any wins! Hurry up and get some!")
+                           
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def slots(self, ctx): 
         
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
+        if not user: 
+            await self.client.pg_con.execute("INSERT INTO users (id, coins, inventory, slotwins) VALUES ($1, 0, '', 0)", str(ctx.author.id))
+        user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         if ctx.author.id == 421830300637593601:
             await ctx.send("Unblock Lime and stop being a bully to use this command!") 
             return
@@ -42,7 +59,10 @@ class Slots(commands.Cog):
         win = "Sorry, you lost!"
         if slots1 == slots2 == slots3: 
             win = "Winner!!! You won nothing! Congratz!"
-
+            try: 
+                await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", str(int(user['slotwins'])+1), str(ctx.author.id))
+            except:
+                await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", 1, str(ctx.author.id))
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
 
 
