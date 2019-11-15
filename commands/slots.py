@@ -9,8 +9,8 @@ class Slots(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @command.command()
-    @command.cooldown(1, 10, BucketType.user) 
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user) 
     async def slotswins(self, ctx): 
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         if not user: 
