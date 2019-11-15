@@ -13,14 +13,14 @@ class Slots(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user) 
     async def slotsleaderboard(self, ctx): 
         leaderboard = await self.client.pg_con.fetch("SELECT * FROM users ORDER BY slotwins DESC")
-        await ctx.send(f"```1) {discord.utils.get(ctx.guild.members, id=leaderboard[0].id).name}\n{discord.utils.get(ctx.guild.members, id=leaderboard[1].id).name}\n{discord.utils.get(ctx.guild.members, id=leaderboard[2].id).name}```")
+        await ctx.send(f"```1) {leaderboard[0]['name']}\n2){leaderboard[1]['name']}\n3){leaderboard[2]['name']}```")
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user) 
     async def slotswins(self, ctx): 
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         if not user: 
-            await self.client.pg_con.execute("INSERT INTO users (id, coins, inventory, slotwins) VALUES ($1, 0, '', 0)", str(ctx.author.id))
+            await self.client.pg_con.execute("INSERT INTO users (id, name, coins, inventory, slotwins) VALUES ($1, $2, 0, '', 0)", str(ctx.author.id), str(ctx.author.name))
         user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         try: 
             await ctx.send(f"{ctx.author.mention}, you have {int(user['slotwins'])} wins")
@@ -33,7 +33,7 @@ class Slots(commands.Cog):
         
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         if not user: 
-            await self.client.pg_con.execute("INSERT INTO users (id, coins, inventory, slotwins) VALUES ($1, 0, '', 0)", str(ctx.author.id))
+            await self.client.pg_con.execute("INSERT INTO users (id, name, coins, inventory, slotwins) VALUES ($1, $2, 0, '', 0)", str(ctx.author.id), str(ctx.author.name))
         user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
         if ctx.author.id == 421830300637593601:
             await ctx.send("Unblock Lime and stop being a bully to use this command!") 
