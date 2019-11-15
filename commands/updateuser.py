@@ -16,6 +16,7 @@ class updateuser(commands.Cog):
             await self.client.pg_con.execute("INSERT INTO users (id, name, coins, inventory, slotwins) VALUES ($1, $2, 0, '', 0)", str(ctx.author.id), str(ctx.author.name))
             await ctx.send("You have been updated!")
         await self.client.pg_con.execute("UPDATE users SET name = $1", str(ctx.author.name))
+        await ctx.send("You have been updated!")
 
         
 def setup(client):
