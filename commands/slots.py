@@ -8,6 +8,12 @@ class Slots(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user) 
+    async def slotsleaderboard(self, ctx): 
+        leaderboard = await self.client.pg_con.fetch("SELECT * FROM users ORDER BY slotwins DESC", str(ctx.author.id))
+        await ctx.send(f"```1) {discord.utils.get(ctx.guild.members, id=leaderboard[0].id).name}\n{discord.utils.get(ctx.guild.members, id=leaderboard[1].id).name}\n{discord.utils.get(ctx.guild.members, id=leaderboard[2].id).name}```")
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user) 
