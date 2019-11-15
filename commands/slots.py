@@ -13,7 +13,7 @@ class Slots(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user) 
     async def slotsleaderboard(self, ctx): 
         leaderboard = await self.client.pg_con.fetch("SELECT * FROM users ORDER BY slotwins DESC")
-        await ctx.send(f"```1) {leaderboard[0]['name']}\n2){leaderboard[1]['name']}\n3){leaderboard[2]['name']}```")
+        await ctx.send(f"```1) {leaderboard[0]['name']}\n2) {leaderboard[1]['name']}\n3) {leaderboard[2]['name']}```")
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user) 
