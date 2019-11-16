@@ -65,7 +65,7 @@ class Slots(commands.Cog):
         win = "Sorry, you lost!"
         if slots1 == slots2 == slots3: 
             win = "Winner!!! You won nothing! Congratz!"
-            try: 
+            if str(user['slotwins']) != "None": 
                 await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", str(int(user['slotwins'])+1), str(ctx.author.id))
             except:
                 await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", 1, str(ctx.author.id))
