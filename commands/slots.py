@@ -35,7 +35,7 @@ class Slots(commands.Cog):
         if not user: 
             await self.client.pg_con.execute("INSERT INTO users (id, name, coins, inventory, slotwins) VALUES ($1, $2, 0, '', 0)", str(ctx.author.id), str(ctx.author.name))
         user = await self.client.pg_con.fetchrow("SELECT * FROM users WHERE id = $1", str(ctx.author.id))
-        if ctx.author.id == 421830300637593601:
+        if ctx.author.id == 4637593601:
             await ctx.send("Unblock Lime and stop being a bully to use this command!") 
             return
         choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
