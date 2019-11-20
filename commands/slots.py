@@ -68,7 +68,7 @@ class Slots(commands.Cog):
             if str(user['slotwins']) != "None": 
                 await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", str(int(user['slotwins'])+1), str(ctx.author.id))
             else:
-                await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", 1, str(ctx.author.id))
+                await self.client.pg_con.execute("UPDATE users SET slotwins = $1 WHERE id=$2", "1", str(ctx.author.id))
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
 
 
