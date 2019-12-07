@@ -14,7 +14,7 @@ class Fun(commands.Cog):
         if user == "None": 
             user = ctx.author
         
-        embed = discord.Embed(title=f"{user.name}#{user.discriminator}, color=0x00ff00)
+        embed = discord.Embed(title=f"{user.name}#{user.discriminator}", color=0x00ff00)
         embed.set_image(url=user.avatar_url)
         embed.set_footer(text=f"Requested by {ctx.author.name}#{ctx.author.discriminator}")
         await ctx.send(embed=embed)
