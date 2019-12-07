@@ -17,7 +17,7 @@ class Fun(commands.Cog):
         embed = discord.Embed(title=user.mention, color=0x00ff00)
         embed.set_image(url=user.avatar_url)
         embed.set_footer(text=f"Requested by {ctx.author.mention}")
-        await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
+        await ctx.send(embed=embed)
 
         
 def setup(client):
