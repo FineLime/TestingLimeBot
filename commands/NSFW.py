@@ -10,7 +10,7 @@ class Nsfw(commands.Cog):
         self.client = client
 
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 1, BucketType.user)
     async def e621(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
         search = tags.split()
