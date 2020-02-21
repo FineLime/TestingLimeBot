@@ -13,7 +13,9 @@ class Nsfw(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def e621(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
-        results = yippi.search(tags.split())
+        search = tags.split()
+        print(search)
+        results = yippi.search(search)
         await ctx.send(random.choice(results).file_url)
         
       
