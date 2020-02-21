@@ -14,8 +14,7 @@ class Nsfw(commands.Cog):
     async def e621(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
         search = tags.split()
-        print(search)
-        results = yippi.search(search)
+        results = yippi.search.post(search)
         await ctx.send(random.choice(results).file_url)
         
       
