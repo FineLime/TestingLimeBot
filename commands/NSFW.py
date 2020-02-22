@@ -12,7 +12,6 @@ class Nsfw(commands.Cog):
         self.client = client
 
     @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
     async def e621(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
         search = tags.split()
@@ -20,7 +19,6 @@ class Nsfw(commands.Cog):
         await ctx.send(random.choice(results).file_url)
     
     @commands.command()
-    @commands.cooldown(1, 1, BucketType.user)
     async def rule34(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
         r34 = rule34.Rule34(self.client.loop)
