@@ -23,8 +23,8 @@ class Nsfw(commands.Cog):
     @commands.cooldown(1, 1, BucketType.user)
     async def rule34(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
-        rule34 = rule34.Rule34(self.client.loop)
-        images = await rule34.getImagesURL(tags=tags)
+        r34 = rule34.Rule34(self.client.loop)
+        images = await r34.getImagesURL(tags=tags)
         await ctx.send(random.choice(images))
         
       
