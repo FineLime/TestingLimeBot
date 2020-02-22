@@ -4,12 +4,13 @@ import rule34
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 import random
-rule34 = rule34.Sync()
+r34 = 1
 
 class Nsfw(commands.Cog): 
 
     def __init__(self, client):
         self.client = client
+        r34 = rule34.Rule34(client)
 
     @commands.command()
     @commands.cooldown(1, 1, BucketType.user)
@@ -23,7 +24,7 @@ class Nsfw(commands.Cog):
     @commands.cooldown(1, 1, BucketType.user)
     async def rule34(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
-        images = rule34.getImages(tags=tags)
+        images = r34.getImages(tags=tags)
         await ctx.send(random.choice(images))
         
       
