@@ -1,3 +1,4 @@
 discord.py==1.2.5
 asyncpg==0.18.3
 yippi
+rule34
