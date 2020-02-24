@@ -21,9 +21,17 @@ class Nsfw(commands.Cog):
     @commands.command()
     async def rule34(self, ctx, *, tags): 
       if ctx.channel.is_nsfw(): 
-        r34 = rule34.Rule34(self.client.loop)
-        images = await r34.getImageURLS(tags=tags)
-        await ctx.send(random.choice(images))
+        badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
+        allowed = True
+        for i in badwords:
+            if badwords[i] in tags.lower()
+                allowed = False
+        if allowed == False:
+            r34 = rule34.Rule34(self.client.loop)
+            images = await r34.getImageURLS(tags=tags)
+            await ctx.send(random.choice(images))
+        else:
+            await ctx.send("Sorry, those tags are not allowed")
         
       
 
