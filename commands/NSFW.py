@@ -24,7 +24,7 @@ class Nsfw(commands.Cog):
         badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
         allowed = True
         for i in badwords:
-            if i in tags.lower()
+            if i in tags.lower():
                 allowed = False
         if allowed == False:
             r34 = rule34.Rule34(self.client.loop)
