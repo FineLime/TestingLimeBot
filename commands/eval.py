@@ -12,7 +12,7 @@ class Eval(commands.Cog):
     @commands.is_owner()
     async def eval(self, ctx, *, e):
         try: 
-            await ctx.send(f'`{str(eval(e))}`')
+            await ctx.send(f'{discord.utils.escape_mentions(str(eval(e)))}`')
         except Exception as e: 
             await ctx.send(f"Failed to run the code: \n{e}")
     
