@@ -13,7 +13,7 @@ class _8ball(commands.Cog):
     @commands.command(aliases=["8ball"])
     @commands.cooldown(1, 10, BucketType.user)
     async def _8ball(self, ctx, *, question): 
-        await ctx.send(f'Question: `{question}`\nAnswer: `{random.choice(choices)}`')
+        await ctx.send(f'**Question**: {discord.utils.escape_markdown(discord.utils.escape_mentions(question))} \n**Answer**: {random.choice(choices)}')
         
 def setup(client):
     client.add_cog(_8ball(client))
