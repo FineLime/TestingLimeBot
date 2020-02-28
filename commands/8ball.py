@@ -20,7 +20,7 @@ class _8ball(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("**Usage:** ;8ball [Question]")
         else:
-            await ctx.send("**Unknown error while running this command, Please contact Lime#6045. \nHow on earth do you break 8ball?")
+            await ctx.send(f"**Unknown error while running this command, Please contact @Lime#6045. \nHow on earth do you break 8ball? \n{error}")
     
 def setup(client):
     client.add_cog(_8ball(client))
