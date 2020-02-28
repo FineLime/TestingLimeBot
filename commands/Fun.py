@@ -18,6 +18,11 @@ class Fun(commands.Cog):
         embed.set_image(url=user.avatar_url)
         embed.set_footer(text=f"Requested by {ctx.author.name}#{ctx.author.discriminator}")
         await ctx.send(embed=embed)
+        
+    @avatar.error
+    async def avatar_error(self, ctx, error):
+        if isinstance(error, commands.badArgument):
+            await ctx("I couldn't find a member by that name.")
 
         
 def setup(client):
