@@ -19,6 +19,8 @@ class _8ball(commands.Cog):
     async def _8ball_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("**Usage:** ;8ball [Question]")
+        elif isinstance(error, commands.CommandOnCooldown): 
+            return
         else:
             await ctx.send(f"**Unknown error while running this command, Please contact @Lime#6045. \nHow on earth do you break 8ball? \n{error}")
     
