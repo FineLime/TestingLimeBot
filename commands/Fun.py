@@ -23,6 +23,11 @@ class Fun(commands.Cog):
     async def avatar_error(self, ctx, error):
         if isinstance(error, commands.badArgument):
             await ctx("I couldn't find a member by that name.")
+            
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def penissize(self, ctx, user:discord.Member = ctx.author): 
+        await ctx.send(f"{user.name}'s dick size is: 8{'='*user.id[-1:]}D")
 
         
 def setup(client):
