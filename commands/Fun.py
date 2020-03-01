@@ -31,7 +31,7 @@ class Fun(commands.Cog):
         if user == "None": 
             user = ctx.author
             
-        await ctx.send(f"{user.name}'s dick size is: 8{'='*user.id[-1:]}D")
+        await ctx.send(f"{user.name}'s dick size is: 8{'='*int(str(user.id)[-1:])}D")
 
         
 def setup(client):
