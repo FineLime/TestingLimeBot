@@ -13,7 +13,7 @@ class Suggest(commands.Cog):
     async def suggest(self, ctx, *, suggestion): 
         server = get(self.client.guilds, id=599677918834327563)
         channel = get(server.channels, id=600798153687695371)
-        await channel.send(f"**{ctx.author}** suggeted:\n`{suggestion}`")
+        await channel.send(f"**{ctx.author}** suggeted:\n{discord.utils.clean_content(discord.utils.escape_markdown(suggestion))}")
         
 def setup(client):
     client.add_cog(Suggest(client))
