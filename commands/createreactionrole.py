@@ -46,7 +46,16 @@ class Addreactionrole(commands.Cog):
                 await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
         await ctx.send("Successfully created a reaction role! :white_check_mark:")
         
-
+    @commands.command()
+    @commands.has_permissions(manage_guild=True)
+    async def deletereactionrole(self, ctx, msgid:str, emoji:str):
+        try:
+            await self.client.pg_con.execute("DELETE FROM reactionroles WHERE messageid=$1 AND emoji=$2", msgid, emoji)
+            msg = await ctx.channel.fetch_message(int(msgid))
+            msg.clear_reaction(emoji)
+            await ctx.send("Reaction role successfully deleted")
+        except:
+            await ctx.send("Failed to delete the reaction role")
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload): 
