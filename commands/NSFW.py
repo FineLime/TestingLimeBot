@@ -26,7 +26,7 @@ class Nsfw(commands.Cog):
         for i in badwords:
             if i in tags.lower():
                 allowed = False
-        if allowed == False:
+        if allowed == True:
             r34 = rule34.Rule34(self.client.loop)
             images = await r34.getImageURLS(tags=tags)
             await ctx.send(random.choice(images))
