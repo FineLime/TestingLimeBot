@@ -54,8 +54,11 @@ class Addreactionrole(commands.Cog):
             message = await ctx.channel.fetch_message(int(msgid))
         except:
             print("oof")
-        await message.clear_reaction(emoji)
-        await message.add_reaction("👍")
+        try:
+            await message.clear_reaction(emoji)
+            await message.add_reaction("👍")
+        await ctx.send(type(message))
+        await ctx.send(message.__dir__())
         await ctx.send("Reaction role successfully deleted")
 
     @commands.Cog.listener()
