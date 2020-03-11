@@ -57,6 +57,8 @@ class Addreactionrole(commands.Cog):
         try:
             await message.clear_reaction(emoji)
             await message.add_reaction("👍")
+        except:
+            print("nope")
         await ctx.send(type(message))
         await ctx.send(message.__dir__())
         await ctx.send("Reaction role successfully deleted")
