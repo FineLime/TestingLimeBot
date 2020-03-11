@@ -55,8 +55,8 @@ class Addreactionrole(commands.Cog):
         except:
             print("oof")
         try:
-            await message.clear_reaction(emoji)
-            await message.add_reaction("👍")
+            await message._clear_reaction(emoji)
+            await message._add_reaction("👍")
         except:
             print("nope")
         await ctx.send(type(message))
