@@ -62,7 +62,7 @@ class Addreactionrole(commands.Cog):
             print("nope")
         await ctx.send(type(message))
         await ctx.send(message.__dir__())
-        wait ctx.send(message.reactions)
+        await ctx.send(message.reactions)
         await ctx.send("Reaction role successfully deleted")
 
     @commands.Cog.listener()
