@@ -51,10 +51,11 @@ class Addreactionrole(commands.Cog):
     async def deletereactionrole(self, ctx, msgid:str, emoji:str):
         await self.client.pg_con.execute("DELETE FROM reactionroles WHERE messageid=$1 AND emoji=$2", msgid, emoji)
         try:
-            msg = await ctx.channel.fetch_message(int(msgid))
+            message = await ctx.channel.fetch_message(int(msgid))
         except:
             print("oof")
-        await msg.clear_reaction(emoji)
+        await message.clear_reaction(emoji)
+        await message.add_reaction("👍")
         await ctx.send("Reaction role successfully deleted")
 
     @commands.Cog.listener()
