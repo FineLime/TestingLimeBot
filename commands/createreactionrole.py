@@ -56,11 +56,11 @@ class Addreactionrole(commands.Cog):
             print("oof")
         try:
             await discord.utils.get(message.reactions, emoji=emoji).clear()
+            await discord.utils.get(message.reactions, emoji=emoji).__dir__()
           
         except:
             print("nope")
             
-        await discord.utils.get(message.reactions, emoji=emoji).__dir__()
         await ctx.send("Reaction role successfully deleted")
 
     @commands.Cog.listener()
