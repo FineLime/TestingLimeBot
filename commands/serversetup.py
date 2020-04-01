@@ -73,6 +73,7 @@ class ServerSetup(commands.Cog):
          
     @commands.Cog.listener() 
     async def on_message(self, message):
+        await message.react("🤡")
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(message.guild.id))
         if len(server) == 0: 
             return
