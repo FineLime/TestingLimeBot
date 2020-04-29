@@ -8,7 +8,7 @@ class Poll(commands.Cog):
         self.client = client
 
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.has_permissions(manage_messages=True)
     async def poll(self, ctx, *, poll): 
         #Poll format: ;poll Should x be allowed to join? | :Zero:=Yes :One:=No
         poll = poll.split(" | ")
