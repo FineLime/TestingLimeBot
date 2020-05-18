@@ -16,7 +16,7 @@ class Nsfw(commands.Cog):
         search = tags.replace(' ', '+')
         headers = {
             
-            'User-Agent'='LimeBot (By FineLime)'   
+            'User-Agent':'LimeBot (By FineLime)'   
             
         }
         r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', 'yjWn25kgWyi5sZepWVBezW2n'))
