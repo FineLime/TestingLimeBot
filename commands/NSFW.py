@@ -1,4 +1,5 @@
 import discord
+import os
 import rule34
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
@@ -19,7 +20,7 @@ class Nsfw(commands.Cog):
             'User-Agent':'LimeBot (By FineLime)'   
             
         }
-        r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', 'yjWn25kgWyi5sZepWVBezW2n'))
+        r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', os.getenv('e621_key')))
         posts = r.json()['posts']
         await ctx.send(random.choice(posts)['file']['url'])
     
