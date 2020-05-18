@@ -21,7 +21,7 @@ class Nsfw(commands.Cog):
         }
         r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', 'yjWn25kgWyi5sZepWVBezW2n'))
         posts = r.json()['posts']
-        await ctx.send(random.choice(posts)['url'])
+        await ctx.send(random.choice(posts)['file']['url'])
     
     @commands.command()
     async def rule34(self, ctx, *, tags): 
