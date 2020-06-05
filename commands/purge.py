@@ -16,7 +16,7 @@ class Purge(commands.Cog):
     async def purgebanana(self, ctx, amount:int, text): 
         
         def isText(m): 
-            return m.message == text
+            return m.content == text
        
         await ctx.channel.purge(limit=amount, check=isText)
         
