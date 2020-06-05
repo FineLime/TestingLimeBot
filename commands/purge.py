@@ -8,6 +8,7 @@ class Purge(commands.Cog):
     
     def isText(m, text): 
         return m.message == text
+        #lol
         
     @commands.command()
     @commands.has_permissions(manage_messages=True)
