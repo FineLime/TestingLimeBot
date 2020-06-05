@@ -13,12 +13,12 @@ class Purge(commands.Cog):
     
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def purgebanana(self, ctx, amount=1): 
+    async def purgebanana(self, ctx, amount=1, text): 
         
-        def isText(m, text): 
+        def isText(m): 
             return m.message == text
        
-        await ctx.channel.purge(limit=amount, check=isText("banana"))
+        await ctx.channel.purge(limit=amount, check=isText)
         
 def setup(client):
     client.add_cog(Purge(client))
