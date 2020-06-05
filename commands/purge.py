@@ -13,7 +13,7 @@ class Purge(commands.Cog):
     
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def purgebanana(self, ctx, amount=1, text): 
+    async def purgebanana(self, ctx, amount, text): 
         
         def isText(m): 
             return m.message == text
