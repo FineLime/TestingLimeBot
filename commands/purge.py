@@ -31,7 +31,7 @@ class Purge(commands.Cog):
             await ctx.channel.purge(limit=amount, check=hasText)
             
         elif type == 'banmatch':
-            def banText(m): 
+            async def banText(m): 
                 if m.content.lower() == text: 
                     try:
                         await m.author.ban()
@@ -41,7 +41,7 @@ class Purge(commands.Cog):
             await ctx.channel.purge(limit=amount, check=banText)
             
         elif type == 'bancontain':
-            def banContains(m): 
+            async def banContains(m): 
                 if text in m.content.lower: 
                     try:
                         m.author.ban()
