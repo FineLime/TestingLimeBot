@@ -6,7 +6,7 @@ class Purge(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    def banText(m, text): 
+    def isText(m, text): 
         return m.message == text
         
     @commands.command()
@@ -17,7 +17,7 @@ class Purge(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def purgebanana(self, ctx, amount=1): 
-        await ctx.channel.purge(limit=amount, check=banText("banana"))
+        await ctx.channel.purge(limit=amount, check=isText("banana"))
         
 def setup(client):
     client.add_cog(Purge(client))
