@@ -30,7 +30,7 @@ class Purge(commands.Cog):
             
             await ctx.channel.purge(limit=amount, check=hasText)
             
-        elif type == 'banmatch'
+        elif type == 'banmatch':
             def banText(m): 
                 if m.content.lower() == text: 
                     try:
@@ -40,7 +40,7 @@ class Purge(commands.Cog):
                     return True
             await ctx.channel.purge(limit=amount, check=banText)
             
-        elif type == 'bancontain'
+        elif type == 'bancontain':
             def banContains(m): 
                 if text in m.content.lower: 
                     try:
