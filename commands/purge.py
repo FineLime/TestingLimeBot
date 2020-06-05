@@ -15,7 +15,7 @@ class Purge(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def purgebanana(self, ctx, type, amount:int, *, text): 
         
-        await ctx.delete()
+        await ctx.message.delete()
         type = type.lower()
         text = text.lower()
         if type == 'match':
