@@ -18,36 +18,38 @@ class Purge(commands.Cog):
         await ctx.message.delete()
         type = type.lower()
         text = text.lower()
+        ban_users = []
         if type == 'match':
             def isText(m): 
+                
                 return m.content.lower() == text
        
             await ctx.channel.purge(limit=amount, check=isText)
         
         elif type == 'contains':
+            
             def hasText(m): 
                 return text in m.content.lower()
             
             await ctx.channel.purge(limit=amount, check=hasText)
             
         elif type == 'banmatch':
-            async def banText(m): 
+            
+            def banText(m): 
                 if m.content.lower() == text: 
-                    try:
-                        await m.author.ban()
-                    except:
-                        pass
+                    if m.author not in ban_users:
+                        ban_users.append(m.author)
                     return True
             await ctx.channel.purge(limit=amount, check=banText)
             
         elif type == 'bancontain':
-            async def banContains(m): 
+            
+            def banContains(m): 
                 if text in m.content.lower: 
-                    try:
-                        m.author.ban()
-                    except:
-                        pass
+                    if m.author not in ban_users:
+                        ban_users.append(m.author)
                     return True
+                
             await ctx.channel.purge(limit=amount, check=banContains)
         
 def setup(client):
