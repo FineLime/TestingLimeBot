@@ -34,7 +34,7 @@ class Purge(commands.Cog):
             def banText(m): 
                 if m.content.lower() == text: 
                     try:
-                        m.author.ban()
+                        await m.author.ban()
                     except:
                         pass
                     return True
