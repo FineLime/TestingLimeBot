@@ -26,7 +26,7 @@ class Purge(commands.Cog):
         
         elif type == 'contains':
             def hasText(m): 
-                return text in m.content.lower
+                return text in m.content.lower()
             
             await ctx.channel.purge(limit=amount, check=hasText)
             
