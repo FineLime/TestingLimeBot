@@ -8,32 +8,43 @@ class Purge(commands.Cog):
         
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, amount=1): 
-        await ctx.channel.purge(limit=amount)
-    
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def purgebanana(self, ctx, type, amount:int, *, text): 
+    async def purge(self, ctx, ptype, amount=0, *, text="d3fault m3ssag3 jd93d0w993r"): 
         
         await ctx.message.delete()
-        type = type.lower()
+        try:
+            ptype = int(type)
+        except:
+            ptype = type.lower()
         text = text.lower()
-        ban_users = []
-        if type == 'match':
+        if ptype == 'match':
             def isText(m): 
                 
                 return m.content.lower() == text
        
             await ctx.channel.purge(limit=amount, check=isText)
         
-        elif type == 'contains':
+        elif ptype == 'contains':
             
             def hasText(m): 
                 return text in m.content.lower()
             
             await ctx.channel.purge(limit=amount, check=hasText)
             
-        elif type == 'banmatch':
+        elif type(ptype) == int and amount == 0:
+            
+            await ctx.channel.purge(limit=ptype)
+            
+        
+    
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def purgeban(self, ctx, type, amount:int, *, text): 
+        
+        await ctx.message.delete()
+        type = type.lower()
+        text = text.lower()
+        ban_users = []
+        if type == 'match':
             
             def banText(m): 
                 if m.content.lower() == text: 
@@ -42,7 +53,7 @@ class Purge(commands.Cog):
                     return True
             await ctx.channel.purge(limit=amount, check=banText)
             
-        elif type == 'bancontain':
+        elif type == 'contain':
             
             def banContains(m): 
                 if text in m.content.lower: 
