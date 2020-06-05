@@ -51,6 +51,10 @@ class Purge(commands.Cog):
                     return True
                 
             await ctx.channel.purge(limit=amount, check=banContains)
+            
+            
+        for i in ban_users:
+            await i.ban(reason=f"Banned from prurge command. Moderator: {ctx.author.name}")
         
 def setup(client):
     client.add_cog(Purge(client))
