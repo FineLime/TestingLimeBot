@@ -38,7 +38,7 @@ class Addreactionrole(commands.Cog):
         await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
         if len(server) > 0: 
             if server[0]["logschannel"] != "None": 
-                embed = discord.Embed(title="Logs | Reactionrole", description="New Reactionrole", url=f"https://discordapp.com/channels/{ctx.guild.id}/{ctx.channel.id}/{msgid}")
+                embed = discord.Embed(title="Logs | Reactionrole", description="New Reactionrole", url=message.jump_url)
                 embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
                 embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
                 embed.add_field(name="Emoji", value=emoji, inline=True)
