@@ -12,9 +12,9 @@ class Purge(commands.Cog):
         
         await ctx.message.delete()
         try:
-            ptype = int(type)
+            ptype = int(ptype)
         except:
-            ptype = type.lower()
+            ptype = ptype.lower()
         text = text.lower()
         if ptype == 'match':
             def isText(m): 
