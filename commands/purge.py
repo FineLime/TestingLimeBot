@@ -29,6 +29,13 @@ class Purge(commands.Cog):
                 return text in m.content.lower()
             
             await ctx.channel.purge(limit=amount, check=hasText)
+        
+        elif ptype == 'images':
+            
+            def hasImage(m):
+                return len(m.attachments) > 0
+            
+            await ctx.channel.purge(limit=amount, check=hasImage)
             
         elif type(ptype) == int and amount == 0:
             
