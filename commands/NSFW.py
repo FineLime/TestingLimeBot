@@ -26,7 +26,7 @@ class Nsfw(commands.Cog):
         badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
         allowed = True
         for i in badwords:
-            if i in post['tags']:
+            if i in post['tags']['general']:
                 allowed = False
         if allowed == True:
             await ctx.send(post)
