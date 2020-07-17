@@ -21,7 +21,7 @@ class Nsfw(commands.Cog):
             
         }
         r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', os.getenv('e621_key')))
-        post = random.choice(r.json()['posts'])['file']['url']
+        post = random.choice(r.json()['posts'])
         
         badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
         allowed = True
@@ -29,7 +29,7 @@ class Nsfw(commands.Cog):
             if i in post['tags']['general']:
                 allowed = False
         if allowed == True:
-            await ctx.send(post)
+            await ctx.send(post['file']['url'])
         else:
             await ctx.send("Sorry, those tags are not allowed")
     
