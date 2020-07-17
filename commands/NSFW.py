@@ -21,8 +21,17 @@ class Nsfw(commands.Cog):
             
         }
         r = requests.get(f'https://e621.net/posts.json?tags={search}&limit=50', headers=headers, auth=('FineLime', os.getenv('e621_key')))
-        posts = r.json()['posts']
-        await ctx.send(random.choice(posts)['file']['url'])
+        post = random.choice(r.json()['posts'])['file']['url']
+        
+        badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
+        allowed = True
+        for i in badwords:
+            if i in post['tags']:
+                allowed = False
+        if allowed == True:
+            await ctx.send(post)
+        else:
+            await ctx.send("Sorry, those tags are not allowed")
     
     @commands.command()
     async def rule34(self, ctx, *, tags): 
