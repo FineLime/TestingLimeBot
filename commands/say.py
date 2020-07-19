@@ -10,7 +10,7 @@ class Say(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def say(self, ctx, *, say):
-        await ctx.send(f'`{discord.utils.escape_mentions(say)}`') 
+        await ctx.send(f'{discord.utils.escape_mentions(say)}') 
         await ctx.message.delete()
 
         
