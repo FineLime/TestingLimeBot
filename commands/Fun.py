@@ -31,7 +31,7 @@ class Fun(commands.Cog):
     async def launch(self, ctx):
         r = requests.get('https://api.spacexdata.com/v3/launches/next').json()
         time = datetime.utcfromtimestamp(r['launch_date_unix']).strftime('%B %d, %Y at %I:%M%p')
-        await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time.day}/{time.month}/{time.year} at {time.hour}:{time.minute}.\nThe mission is: {r["details"]}')
+        await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time}.\nThe mission is: {r["details"]}')
 
         
 def setup(client):
