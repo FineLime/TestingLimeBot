@@ -38,7 +38,7 @@ class Fun(commands.Cog):
         e[0] -= days*1440
         hours = math.floor(e[0]/60)
         e[0] -= hours*60
-        await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time.strftime('%B %d, %Y at %I:%M%p')} (in {days} days, {hours} hours, {e[0]} minutes and {e[1]} seconds) UTC.\nThe mission: {r["details"]}')
+        await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time.strftime("%B %d, %Y at %I:%M%p")} (in {days} days, {hours} hours, {e[0]} minutes and {e[1]} seconds) UTC.\nThe mission: {r["details"]}')
 
         
 def setup(client):
