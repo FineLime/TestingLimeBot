@@ -16,10 +16,7 @@ database = DB[3].split("/")[1]
 client = commands.Bot(command_prefix=";", case_insensitive=True)
 client.remove_command("help")
 
-status = "How to train your dragon"
-
-emotes = ["1", "2", "3", "4", "5"]
-role = [350314217879896066, 423253740246794241, 310784232093908992, 316977167298985985, 545737840697278464]
+status = "for commands"
 
 @client.event
 async def on_ready():
