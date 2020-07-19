@@ -30,8 +30,8 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def launch(self, ctx):
         r = requests.get('https://api.spacexdata.com/v3/launches/next').json()
-        time = datetime.utcfromtimestamp(r[launch_date_unix]).strftime('%Y-%m-%dT%H:%M:%SZ')
-        await ctx.send(f'Mission {r[mission_name]} is set to launch at {time}\nThe mission is:{r["details"]}')
+        time = datetime.utcfromtimestamp(r['launch_date_unix']).strftime('%Y-%m-%dT%H:%M:%SZ')
+        await ctx.send(f'Mission {r["mission_name"]} is set to launch at {time}\nThe mission is:{r["details"]}')
 
         
 def setup(client):
