@@ -33,7 +33,7 @@ class Fun(commands.Cog):
         r = requests.get('https://api.spacexdata.com/v3/launches/next').json()
         time = datetime.utcfromtimestamp(r['launch_date_unix'])
         e = time - datetime.now()
-        e = divmod(e.days * 86400 + difference.seconds, 60);
+        e = divmod(e.days * 86400 + e.seconds, 60);
         days = math.floor(e[0]/1440)
         e[0] -= days*1440
         hours = math.floor(e[0]/60)
