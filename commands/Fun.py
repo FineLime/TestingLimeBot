@@ -34,10 +34,11 @@ class Fun(commands.Cog):
         time = datetime.utcfromtimestamp(r['launch_date_unix'])
         e = time - datetime.now()
         e = divmod(e.days * 86400 + e.seconds, 60);
-        days = math.floor(e[0]/1440)
-        e[0] -= days*1440
-        hours = math.floor(e[0]/60)
-        e[0] -= hours*60
+        minutes = e[0]
+        days = math.floor(minutes/1440)
+        minutes -= days*1440
+        hours = math.floor(minutes/60)
+        minutes -= hours*60
         await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time.strftime("%B %d, %Y at %I:%M%p")} (in {days} days, {hours} hours, {e[0]} minutes and {e[1]} seconds) UTC.\nThe mission: {r["details"]}')
 
         
