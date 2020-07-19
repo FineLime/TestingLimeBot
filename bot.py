@@ -27,6 +27,9 @@ async def create_db_pool():
     client.pg_con = await asyncpg.create_pool(database=database, user=user, password=password, host=host, port=port, ssl="require")
 
 @client.command()
+async def help(ctx):
+    await ctx.send("Find the list of commands at https://finelime.github.io")
+@client.command()
 @commands.is_owner()
 async def load(ctx, extenstion):
     client.load_extension(f'commands.{extenstion}')
