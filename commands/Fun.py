@@ -32,17 +32,26 @@ class Fun(commands.Cog):
     async def launch(self, ctx):
         r = requests.get('https://api.spacexdata.com/v3/launches/next').json()
         time = datetime.utcfromtimestamp(r['launch_date_unix'])
-        e = time - datetime.now()
-        e = divmod(e.days * 86400 + e.seconds, 60);
-        minutes = e[0]
-        days = math.floor(minutes/1440)
-        minutes -= days*1440
-        hours = math.floor(minutes/60)
-        minutes -= hours*60
+        displayTime = ""
+        T = ""
+        if time > datetime.now() or time is not None:
+            e = time - datetime.now()
+            e = divmod(e.days * 86400 + e.seconds, 60);
+            minutes = e[0]
+            days = math.floor(minutes/1440)
+            minutes -= days*1440
+            hours = math.floor(minutes/60)
+            minutes -= hours*60
+            displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
+            T = f'{days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
+        else:
+            displayTime = ""
+            T = 'TBD'
+            
         link = ""
         if r['links']['video_link']: 
             link = f"\n\nWatch here: {r['links']['video_link']}"
-        embed = discord.Embed(title=f'{r["mission_name"]} on {time.strftime("%B %d, %Y at %I:%M%p")} UTC', description=f"{r['details']}{link}\n\nT- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds")
+        embed = discord.Embed(title=f'{r["mission_name"]} {displayTime}', description=f"{r['details']}{link}\n\nT-{t}")
         
         await ctx.send(embed=embed)
 
