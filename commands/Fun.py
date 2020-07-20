@@ -34,7 +34,7 @@ class Fun(commands.Cog):
         time = datetime.utcfromtimestamp(r['launch_date_unix'])
         displayTime = ""
         T = ""
-        if time > datetime.now() or time is not None:
+        if time > datetime.now() and time is not None:
             e = time - datetime.now()
             e = divmod(e.days * 86400 + e.seconds, 60);
             minutes = e[0]
