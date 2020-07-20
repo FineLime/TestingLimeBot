@@ -39,7 +39,10 @@ class Fun(commands.Cog):
         minutes -= days*1440
         hours = math.floor(minutes/60)
         minutes -= hours*60
-        embed = discord.Embed(title=f'{r["mission_name"]} on {time.strftime("%B %d, %Y at %I:%M%p")} UTC', description=f"{r['details']}\n\nT- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds")
+        link = ""
+        if r['links']['video_link'] not null: 
+            link = f"\n\nWatch here: {r['links']['video_link']}"
+        embed = discord.Embed(title=f'{r["mission_name"]} on {time.strftime("%B %d, %Y at %I:%M%p")} UTC', description=f"{r['details']}{link}\n\nT- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds")
         
         await ctx.send(embed=embed)
 
