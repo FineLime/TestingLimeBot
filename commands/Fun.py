@@ -41,7 +41,7 @@ class Fun(commands.Cog):
         minutes -= hours*60
         embed = discord.Embed(title='{r["mission_name"]} on {time.strftime("%B %d, %Y at %I:%M%p")}', description=f"{r['details']}\n\nT- {days}, days, {hours}, hours, {minutes}, minutes, {seconds}, seconds")
         
-        await ctx.send(embed=embed')
+        await ctx.send(embed=embed)
 
         
 def setup(client):
