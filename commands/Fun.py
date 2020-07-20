@@ -40,7 +40,7 @@ class Fun(commands.Cog):
         hours = math.floor(minutes/60)
         minutes -= hours*60
         link = ""
-        if r['links']['video_link'] not null: 
+        if r['links']['video_link']: 
             link = f"\n\nWatch here: {r['links']['video_link']}"
         embed = discord.Embed(title=f'{r["mission_name"]} on {time.strftime("%B %d, %Y at %I:%M%p")} UTC', description=f"{r['details']}{link}\n\nT- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds")
         
