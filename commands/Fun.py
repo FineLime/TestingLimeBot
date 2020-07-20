@@ -39,7 +39,9 @@ class Fun(commands.Cog):
         minutes -= days*1440
         hours = math.floor(minutes/60)
         minutes -= hours*60
-        await ctx.send(f'Mission {r["mission_name"]} is set to launch on {time.strftime("%B %d, %Y at %I:%M%p")} UTC (T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds).\nThe mission: {r["details"]}')
+        embed = discord.Embed(title=r["mission_name"] on {time.strftime("%B %d, %Y at %I:%M%p")}, description=f"{r['details']}\n\nT- {days}, days, {hours}, hours, {minutes}, minutes, {seconds}, seconds")
+        
+        await ctx.send(embed=embed')
 
         
 def setup(client):
