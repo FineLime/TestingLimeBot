@@ -51,7 +51,7 @@ class Fun(commands.Cog):
         link = ""
         if r['links']['video_link']: 
             link = f"\n\nWatch here: {r['links']['video_link']}"
-        embed = discord.Embed(title=f'{r["mission_name"]} {displayTime}', description=f"{r['details']}{link}\n\nT-{t}")
+        embed = discord.Embed(title=f'{r["mission_name"]} {displayTime}', description=f"{r['details']}{link}\n\nT-{T}")
         
         await ctx.send(embed=embed)
 
