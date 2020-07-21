@@ -28,7 +28,8 @@ async def create_db_pool():
 
 @client.command()
 async def help(ctx):
-    await ctx.send("Find the list of commands at https://finelime.github.io")
+    await ctx.send("Find the list of commands at https://finelime.github.io/docs")
+    
 @client.command()
 @commands.is_owner()
 async def load(ctx, extenstion):
