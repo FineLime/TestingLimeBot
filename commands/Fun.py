@@ -66,7 +66,7 @@ class Fun(commands.Cog):
             "https://launchlibrary.net/1.4/launch/next/1", 
             headers={
             'User-Agent': 'LimeBot for discord'
-        }
+        })
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         time = datetime.utcfromtimestamp(r['netstamp'])
