@@ -1,3 +1,4 @@
 discord.py==1.3.4
 asyncpg==0.18.3
 rule34
+requests
