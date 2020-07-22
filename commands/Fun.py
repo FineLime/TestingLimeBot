@@ -67,7 +67,8 @@ class Fun(commands.Cog):
             headers={
             'User-Agent': 'LimeBot for discord'
         }
-        r = json.loads(urllib.request.urlopen(req).read().decode('utf-8'))
+        r = urllib.request.urlopen(req).read().decode('utf-8')
+        r = json.loads(r)
         time = datetime.utcfromtimestamp(r['netstamp'])
         e = time - datetime.now()
         e = divmod(e.days * 86400 + e.seconds, 60);
