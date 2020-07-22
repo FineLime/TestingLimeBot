@@ -69,6 +69,7 @@ class Fun(commands.Cog):
         })
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
+        r = r['launches'][0]
         time = datetime.utcfromtimestamp(r['netstamp'])
         e = time - datetime.now()
         e = divmod(e.days * 86400 + e.seconds, 60);
