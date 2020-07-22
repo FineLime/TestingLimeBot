@@ -54,7 +54,7 @@ class Fun(commands.Cog):
         link = ""
         if r['links']['video_link']: 
             link = f"\n\nWatch here: {r['links']['video_link']}"
-        embed = discord.Embed(title=f'{r["mission_name"]} {displayTime}', description=f"{r['details']}{link}\n\nT-{T}")
+        embed = discord.Embed(title=f'{r["mission_name"]} {displayTime}', description=f"{r['details']}{link}\n\nT- {T}")
         
         await ctx.send(embed=embed)
     
@@ -83,7 +83,7 @@ class Fun(commands.Cog):
         link = ""
         if r['vidURLs']: 
             link = f"\n\nWatch here: {r['vidURLs'][0]}"
-        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}{link}\n\nT-{T}')
+        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}{link}\n\nT- {T}')
         await ctx.send(embed=embed)
         
             
