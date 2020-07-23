@@ -6,16 +6,15 @@ class Purge(commands.Cog):
     def __init__(self, client):
         self.client = client
         
-    @commands.group()
+    @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
     async def ppurge(self, ctx, amount:int): 
         
-        if ctx.invoked_subcommand is None:
-            if amount is None:
-                await ctx.send('Enter the amount of messages you wish to be deleted')
-            else:
-                await ctx.message.delete()
-                await ctx.channel.purge(limit=amount)
+        if amount is None:
+            await ctx.send('Enter the amount of messages you wish to be deleted')
+        else:
+            await ctx.message.delete()
+            await ctx.channel.purge(limit=amount)
                 
     @ppurge.command()
     async def match(self, ctx, amount:int, text:str):
