@@ -70,7 +70,19 @@ class Fun(commands.Cog):
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         r = r['launches'][0]
-        status = r['status']['id']
+        status = r['status']
+        try:
+            print(status)
+        except:
+            print('no status')
+        try: 
+            print(status.name)
+        except:
+            print('no .name')
+        try:
+            print(status['name'])
+        except:
+            print("No []'s")
         try: 
             time = datetime.utcfromtimestamp(r['netstamp'])
             if time < datetime.now(): 
