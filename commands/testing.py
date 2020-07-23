@@ -11,7 +11,7 @@ class Purge(commands.Cog):
     async def ppurge(self, ctx, amount:int): 
         
         if ctx.invoked_subcommand is None:
-            if amont is None:
+            if amount is None:
                 await ctx.send('Enter the amount of messages you wish to be deleted')
             else:
                 await ctx.message.delete()
