@@ -59,6 +59,10 @@ class Purge(commands.Cog):
         
         await ctx.message.delete()
         await ctx.channel.purge(limit=amount, check=hasImage)
+        
+    @ppurge.command()
+    async def test(self, ctx, testing):
+        await ctx.send(testing)
     
     @commands.command()
     @commands.has_permissions(ban_members=True)
