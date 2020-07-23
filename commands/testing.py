@@ -1,35 +1,71 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
 
-class Testing(commands.Cog): 
+class Purge(commands.Cog): 
 
     def __init__(self, client):
         self.client = client
-
-    @commands.group(pass_context=True)
-    @commands.cooldown(1, 10, BucketType.user)
-    async def test(self, ctx): 
-        if ctx.invoked_subcommand is None:
-            await ctx.send('You did not use a subcommand')
-            
-    @test.command()
-    async def this(self, ctx):
-        await ctx.send('You used the \'this\' subcommand')
-          
-    @test.command()
-    async def that(self, ctx):
-        await ctx.send('You used the \'that\' subcommand')   
         
-    @commands.group(pass_context=True)
-    @commands.cooldown(1, 10, BucketType.user)
-    async def test2(self, ctx):
+    @commands.group()
+    @commands.has_permissions(manage_messages=True)
+    async def ppurge(self, ctx, amount:int): 
+        
         if ctx.invoked_subcommand is None:
-            await ctx.send('You did not use a subcommand on test 2')
-            
-    @test2.command()
-    async def sub(self, ctx):
-        await ctx.send('You did use a subcommand on test 2')   
+            if amont is None:
+                await ctx.send('Enter the amount of messages you wish to be deleted')
+            elif:
+                await ctx.message.delete()
+                await ctx.channel.purge(limit=amount)
+                
+    @ppurge.command()
+    async def match(self, ctx, amount:int, text:str):
+        if amont is None:
+            await ctx.send('Enter the amount of messages you wish to be deleted')
+            return
+        if text is None:
+            await ctx.send('Enter type in the text you want to be deleted.')
+            return
+        
+        def isText(m): 
+            return m.content.lower() == text.lower()
+        
+        await ctx.message.delete()
+        await ctx.channel.purge(limit=amount, check=isText)
+    
+    @ppurge.command()
+    async def contains(self, ctx, amount:int, text:str):
+    
+        if amont is None:
+            await ctx.send('Enter the amount of messages you wish to be deleted')
+            return
+        if text is None:
+            await ctx.send('Enter type in the text you want to be deleted.')
+            return
+        
+        def hasText(m): 
+            return text.lower() in m.content.lower()
+        
+        await ctx.message.delete()
+        await ctx.channel.purge(limit=amount, check=hasText)
+        
+    @ppurge.command()
+    async def images(self, ctx, amount:int):
+        if amont is None:
+            await ctx.send('Enter the amount of messages you wish to be deleted')
+            return
+        
+        def hasImage(m):
+                return len(m.attachments) > 0
+        
+        await ctx.message.delete()
+        await ctx.channel.purge(limit=amount, check=hasImage)
+    
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def ppurgeban(self, ctx, type, amount:int, *, text): 
+        
+        await ctx.message.delete()
+        
         
 def setup(client):
-    client.add_cog(Testing(client))
+    client.add_cog(Purge(client))
