@@ -7,7 +7,7 @@ class Testing(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @self.client.group()
+    @commands.group(pass_context=True)
     @commands.cooldown(1, 10, BucketType.user)
     async def test(self, ctx): 
         if ctx.invoked_subcommand is None:
