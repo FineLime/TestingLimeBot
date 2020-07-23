@@ -19,7 +19,7 @@ class Purge(commands.Cog):
                 
     @ppurge.command()
     async def match(self, ctx, amount:int, text:str):
-        if amont is None:
+        if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
             return
         if text is None:
@@ -35,7 +35,7 @@ class Purge(commands.Cog):
     @ppurge.command()
     async def contains(self, ctx, amount:int, text:str):
     
-        if amont is None:
+        if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
             return
         if text is None:
@@ -50,7 +50,7 @@ class Purge(commands.Cog):
         
     @ppurge.command()
     async def images(self, ctx, amount:int):
-        if amont is None:
+        if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
             return
         
