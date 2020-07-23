@@ -70,38 +70,6 @@ class Fun(commands.Cog):
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         r = r['launches'][0]
-        try: 
-            time = datetime.utcfromtimestamp(r['netstamp'])
-            if time < datetime.now(): 
-                time = 'TBD'
-        except:
-            time = 'TBD'
-                              
-        if time == 'TBD':
-            displayTime = '- TBD'     
-            T = 'TBD'
-        else: 
-            e = time - datetime.now()
-            e = divmod(e.days * 86400 + e.seconds, 60);
-            minutes = e[0]
-            days = math.floor(minutes/1440)
-            minutes -= days*1440
-            hours = math.floor(minutes/60)
-            minutes -= hours*60
-            displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
-            T = f'{days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
-        link = ""
-        if r['vidURLs']: 
-            link = f"\n\nWatch here: {r['vidURLs'][0]}"
-        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}{link}\n\nT- {T}')
-        await ctx.send(embed=embed)
-        
-    @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
-    async def launchtest(self, ctx):
-                              
-        r = requests.get('https://ll.thespacedevs.com/2.0.0/launch/upcoming/limit=10&offset=10').json()
-        r = r['launches'][0]
         status = r['launches'][0]['status']
         try: 
             time = datetime.utcfromtimestamp(r['netstamp'])
@@ -110,12 +78,12 @@ class Fun(commands.Cog):
         except:
             time = 'TBD'
         
-        if status == 3: 
-            displayTime= " - Successful"
-            T = 'Launched Successfully'
+        if status == 3:
+            displayTime = '- Successful'
+            T =  'Launched Successfully'
         if time == 'TBD':
             displayTime = '- TBD'     
-            T = 'T- TBD'
+            T = 'Launch Time - TBD'
         else: 
             e = time - datetime.now()
             e = divmod(e.days * 86400 + e.seconds, 60);
@@ -131,6 +99,7 @@ class Fun(commands.Cog):
             link = f"\n\nWatch here: {r['vidURLs'][0]}"
         embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}{link}\n\n{T}')
         await ctx.send(embed=embed)
+        
         
 def setup(client):
     client.add_cog(Fun(client))
