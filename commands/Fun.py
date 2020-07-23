@@ -70,7 +70,7 @@ class Fun(commands.Cog):
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         r = r['launches'][0]
-        status = r['status']
+        status = r['status']['name']
         try: 
             time = datetime.utcfromtimestamp(r['netstamp'])
             if time < datetime.now(): 
@@ -78,7 +78,7 @@ class Fun(commands.Cog):
         except:
             time = 'TBD'
         
-        if status == 3:
+        if status == 'Success':
             displayTime = '- Successful'
             T =  'Launched Successfully'
         if time == 'TBD':
