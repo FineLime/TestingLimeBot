@@ -81,7 +81,7 @@ class Fun(commands.Cog):
         if status == 3:
             displayTime = '- Successful'
             T =  'Launched Successfully'
-        else if time == 'TBD':
+        elif time == 'TBD':
             displayTime = '- TBD'     
             T = 'Launch Time - TBD'
         else: 
