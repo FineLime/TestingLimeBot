@@ -96,8 +96,8 @@ class Fun(commands.Cog):
             T = f'T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
         link = ""
         if r['vidURLs']: 
-            link = f"\n\nWatch here: {r['vidURLs'][0]}"
-        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}{link}\n\n{T}')
+            link = f"\n\n[Watch here]({r['vidURLs'][0]})"
+        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
         await ctx.send(embed=embed)
         
         
