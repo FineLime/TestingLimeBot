@@ -13,7 +13,7 @@ class Purge(commands.Cog):
         if ctx.invoked_subcommand is None:
             if amont is None:
                 await ctx.send('Enter the amount of messages you wish to be deleted')
-            elif:
+            else:
                 await ctx.message.delete()
                 await ctx.channel.purge(limit=amount)
                 
