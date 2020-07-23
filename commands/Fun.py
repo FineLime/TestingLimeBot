@@ -70,16 +70,26 @@ class Fun(commands.Cog):
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         r = r['launches'][0]
-        time = datetime.utcfromtimestamp(r['netstamp'])
-        e = time - datetime.now()
-        e = divmod(e.days * 86400 + e.seconds, 60);
-        minutes = e[0]
-        days = math.floor(minutes/1440)
-        minutes -= days*1440
-        hours = math.floor(minutes/60)
-        minutes -= hours*60
-        displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
-        T = f'{days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
+        try: 
+            time = datetime.utcfromtimestamp(r['netstamp'])
+            if time < datetime.now(): 
+                time = 'TBD'
+        except:
+            time = 'TBD'
+                              
+        if time == 'TBD':
+            displayTime = '- TBD'     
+            T = 'TBD'
+        else: 
+            e = time - datetime.now()
+            e = divmod(e.days * 86400 + e.seconds, 60);
+            minutes = e[0]
+            days = math.floor(minutes/1440)
+            minutes -= days*1440
+            hours = math.floor(minutes/60)
+            minutes -= hours*60
+            displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
+            T = f'{days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
         link = ""
         if r['vidURLs']: 
             link = f"\n\nWatch here: {r['vidURLs'][0]}"
