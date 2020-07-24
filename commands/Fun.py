@@ -77,7 +77,7 @@ class Fun(commands.Cog):
             })
             r = urllib.request.urlopen(reqLSPname).read().decode('utf-8')
             r = json.loads(r)
-            if r['agencies'] is None:
+            if len(r['agencies']) == 0:
                 reqLSP = urllib.request.Request(
                     f"https://launchlibrary.net/1.4/agency?abbrev={lsp}", 
                     headers={
@@ -85,7 +85,7 @@ class Fun(commands.Cog):
                 })
                 r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
                 r = json.loads(r)
-                if r['agencies'] is None:
+                if len(r['agencies']) == 0:
                     await ctx.send('Could not find an agency by that name')
                     return
             
