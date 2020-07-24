@@ -48,7 +48,7 @@ class Purge(commands.Cog):
         await ctx.channel.purge(limit=amount, check=hasText)
         
     @ppurge.command()
-    async def images(self, ctx, amount:int):
+    async def files(self, ctx, amount:int):
         if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
             return
