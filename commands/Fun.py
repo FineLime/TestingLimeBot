@@ -75,7 +75,7 @@ class Fun(commands.Cog):
                 headers={
                 'User-Agent': 'LimeBot for discord'
             })
-            r = urllib.request.urlopen(reqLSPName).read().decode('utf-8')
+            r = urllib.request.urlopen(reqLSPname).read().decode('utf-8')
             r = json.loads(r)
             if r['agencies'] is None:
                 reqLSP = urllib.request.Request(
