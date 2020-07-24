@@ -63,7 +63,7 @@ class Fun(commands.Cog):
     async def launch(self, ctx, *, lsp=None):
         
         req = ""
-        if lsp is not None:
+        if lsp is None:
             req = urllib.request.Request(
                 "https://launchlibrary.net/1.4/launch/next/1", 
                 headers={
