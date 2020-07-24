@@ -70,6 +70,7 @@ class Fun(commands.Cog):
                 'User-Agent': 'LimeBot for discord'
             })
         else:
+            lsp = lsp.replace(" ", "%20")
             reqLSPname = urllib.request.Request(
                 f"https://launchlibrary.net/1.4/agency?name={lsp}", 
                 headers={
@@ -77,6 +78,7 @@ class Fun(commands.Cog):
             })
             r = urllib.request.urlopen(reqLSPname).read().decode('utf-8')
             r = json.loads(r)
+            print(f"lsp name: {r}")
             if len(r['agencies']) == 0:
                 reqLSP = urllib.request.Request(
                     f"https://launchlibrary.net/1.4/agency?abbrev={lsp}", 
@@ -85,6 +87,7 @@ class Fun(commands.Cog):
                 })
                 r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
                 r = json.loads(r)
+                print(f"lsp abb: {r}")
                 if len(r['agencies']) == 0:
                     await ctx.send('Could not find an agency by that name')
                     return
@@ -93,40 +96,45 @@ class Fun(commands.Cog):
                 f"https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}", 
                 headers={
                 'User-Agent': 'LimeBot for discord'
-            })                  
-        r = urllib.request.urlopen(req).read().decode('utf-8')
-        r = json.loads(r)
-        r = r['launches'][0]
-        status = r['status']
-        try: 
-            time = datetime.utcfromtimestamp(r['netstamp'])
-            if time < datetime.now(): 
+            })
+            print(f"Requested for https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}")
+        
+        try:
+            r = urllib.request.urlopen(req).read().decode('utf-8')
+            r = json.loads(r)
+            r = r['launches'][0]
+            status = r['status']
+            try: 
+                time = datetime.utcfromtimestamp(r['netstamp'])
+                if time < datetime.now(): 
+                    time = 'TBD'
+            except:
                 time = 'TBD'
+
+            if status == 3:
+                displayTime = '- Successful'
+                T =  'Launched Successfully'
+            elif time == 'TBD':
+                displayTime = '- TBD'     
+                T = 'Launch Time - TBD'
+            else: 
+                e = time - datetime.now()
+                e = divmod(e.days * 86400 + e.seconds, 60);
+                minutes = e[0]
+                days = math.floor(minutes/1440)
+                minutes -= days*1440
+                hours = math.floor(minutes/60)
+                minutes -= hours*60
+                displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
+                T = f'T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
+            link = ""
+            if r['vidURLs']: 
+                link = f"\n\n[Watch here]({r['vidURLs'][0]})"
+            embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
+            await ctx.send(embed=embed)
         except:
-            time = 'TBD'
-        
-        if status == 3:
-            displayTime = '- Successful'
-            T =  'Launched Successfully'
-        elif time == 'TBD':
-            displayTime = '- TBD'     
-            T = 'Launch Time - TBD'
-        else: 
-            e = time - datetime.now()
-            e = divmod(e.days * 86400 + e.seconds, 60);
-            minutes = e[0]
-            days = math.floor(minutes/1440)
-            minutes -= days*1440
-            hours = math.floor(minutes/60)
-            minutes -= hours*60
-            displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
-            T = f'T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
-        link = ""
-        if r['vidURLs']: 
-            link = f"\n\n[Watch here]({r['vidURLs'][0]})"
-        embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
-        await ctx.send(embed=embed)
-        
+            print(sys.exc_info()[0])
+            
         
 def setup(client):
     client.add_cog(Fun(client))
