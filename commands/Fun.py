@@ -110,7 +110,7 @@ class Fun(commands.Cog):
         except:
             failed=True
         
-        if failed=True:
+        if failed==True:
             await ctx.send("No launches from that agency was found")
             return
                   
