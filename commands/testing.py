@@ -17,7 +17,7 @@ class Purge(commands.Cog):
             await ctx.channel.purge(limit=amount)
                 
     @ppurge.command()
-    async def match(self, ctx, amount:int, text:str):
+    async def match(self, ctx, amount:int, *, text:str):
         if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
             return
@@ -32,7 +32,7 @@ class Purge(commands.Cog):
         await ctx.channel.purge(limit=amount, check=isText)
     
     @ppurge.command()
-    async def contains(self, ctx, amount:int, text:str):
+    async def contains(self, ctx, amount:int, *, text:str):
     
         if amount is None:
             await ctx.send('Enter the amount of messages you wish to be deleted')
