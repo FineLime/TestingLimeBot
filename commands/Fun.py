@@ -94,7 +94,7 @@ class Fun(commands.Cog):
                 print(f"lsp name: {r}")
                 if len(r['agencies']) == 0:
                     await ctx.send('Could not find an agency by that name')
-                    return
+                    
             
             req = urllib.request.Request(
                 f"https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}", 
@@ -103,8 +103,19 @@ class Fun(commands.Cog):
             })
             print(f"Requested for https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}")
         
+        
+        failed = False
         try:
             r = urllib.request.urlopen(req).read().decode('utf-8')
+        except:
+            failed=True
+        
+        if failed=True:
+            await ctx.send("No launches from that agency was found")
+            return
+                  
+        try:
+            
             r = json.loads(r)
             r = r['launches'][0]
             status = r['status']
