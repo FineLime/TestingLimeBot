@@ -60,13 +60,40 @@ class Fun(commands.Cog):
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def launch(self, ctx):
-                              
-        req = urllib.request.Request(
-            "https://launchlibrary.net/1.4/launch/next/1", 
-            headers={
-            'User-Agent': 'LimeBot for discord'
-        })
+    async def launch(self, ctx, *, lsp=None):
+        
+        req = ""
+        if lsp is not None:
+            req = urllib.request.Request(
+                "https://launchlibrary.net/1.4/launch/next/1", 
+                headers={
+                'User-Agent': 'LimeBot for discord'
+            })
+        else:
+            reqLSPname = urllib.request.Request(
+                f"https://launchlibrary.net/1.4/agency?name={lsp}", 
+                headers={
+                'User-Agent': 'LimeBot for discord'
+            })
+            r = urllib.request.urlopen(reqLSPName).read().decode('utf-8')
+            r = json.loads(r)
+            if r['agencies'] is None:
+                reqLSP = urllib.request.Request(
+                    f"https://launchlibrary.net/1.4/agency?abbrev={lsp}", 
+                    headers={
+                    'User-Agent': 'LimeBot for discord'
+                })
+                r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
+                r = json.loads(r)
+                if r['agencies'] is None:
+                    await ctx.send('Could not find an agency by that name')
+                    return
+            
+            req = urllib.request.Request(
+                f"https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}", 
+                headers={
+                'User-Agent': 'LimeBot for discord'
+            })                  
         r = urllib.request.urlopen(req).read().decode('utf-8')
         r = json.loads(r)
         r = r['launches'][0]
