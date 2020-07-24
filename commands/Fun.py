@@ -71,23 +71,27 @@ class Fun(commands.Cog):
             })
         else:
             lsp = lsp.replace(" ", "%20")
-            reqLSPname = urllib.request.Request(
-                f"https://launchlibrary.net/1.4/agency?name={lsp}", 
+            reqLSP = urllib.request.Request(
+                f"https://launchlibrary.net/1.4/agency/{lsp}", 
                 headers={
                 'User-Agent': 'LimeBot for discord'
             })
-            r = urllib.request.urlopen(reqLSPname).read().decode('utf-8')
+            try:
+                r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
+            except:
+                await ctx.send('Could not find a launch from that Launch Service Provider')
+                return
             r = json.loads(r)
             print(f"lsp name: {r}")
             if len(r['agencies']) == 0:
                 reqLSP = urllib.request.Request(
-                    f"https://launchlibrary.net/1.4/agency?abbrev={lsp}", 
+                    f"https://launchlibrary.net/1.4/agency?name={lsp}", 
                     headers={
                     'User-Agent': 'LimeBot for discord'
                 })
                 r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
                 r = json.loads(r)
-                print(f"lsp abb: {r}")
+                print(f"lsp name: {r}")
                 if len(r['agencies']) == 0:
                     await ctx.send('Could not find an agency by that name')
                     return
@@ -133,7 +137,7 @@ class Fun(commands.Cog):
             embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
             await ctx.send(embed=embed)
         except:
-            print(sys.exc_info()[0])
+            print("you failed")
             
         
 def setup(client):
