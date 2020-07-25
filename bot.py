@@ -13,7 +13,7 @@ host = DB[2].split("@")[1]
 port = DB[3].split("/")[0]
 database = DB[3].split("/")[1]
 
-client = commands.Bot(command_prefix="l#", case_insensitive=True)
+client = commands.Bot(command_prefix=";", case_insensitive=True)
 client.remove_command("help")
 
 status = "for commands"
