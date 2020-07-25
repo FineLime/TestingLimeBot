@@ -30,7 +30,7 @@ class Autorole(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         autoroles = await self.client.pg_con.fetch("SELECT * FROM autorole WHERE server=$1", str(member.guild.id))
-        if not guild:
+        if len(autoroles):
             return
         for i in autoroles:
             try:
