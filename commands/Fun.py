@@ -119,11 +119,10 @@ class Fun(commands.Cog):
             r = json.loads(r)
             r = r['launches'][0]
             status = r['status']
-            b = False
             try: 
                 time = datetime.utcfromtimestamp(r['netstamp'])
                 if time < datetime.now(): 
-                    b = True
+                    time = 'TBD'
             except:
                 time = 'TBD'
 
@@ -133,9 +132,6 @@ class Fun(commands.Cog):
             elif time == 'TBD':
                 displayTime = '- TBD'     
                 T = 'Launch Time - TBD'
-            elif b == True and status == 1:
-                  displayTime = "- Inflight"
-                  T = "Inflight"
             else: 
                 e = time - datetime.now()
                 e = divmod(e.days * 86400 + e.seconds, 60);
