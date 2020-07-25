@@ -30,7 +30,7 @@ class ServerSetup(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_guild=True)
     async def logs(self, ctx): 
-        await ctx.send("**USAGE:** ;logs [channel/remove] {set} {channel}
+        await ctx.send("**USAGE:** ;logs [channel/remove] {set} {channel})
     
     @logs.command()
     async def remove(self, ctx):
