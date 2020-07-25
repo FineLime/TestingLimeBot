@@ -63,10 +63,10 @@ class ServerSetup(commands.Cog):
     @channel.command()
     async def set(self, ctx, channel:discord.Channel):
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
-            if len(server) == 0: 
-                await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", str(channel.id))
-                await ctx.send(f"Your logs channel has been set to: {channel.mention}")
-                return
+        if len(server) == 0: 
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", str(channel.id))
+            await ctx.send(f"Your logs channel has been set to: {channel.mention}")
+            return
         server = server[0]
         await self.client.pg_con.execute("UPDATE servers SET logschannel=$1 WHERE serverid=$2", str(channel.id), str(ctx.guild.id))
         await ctx.send(f"Your logs channel has been updated to: {channel.mention}")
