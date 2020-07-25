@@ -20,7 +20,7 @@ class Moderation(commands.Cog):
             await ctx.send("You don't have permission to use that command")
             return
             
-        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
+        server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) > 0: 
             if server[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Kicked")
@@ -45,7 +45,7 @@ class Moderation(commands.Cog):
             await ctx.send("You don't have permission to use that command")        
             return
         
-        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
+        server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) > 0: 
             if server[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Banned")
