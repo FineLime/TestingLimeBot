@@ -25,7 +25,7 @@ class ServerSetup(commands.Cog):
             embed.add_field(name="MutedRole", value=mutedrole.mention, inline=True)
             await get(ctx.guild.channels, id=int(server['logschannel'])).send(embed=embed)
 
-        await ctx.send("The mute role has been changed! :white_check_mark:")
+        await ctx.send("The mute role has been changed! :white_check_mark: \nMake sure the permissions for the role are correct before attempting to mute people.")
 
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_guild=True)
