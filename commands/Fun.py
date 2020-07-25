@@ -133,7 +133,7 @@ class Fun(commands.Cog):
             elif time == 'TBD':
                 displayTime = '- TBD'     
                 T = 'Launch Time - TBD'
-            elif b == True and staus == 1:
+            elif b == True and status == 1:
                   displayTime = "- Inflight"
                   T = "Inflight"
             else: 
