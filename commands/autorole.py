@@ -33,7 +33,7 @@ class Autorole(commands.Cog):
         if len(autoroles):
             for i in autoroles:
                 try:
-                    await member.add_roles(discord.utils.get(member.guild.roles, id=int(i["role"]))
+                    await member.add_roles(discord.utils.get(member.guild.roles, id=int(i["role"])))
                 except:
                     pass
         
