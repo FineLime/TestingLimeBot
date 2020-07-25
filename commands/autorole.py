@@ -16,7 +16,7 @@ class Autorole(commands.Cog):
     async def add(self, ctx, role:discord.Role):
         
         check = await self.client.pg_con.fetch("SELECT * FROM autorole WHERE server=$1 AND role=$2", str(ctx.guild.id), str(role.id))
-        if check is not None:
+        if len(check):
             await ctx.send("That role is already set up as an autorole")
             return
         await self.client.pg_con.execute("INSERT INTO reactionroles (server, role) VALUES ($1, $2)", str(ctx.guild.id), str(role.id))
