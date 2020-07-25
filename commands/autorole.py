@@ -27,5 +27,16 @@ class Autorole(commands.Cog):
         await self.client.pg_con.execute("DELETE FROMreactionroles WHERE server=$1 AND role=$2", str(ctx.guild.id), str(role.id))
         await ctx.send("Removed autorole! :white_check_mark:")
         
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        autoroles = await self.client.pg_con.fetch("SELECT * FROM autorole WHERE serverid=$1", str(member.guild.id))
+        if not guild:
+            return
+        for i in autoroles:
+            try:
+                await member.add_role(discord.utils.get(member.guild.roles, id=i[f"{int(role)}"]))
+            except:
+                pass
+        
 def setup(client):
     client.add_cog(Autorole(client))
