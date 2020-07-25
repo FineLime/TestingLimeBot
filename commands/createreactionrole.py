@@ -64,7 +64,7 @@ class Addreactionrole(commands.Cog):
                 embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
                 embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
                 embed.add_field(name="Emoji", value=emoji, inline=True)
-                embed.add_field(name="Role", value=discord.utils.get(ctx.guild.roles, id=int(rr[0]['roleid'])), inline=True)
+                embed.add_field(name="Role", value=discord.utils.get(ctx.guild.roles, id=int(rr[0]['roleid'])).mention, inline=True)
                 await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
             
 
