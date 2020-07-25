@@ -61,7 +61,7 @@ class ServerSetup(commands.Cog):
         await ctx.send(f"The current logs channel is: {discord.utils.get(ctx.guild.channels, id=int(server['logschannel'])).mention}")
    
     @channel.command()
-    async def set(self, ctx, channel:discord.Channel):
+    async def set(self, ctx, channel:discord.TextChannel):
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
             await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel) VALUES ($1, $2, $3)", str(ctx.guild.id), "None", str(channel.id))
