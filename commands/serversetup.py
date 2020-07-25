@@ -54,7 +54,7 @@ class ServerSetup(commands.Cog):
             await ctx.send("You currently do not have a logs channel. Set one with ;logs channel set [channel]")
             return
         server = server[0]
-        if server['logschannel'] = 'None':
+        if server['logschannel'] == 'None':
             await ctx.send("You currently do not have a logs channel. Set one with ;logs channel set [channel]")
             return
         
