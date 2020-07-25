@@ -31,12 +31,11 @@ class Autorole(commands.Cog):
     async def on_member_join(self, member):
         autoroles = await self.client.pg_con.fetch("SELECT * FROM autorole WHERE server=$1", str(member.guild.id))
         if len(autoroles):
-            return
-        for i in autoroles:
-            try:
-                await member.add_role(discord.utils.get(member.guild.roles, id=i[f"{int(role)}"]))
-            except:
-                pass
+            for i in autoroles:
+                try:
+                    await member.add_role(discord.utils.get(member.guild.roles, id=i[f"{int(role)}"]))
+                except:
+                    pass
         
 def setup(client):
     client.add_cog(Autorole(client))
