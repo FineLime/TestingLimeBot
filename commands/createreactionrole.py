@@ -38,7 +38,7 @@ class Addreactionrole(commands.Cog):
         await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
         if len(server) > 0: 
             if server[0]["logschannel"] != "None": 
-                embed = discord.Embed(title="Logs | Reactionrole", description="New Reactionrole", url=message.jump_url)
+                embed = discord.Embed(title="Logs | Reactionrole", description=f"[New Reaction role]({message.jump_url})")
                 embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
                 embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
                 embed.add_field(name="Emoji", value=emoji, inline=True)
@@ -49,19 +49,24 @@ class Addreactionrole(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_guild=True)
     async def deletereactionrole(self, ctx, msgid:str, emoji:str):
+        rr = await self.client.pg_con.fetch("SELECT * FROM reactionroles WHERE messageid=$1 AND emoji=$2", msgid, emoji)
+        if len(rr) == 0:
+            await ctx.send(f"Could not find a reaction role on that message with the emoji {emoji}")
+            return
+        
         await self.client.pg_con.execute("DELETE FROM reactionroles WHERE messageid=$1 AND emoji=$2", msgid, emoji)
-        try:
-            message = await ctx.channel.fetch_message(int(msgid))
-        except:
-            print("oof")
-        try:
-            await discord.utils.get(message.reactions, emoji=emoji).clear()
-            await discord.utils.get(message.reactions, emoji=emoji).__dir__()
-          
-        except:
-            print("nope")
-            
         await ctx.send("Reaction role successfully deleted")
+        
+        server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        if len(server) > 0: 
+            if server[0]["logschannel"] != "None": 
+                embed = discord.Embed(title="Logs | Reactionrole", description="Removed Reaction role")
+                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
+                embed.add_field(name="Emoji", value=emoji, inline=True)
+                embed.add_field(name="Role", value=discord.utils.get(ctx.guild.roles, id=rr[0]['roleid']), inline=True)
+                await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
+            
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload): 
