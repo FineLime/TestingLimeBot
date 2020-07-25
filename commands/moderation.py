@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from discord.utils import get
+import asyncpg
 
 class Moderation(commands.Cog): 
 
@@ -17,6 +18,18 @@ class Moderation(commands.Cog):
             await ctx.send(f"**{user.name}** has been kicked by **{ctx.author.name}**\nReason:`{reason}`")
         else: 
             await ctx.send("You don't have permission to use that command")
+            return
+            
+        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
+        if len(server) > 0: 
+            if server[0]["logschannel"] != "None": 
+                embed = discord.Embed(title="Logs | User Kicked")
+                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
+                embed.add_field(name="User", value=f"{user.name}#{user.discriminator} ({user.mention})", inline=True)
+                embed.add_field(name="Reason", value=reason, inline=True)
+                await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
+        
             
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -30,7 +43,17 @@ class Moderation(commands.Cog):
             await ctx.send(f"**{user.name}** has been banned by **{ctx.author.name}**\nReason:`{reason}`")
         else: 
             await ctx.send("You don't have permission to use that command")        
+            return
         
+        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
+        if len(server) > 0: 
+            if server[0]["logschannel"] != "None": 
+                embed = discord.Embed(title="Logs | User Banned")
+                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
+                embed.add_field(name="User", value=f"{user.name}#{user.discriminator} ({user.mention})", inline=True)
+                embed.add_field(name="Reason", value=reason, inline=True)
+                await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
         
 def setup(client):
     client.add_cog(Moderation(client))
