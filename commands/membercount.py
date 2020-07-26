@@ -14,7 +14,7 @@ class Membercount(commands.Cog):
     async def setmemberchannel(self, ctx, channel:discord.VoiceChannel):
         guild = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if not guild: 
-            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "None")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel, prefix) VALUES ($1, $2, $3, $4, $5)", str(ctx.guild.id), "None", "None", "None", ";")
         
         server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         mchannel = channel.id
