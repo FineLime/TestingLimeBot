@@ -15,11 +15,15 @@ database = DB[3].split("/")[1]
 
 async def prefix(bot, message):
     server = client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$", str(message.guild.id))
-    print(server)
+    extra_prefix = None
+    if len(server) > 0:
+        server = server[0]
+        extra_prefix = server['prefix']
+        
     if message.guild.id == 264445053596991498:
-        return ('l#')
+        return ('l#', extra_prefix if extra_prefix is not None and extra_prefix is not ";" else 'l#')
     else:
-        return (';')
+        return (';', extra_prefix if extra_prefix is not None else ';')
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
