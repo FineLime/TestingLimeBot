@@ -15,7 +15,14 @@ database = DB[3].split("/")[1]
 
 async def prefix(bot, message):
     
-    if message.guild.id == 264445053596991498:
+    dbl = False
+    try:
+        if message.guild.id == 264445053596991498:
+            dbl=True
+    except:
+        pass
+    
+    if dbl:
         return 'l#'
     else:
         return ';'
