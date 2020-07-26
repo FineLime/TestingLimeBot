@@ -14,8 +14,10 @@ port = DB[3].split("/")[0]
 database = DB[3].split("/")[1]
 
 async def prefix(bot, message):
-    if message.guild.id == 599677918834327563:
-        return ('#', '?')
+    server = client.pg_com.fetch("SELECT * FROM servers WHERE serverid=$", str(message.guild.id))
+    print(server)
+    if message.guild.id == 264445053596991498:
+        return ('l#')
     else:
         return (';')
 
