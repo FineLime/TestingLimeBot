@@ -13,16 +13,17 @@ host = DB[2].split("@")[1]
 port = DB[3].split("/")[0]
 database = DB[3].split("/")[1]
 
-client = commands.Bot(command_prefix=";", case_insensitive=True)
-client.remove_command("help")
-
-status = "for commands"
-
 async def prefix(bot, message):
     if message.guild.id == 599677918834327563:
         return ('#', '?')
     else:
         return (';')
+
+client = commands.Bot(command_prefix=prefix, case_insensitive=True)
+client.remove_command("help")
+
+status = "for commands"
+
 @client.event
 async def on_ready():
     print("The bot is ready")
