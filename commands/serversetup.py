@@ -14,7 +14,7 @@ class ServerSetup(commands.Cog):
     async def muterole(self, ctx, muterole:discord.Role): 
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
-            aawait self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "None")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "None")
         
         server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         await self.client.pg_con.execute("UPDATE servers SET mutedrole = $1 WHERE serverid=$2", str(muterole.id), str(ctx.guild.id))
