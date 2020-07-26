@@ -18,6 +18,11 @@ client.remove_command("help")
 
 status = "for commands"
 
+async def prefix(bot, message):
+    if message.guild.id == 599677918834327563:
+        return ('#', '?')
+    else:
+        return (';')
 @client.event
 async def on_ready():
     print("The bot is ready")
