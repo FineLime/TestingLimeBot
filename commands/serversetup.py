@@ -71,5 +71,33 @@ class ServerSetup(commands.Cog):
         await self.client.pg_con.execute("UPDATE servers SET logschannel=$1 WHERE serverid=$2", str(channel.id), str(ctx.guild.id))
         await ctx.send(f"Your logs channel has been updated to: {channel.mention}")
                        
+    @commands.command()
+    @commands.has_permissions(manage_guild=True)
+    async def prefix(self, ctx, prefix=None):
+        
+        if prefix is None:
+            await ctx.send("**USAGE:** ;prefix [prefix]")
+            return
+        if len(prefix) > 3:
+            await ctx.send("Max length of prefix is 3 characters")
+            return
+        
+        server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        if len(server) == 0: 
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel, prefix) VALUES ($1, $2, $3, $4, $5)", str(ctx.guild.id), "None", "None", "None", ";")
+        
+        server = await self.client.pg_con.fetch_row("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        await self.client.pg_con.execute("UPDATE servers SET prefix=$1 WHERE serverid=$2", prefix, str(ctx.guild.id))
+        await ctx.send("Your prefix has been updated to: prefix")
+                       
+        if server['logschannel'] != "None":
+            embed = discord.Embed(title="Logs | Prefix", description="Limebot's has been changed.")
+            embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+            embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
+            embed.add_field(name="Prefix", value=prefix, inline=True)
+            await get(ctx.guild.channels, id=int(server['logschannel'])).send(embed=embed)
+                       
+        
+                       
 def setup(client):
     client.add_cog(ServerSetup(client))
