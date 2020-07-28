@@ -96,7 +96,7 @@ class Moderation(commands.Cog):
             except:
                 pass
                                                                                   
-            self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['serverid'], i['userid'])                                                                           
+            await self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['serverid'], i['userid'])                                                                           
     
                                     
     @commands.command()
