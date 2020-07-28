@@ -70,7 +70,7 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), int(unmute.strftime('%d%m%Y%H%M')))
+            await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), round(unmute.timestamp())) 
             
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=int(role['mutedrole']))) 
             
@@ -92,7 +92,7 @@ class Moderation(commands.Cog):
     async def unmute_users(self):
         
         try:
-            unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute <= $1", int(datetime.datetime.now().strftime('%d%m%Y%H%M')))
+            unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute <= $1", round(datetime.datetime.now().timestamp()))
         except:
             unmute = []
         for i in unmute:
