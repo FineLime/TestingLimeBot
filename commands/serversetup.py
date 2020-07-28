@@ -16,8 +16,8 @@ class ServerSetup(commands.Cog):
         if len(server) == 0: 
             await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), "None", "None", "None")
         
-        server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         await self.client.pg_con.execute("UPDATE servers SET mutedrole = $1 WHERE serverid=$2", str(muterole.id), str(ctx.guild.id))
+        server = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if server['logschannel'] != "None":
             embed = discord.Embed(title="Logs | MutedRole", description="The server's mute role has been changed.")
             embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
