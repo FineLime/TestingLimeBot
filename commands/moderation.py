@@ -18,7 +18,7 @@ class Moderation(commands.Cog):
             await ctx.send("There is not a mute role set up in this server! Set one up with ;muterole [role]")
             return
         role = role[0]
-        if role['mutedrole'] == 'None:
+        if role['mutedrole'] == 'None':
             await ctx.send("There is not a mute role set up in this server! Set one up with ;muterole [role]")
             return
         
