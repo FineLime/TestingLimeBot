@@ -13,7 +13,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
-        role = async self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        role = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(role) == 0:
             await ctx.send("There is not a mute role set up in this server! Set one up with ;muterole [role]")
             return
@@ -47,7 +47,7 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            async self.client.pg_con.execute("INSERT INTO mutes('user', 'server', 'unmute') VALUES ($1, $2, $3)", str(user.id), str(self.client.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            await self.client.pg_con.execute("INSERT INTO mutes('user', 'server', 'unmute') VALUES ($1, $2, $3)", str(user.id), str(self.client.id), unmute.strftime('%d/%m/%Y %H:%M'))
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=role['mutedrole'])) 
             
             try:
@@ -66,10 +66,10 @@ class Moderation(commands.Cog):
     
     @tasks.loop(seconds=60)
     async def unmute_users(self):
-        unmute = async self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute=$1", datetime.datetime.now().strftime('%d/%m/%Y %H:%M'))
+        unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute=$1", datetime.datetime.now().strftime('%d/%m/%Y %H:%M'))
         for i in unmute:
             try:
-                role = async self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['server'])
+                role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['server'])
                 if role["logschannel"] != "None": 
                     embed = discord.Embed(title="Logs | User Unmuted")
                     embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
