@@ -48,7 +48,7 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), int(unmute.strftime('%d%m%Y%H%M')))
             
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=int(role['mutedrole']))) 
             
@@ -68,8 +68,10 @@ class Moderation(commands.Cog):
     
     @tasks.loop(seconds=60)
     async def unmute_users(self):
-        unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute=$1", datetime.datetime.now().strftime('%d/%m/%Y %H:%M'))
+        print('1 minute')
+        unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute <= $1", int(datetime.datetime.now().strftime('%d%m%Y%H%M')))
         for i in unmute:
+            print('I unmuted someone')
             try:
                 role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['server'])
                 if role["logschannel"] != "None": 
