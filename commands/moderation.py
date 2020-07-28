@@ -70,7 +70,10 @@ class Moderation(commands.Cog):
     @tasks.loop(seconds=60)
     async def unmute_users(self):
         print('1 minute')
-        unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute <= $1", int(datetime.datetime.now().strftime('%d%m%Y%H%M')))
+        try:
+            unmute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE unmute <= $1", int(datetime.datetime.now().strftime('%d%m%Y%H%M')))
+        except:
+            unmute = []
         for i in unmute:
             print('I unmuted someone')
             try:
