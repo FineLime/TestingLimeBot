@@ -75,15 +75,9 @@ class Moderation(commands.Cog):
         except:
             unmute = []
         for i in unmute:
+            
             print('I unmuted someone')
             role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['serverid'])
-            if role["logschannel"] != "None": 
-                embed = discord.Embed(title="Logs | User Unmuted")
-                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
-                embed.add_field(name="Moderator", value='LimeBot', inline=True)
-                embed.add_field(name='User', value=f"<@{i.userid}>", inline=True)
-                embed.add_field(name="Reason", value='Mute Ended', inline=True)
-                await get(ctx.guild.channels, id=int(role["logschannel"])).send(embed=embed)
                              
                                     
             try:
@@ -92,7 +86,15 @@ class Moderation(commands.Cog):
                                                                                   
             except:
                 pass
-                                                                                  
+            
+            if role["logschannel"] != "None": 
+                embed = discord.Embed(title="Logs | User Unmuted")
+                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                embed.add_field(name="Moderator", value='LimeBot', inline=True)
+                embed.add_field(name='User', value=f"<@{i.userid}>", inline=True)
+                embed.add_field(name="Reason", value='Mute Ended', inline=True)
+                await get(server.channels, id=int(role["logschannel"])).send(embed=embed)
+                
             await self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['serverid'], i['userid'])                                                                           
     
                                     
