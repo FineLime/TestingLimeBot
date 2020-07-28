@@ -22,7 +22,7 @@ class ServerSetup(commands.Cog):
             embed = discord.Embed(title="Logs | MutedRole", description="The server's mute role has been changed.")
             embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
             embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
-            embed.add_field(name="MutedRole", value=mutedrole.mention, inline=True)
+            embed.add_field(name="MutedRole", value=muterole.mention, inline=True)
             await get(ctx.guild.channels, id=int(server['logschannel'])).send(embed=embed)
 
         await ctx.send("The mute role has been changed! :white_check_mark: \nMake sure the permissions for the role are correct before attempting to mute people.")
