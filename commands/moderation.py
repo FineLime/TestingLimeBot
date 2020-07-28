@@ -23,7 +23,7 @@ class Moderation(commands.Cog):
             mute = True
         if len(role):
             
-            await user.remove_roles(discord.utils.get(ctx.guild.roles, id=str(role[0]['mutedrole'])))
+            await user.remove_roles(discord.utils.get(ctx.guild.roles, id=int(role[0]['mutedrole'])))
             mute = True
             if role[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Unmuted")
