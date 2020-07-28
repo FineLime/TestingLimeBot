@@ -10,6 +10,7 @@ class Moderation(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.unmute_users.start()
     
     @commands.command()
     @commands.has_permissions(manage_roles=True)
