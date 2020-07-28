@@ -49,7 +49,7 @@ class Moderation(commands.Cog):
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
             try:
-                await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+                await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", '129627403101143040', '599677918834327563', '28/07/2020 15:45')
             except:
                 print(f"This is not working: {sys.exc_info()[0]}")
                 print(f"num: {num}\nuser:{user.id},unmute: {unmute.strftime('%d/%m/%Y %H:%M')}")
