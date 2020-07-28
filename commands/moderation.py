@@ -91,7 +91,7 @@ class Moderation(commands.Cog):
                                     
             try:
                 server = discord.utils.get(self.client.guilds, id=int(i['serverid']))
-                discord.utils.get(server.members, id=int(i['userid'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
+                await discord.utils.get(server.members, id=int(i['userid'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
                                                                                   
             except:
                 pass
