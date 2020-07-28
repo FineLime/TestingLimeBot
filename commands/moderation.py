@@ -10,6 +10,7 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
     
+    '''[WIP]
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
@@ -47,7 +48,7 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ('$1', '$2', '$3')", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=role['mutedrole'])) 
             
             try:
@@ -89,7 +90,8 @@ class Moderation(commands.Cog):
                 pass
                                                                                   
             self.client.pg_con.execute("DELETE FROM mutes WHERE server=$1 AND user=$2", i['server'], i['user'])                                                                           
-               
+    
+    '''
                                     
     @commands.command()
     @commands.has_permissions(kick_members=True)
