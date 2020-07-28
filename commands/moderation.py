@@ -48,13 +48,8 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            try:
-                await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", '129627403101143040', '599677918834327563', '28/07/2020 15:45')
-            except:
-                print(f"This is not working: {sys.exc_info()[0]}")
-                print(f"num: {num}\nuser:{user.id},unmute: {unmute.strftime('%d/%m/%Y %H:%M')}")
-                print(f"role: {role['mutedrole']}")
-                
+            await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=int(role['mutedrole']))) 
             
             try:
@@ -95,7 +90,7 @@ class Moderation(commands.Cog):
             except:
                 pass
                                                                                   
-            self.client.pg_con.execute("DELETE FROM mutes WHERE server=$1 AND user=$2", i['server'], i['user'])                                                                           
+            self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['server'], i['user'])                                                                           
     
                                     
     @commands.command()
