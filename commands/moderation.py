@@ -22,10 +22,8 @@ class Moderation(commands.Cog):
             await self.client.pg_con.fetch("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
             mute = True
         if len(role):
-            try:
-                await user.remove_roles(discord.utils.get(ctx.guild.roles, id=str(role[0]['mutedrole'])))
-            except:
-                pass
+            
+            await user.remove_roles(discord.utils.get(ctx.guild.roles, id=str(role[0]['mutedrole'])))
             mute = True
             if role[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Unmuted")
