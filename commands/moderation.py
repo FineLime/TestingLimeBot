@@ -53,7 +53,7 @@ class Moderation(commands.Cog):
             except:
                 print(f"This is not working: {sys.exc_info()[0]}")
                 print(f"num: {num}\nuser:{user.id},unmute: {unmute.strftime('%d/%m/%Y %H:%M')}")
-                print(f"role: {role['mutedrole']"}
+                print(f"role: {role['mutedrole']}"}
                 
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=int(role['mutedrole']))) 
             
