@@ -11,7 +11,7 @@ class Moderation(commands.Cog):
         self.client = client
     
     @commands.command()
-    @commands.has_permissions(manage_roles=True):
+    @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
         role = async self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(role) == 0:
