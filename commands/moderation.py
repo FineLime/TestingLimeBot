@@ -80,9 +80,10 @@ class Moderation(commands.Cog):
                                     
             except:
                 pass
+                                    
             try:
                 server = discord.utils.get(self.client.guilds, id=int(i['server']))
-                discord.utils.get(server.members, id=int(i['user'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole']))
+                discord.utils.get(server.members, id=int(i['user'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
                                                                                   
             except:
                 pass
