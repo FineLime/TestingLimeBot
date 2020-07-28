@@ -11,7 +11,6 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    '''[WIP]
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
@@ -97,7 +96,6 @@ class Moderation(commands.Cog):
                                                                                   
             self.client.pg_con.execute("DELETE FROM mutes WHERE server=$1 AND user=$2", i['server'], i['user'])                                                                           
     
-    '''
                                     
     @commands.command()
     @commands.has_permissions(kick_members=True)
