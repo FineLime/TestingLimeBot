@@ -80,8 +80,8 @@ class Moderation(commands.Cog):
             if role["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Unmuted")
                 embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
-                embed.add_field(name="Moderator", value='LimeBot')
-                embed.add_field(name="User", value=f"<@{i['userid']}>", inline=True)
+                embed.add_field(name="Moderator", value='LimeBot', inline=True)
+                embed.add_field(name='User', value=f"<@{i.userid}>", inline=True)
                 embed.add_field(name="Reason", value='Mute Ended', inline=True)
                 await get(ctx.guild.channels, id=int(role["logschannel"])).send(embed=embed)
                              
