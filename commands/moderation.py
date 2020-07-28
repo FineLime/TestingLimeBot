@@ -4,6 +4,7 @@ from discord.ext.commands.cooldowns import BucketType
 from discord.utils import get
 import asyncpg
 import datetime
+import sys
 
 class Moderation(commands.Cog): 
 
@@ -48,7 +49,12 @@ class Moderation(commands.Cog):
             mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
-            await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            try:
+                await self.client.pg_con.execute("INSERT INTO mutes (user, server, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), unmute.strftime('%d/%m/%Y %H:%M'))
+            except:
+                print(f"This is not working: {sys.exc_info()[0]}")
+                print(f"num: {num}\nuser:{user.id},unmute: {unmute.strftime('%d/%m/%Y %H:%M')})
+                
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=role['mutedrole'])) 
             
             try:
