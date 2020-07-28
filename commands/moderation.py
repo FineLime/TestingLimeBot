@@ -77,12 +77,12 @@ class Moderation(commands.Cog):
         for i in unmute:
             print('I unmuted someone')
             try:
-                role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['server'])
+                role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['serverid'])
                 if role["logschannel"] != "None": 
                     embed = discord.Embed(title="Logs | User Unmuted")
                     embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
                     embed.add_field(name="Moderator", value='LimeBot')
-                    embed.add_field(name="User", value=f"<@{i['user']}>", inline=True)
+                    embed.add_field(name="User", value=f"<@{i['userid']}>", inline=True)
                     embed.add_field(name="Reason", value='Mute Ended', inline=True)
                     await get(ctx.guild.channels, id=int(role["logschannel"])).send(embed=embed)
                                     
@@ -90,13 +90,13 @@ class Moderation(commands.Cog):
                 pass
                                     
             try:
-                server = discord.utils.get(self.client.guilds, id=int(i['server']))
-                discord.utils.get(server.members, id=int(i['user'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
+                server = discord.utils.get(self.client.guilds, id=int(i['serverid']))
+                discord.utils.get(server.members, id=int(i['userid'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
                                                                                   
             except:
                 pass
                                                                                   
-            self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['server'], i['user'])                                                                           
+            self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['serverid'], i['userid'])                                                                           
     
                                     
     @commands.command()
