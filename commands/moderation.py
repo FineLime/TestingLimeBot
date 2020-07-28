@@ -23,7 +23,7 @@ class Moderation(commands.Cog):
             mute = True
         if len(role):
             try:
-                await user.remove_roles(discord.utils.get(ctx.guild.roles, id=role[0]['mutedrole']))
+                await user.remove_roles(discord.utils.get(ctx.guild.roles, id=str(role[0]['mutedrole'])))
             except:
                 pass
             mute = True
