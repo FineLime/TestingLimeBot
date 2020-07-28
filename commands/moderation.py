@@ -14,6 +14,29 @@ class Moderation(commands.Cog):
     
     @commands.command()
     @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, user:discord.Member, *, reason="No reason given"):
+        mute = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
+        role = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        isMuted = False
+        if len(mute):
+            await self.client.pg_con.fetch("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
+            mute = True
+        if len(role):
+            try:
+                await user.remove_roles(discord.utils.get(ctx.guild.roles, id=role[0]['mutedrole']))
+            except:
+                pass
+            mute = True
+            if role[0]["logschannel"] != "None": 
+                embed = discord.Embed(title="Logs | User Unmuted")
+                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
+                embed.add_field(name="User", value=f"{user.name}#{user.discriminator} ({user.mention})", inline=True)
+                embed.add_field(name="Reason", value=reason, inline=True)
+                await get(ctx.guild.channels, id=int(role[0]["logschannel"])).send(embed=embed)
+            
+    @commands.command()
+    @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
         role = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(role) == 0:
@@ -145,6 +168,16 @@ class Moderation(commands.Cog):
                 embed.add_field(name="User", value=f"{user.name}#{user.discriminator} ({user.mention})", inline=True)
                 embed.add_field(name="Reason", value=reason, inline=True)
                 await get(ctx.guild.channels, id=int(server[0]["logschannel"])).send(embed=embed)
+                                
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        muted = await self.client.pg_con.fetch("SELECT * FROM mutes WHERE serverid = $1 AND userid = $2", str(member.guild.id), str(member.id))
+        if len(muted):
+            role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid = $1", str(member.guild.id))
+            try:
+                await member.add_roles(discord.utils.get(member.guild.roles, id=int(role['mutedrole'])))
+            except:
+                pass
         
 def setup(client):
     client.add_cog(Moderation(client))
