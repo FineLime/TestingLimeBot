@@ -23,10 +23,9 @@ async def prefix(bot, message):
         pass
     
     if dbl:
-        return client.user.mention
+        
+        return '<@!458265636896768001> '
     else:
-        print(message.content.split(" ")[0])
-        print(message.content.startswith("<@!458265636896768001>"))
         
         return [';', '<@!458265636896768001> ']
 
