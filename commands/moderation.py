@@ -66,10 +66,12 @@ class Moderation(commands.Cog):
                 logtime += ' hours'
             else:
                 logtime += ' minutes'
-                
-            mutetime = datetime.timedelta(minutes=num)
-            if mutetime > 10080:
+            
+            if num > 10800:
                 await ctx.send("Max mute time is 7 days.")
+                return
+            
+            mutetime = datetime.timedelta(minutes=num)
             unmute = datetime.datetime.now() + datetime.timedelta(minutes=num)
             
             await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), round(unmute.timestamp())) 
