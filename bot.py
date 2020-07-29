@@ -26,7 +26,7 @@ async def prefix(bot, message):
         return client.user.mention
     else:
         print(message.content.split(" ")[0])
-        print(message.startswith("<@!458265636896768001>"))
+        print(message.content.startswith("<@!458265636896768001>"))
         
         return [';', '<@!458265636896768001> ']
 
