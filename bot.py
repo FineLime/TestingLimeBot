@@ -26,8 +26,9 @@ async def prefix(bot, message):
         return client.user.mention
     else:
         print(message.content.split(" ")[0])
-        print(client.user.mention)
-        return (';', '<@458265636896768001> ')
+        print(message.startswith("<@!458265636896768001>"))
+        
+        return [';', '<@!458265636896768001> ']
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
