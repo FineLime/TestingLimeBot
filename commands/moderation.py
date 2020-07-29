@@ -45,7 +45,7 @@ class Moderation(commands.Cog):
             await ctx.send("There is not a mute role set up in this server! Set one up with ;muterole [role]")
             return
         
-        if ctx.author.top_role.position > user.top_role.position:
+        if ctx.author.top_role.position > user.top_role.position or ctx.author == ctx.guild.owner:
             
             if time[-1] not in ['m', 'h', 'd']:
                 await ctx.send("**USAGE:** ;mute user [time] {reason}\nTo set time, put 'm', 'h', or 'd' after a number. Max 7 days.")
@@ -121,7 +121,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, user : discord.Member, *, reason='No reason given'): 
-        if ctx.author.top_role.position > user.top_role.position: 
+        if ctx.author.top_role.position > user.top_role.position or ctx.author == ctx.guild.owner: 
             try:
                 await user.send(f"You have been kicked from **{ctx.guild.name}**\nReason:`{reason}`")
             except:
@@ -146,7 +146,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, user : discord.Member, *, reason='No reason given'): 
-        if ctx.author.top_role.position > user.top_role.position: 
+        if ctx.author.top_role.position > user.top_role.position or ctx.author == ctx.guild.owner: 
             try:
                 await user.send(f"You have been banned from **{ctx.guild.name}**\nReason:`{reason}`")
             except:
