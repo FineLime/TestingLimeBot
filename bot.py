@@ -25,6 +25,8 @@ async def prefix(bot, message):
     if dbl:
         return client.user.mention
     else:
+        print(message.split(" ")[0])
+        print(client.user.mention)
         return (';', '<@458265636896768001> ')
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
