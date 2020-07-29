@@ -23,9 +23,9 @@ async def prefix(bot, message):
         pass
     
     if dbl:
-        return 'l#'
+        return client.user.mention
     else:
-        return ';'
+        return (';', client.user.mention)
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
