@@ -24,10 +24,10 @@ async def prefix(bot, message):
     
     if dbl:
         
-        return '<@!458265636896768001> '
+        return '<@!458265636896768001> ', '<@458265636896768001> '
     else:
         
-        return [';', '<@!458265636896768001> ']
+        return [';', '<@!458265636896768001> ', '<@458265636896768001> ']
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
