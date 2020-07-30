@@ -17,7 +17,7 @@ async def prefix(bot, message):
     
     dbl = False
     try:
-        if message.guild.id == 264445053596991498:
+        if message.guild.id in [264445053596991498, 110373943822540800]:
             dbl=True
     except:
         pass
