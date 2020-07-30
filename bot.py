@@ -32,7 +32,7 @@ async def prefix(bot, message):
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
 
-status = "for commands"
+status = "for ;help commands"
 
 @client.event
 async def on_ready():
