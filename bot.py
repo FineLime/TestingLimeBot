@@ -46,7 +46,7 @@ async def create_db_pool():
 async def help(ctx):
     await ctx.send("Find the list of commands at https://finelime.github.io/docs")
     
-@client.event()
+@client.event
 async def on_member_leave(member):
     print(member.id == client.user.id)
     
