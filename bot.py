@@ -47,8 +47,11 @@ async def help(ctx):
     await ctx.send("Find the list of commands at https://finelime.github.io/docs")
     
 @client.event
-async def on_member_leave(member):
-    print(member.id == client.user.id)
+async def on_guild_remove(guild):
+    await client.pg_con.execute("DELETE FROM servers WHERE serverid = $1", str(guild.id))
+    await client.pg_con.execute("DELETE FROM autorole WHERE server = $1", str(guild.id))
+    await client.pg_con.execute("DELETE FROM reactionroles WHERE serverid = $1", str(guild.id))
+    await client.pg_con.execute("DELETE FROM mutes WHERE serverid = $1", str(guild.id))
     
 @client.command()
 @commands.is_owner()
