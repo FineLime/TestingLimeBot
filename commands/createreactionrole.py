@@ -35,7 +35,7 @@ class Addreactionrole(commands.Cog):
             await ctx.send("That's not an emoji!")
             return
 
-        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji) VALUES ($1, $2, $3, $4)", msgid, roleid, str(ctx.channel.id), emoji)
+        await self.client.pg_con.execute("INSERT INTO reactionroles (messageid, roleid, channelid, emoji, serverid) VALUES ($1, $2, $3, $4, $5)", msgid, roleid, str(ctx.channel.id), emoji, str(ctx.guild.id))
         if len(server) > 0: 
             if server[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | Reactionrole", description=f"[New Reaction role]({message.jump_url})")
