@@ -50,7 +50,7 @@ class ServerSetup(commands.Cog):
     async def channel(self, ctx):
         server = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
         if len(server) == 0: 
-            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel, prefix) VALUES ($1, $2, $3, $4, $5)", str(ctx.guild.id), "None", "None", "None", ";")
+            await self.client.pg_con.execute("INSERT INTO servers (serverid, mutedrole, logschannel, memberschannel) VALUES ($1, $2, $3, $4, $5)", str(ctx.guild.id), "None", "None", "None")
             await ctx.send("You currently do not have a logs channel. Set one with ;logs channel set [channel]")
             return
         server = server[0]
