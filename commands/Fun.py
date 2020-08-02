@@ -148,7 +148,7 @@ class Fun(commands.Cog):
             embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
             await ctx.send(embed=embed)
         except Exception as e:
-            print e.message, e.args
+            print (e.message)
             
         
 def setup(client):
