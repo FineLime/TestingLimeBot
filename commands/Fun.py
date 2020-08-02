@@ -151,7 +151,7 @@ class Fun(commands.Cog):
             if len(r["missions"]) > 0:
                 mission = r["missions"][0]["description"]
                 missionname = r["missions"][0]["name"]
-            embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{mission}\n\n{T}{link}')
+            embed = discord.Embed(title=f'{missionname} {displayTime}', description=f'{mission}\n\n{T}{link}')
             await ctx.send(embed=embed)
         except Exception as e:
             print (e.message)
