@@ -15,19 +15,7 @@ database = DB[3].split("/")[1]
 
 async def prefix(bot, message):
     
-    dbl = False
-    try:
-        if message.guild.id in [264445053596991498, 110373943822540800]:
-            dbl=True
-    except:
-        pass
-    
-    if dbl:
-        
-        return '<@!458265636896768001> ', '<@458265636896768001> '
-    else:
-        
-        return [';', '<@!458265636896768001> ', '<@458265636896768001> ']
+    return [';', '<@!458265636896768001> ', '<@458265636896768001> ']
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
