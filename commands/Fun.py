@@ -147,8 +147,8 @@ class Fun(commands.Cog):
                 link = f"\n\n[Watch here]({r['vidURLs'][0]})"
             embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
             await ctx.send(embed=embed)
-        except:
-            print("you failed")
+        except Exception as e:
+            print e.message, e.args
             
         
 def setup(client):
