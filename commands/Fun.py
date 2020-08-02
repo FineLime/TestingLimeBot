@@ -145,7 +145,11 @@ class Fun(commands.Cog):
             link = ""
             if r['vidURLs']: 
                 link = f"\n\n[Watch here]({r['vidURLs'][0]})"
-            embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{r["missions"][0]["description"]}\n\n{T}{link}')
+            
+            mission = "There is not mission details avaliable" 
+            if len(r["missions"]) > 0:
+                mission = r["missions"][0]["description"]
+            embed = discord.Embed(title=f'{r["missions"][0]["name"]} {displayTime}', description=f'{mission}\n\n{T}{link}')
             await ctx.send(embed=embed)
         except Exception as e:
             print (e.message)
