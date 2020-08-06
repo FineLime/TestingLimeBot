@@ -101,7 +101,6 @@ class Moderation(commands.Cog):
             unmute = []
         for i in unmute:
             
-            print(f"Attempting to unmute {len(i)} users")
             role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['serverid'])
                              
                                     
@@ -110,9 +109,7 @@ class Moderation(commands.Cog):
                 await discord.utils.get(server.members, id=int(i['userid'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
                                                                                   
             except Exception as e:
-                print(e)
-                print(server)
-                print(i['serverid'])
+                pass
             
             try:
                 if role["logschannel"] != "None": 
