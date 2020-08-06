@@ -109,16 +109,21 @@ class Moderation(commands.Cog):
                 server = discord.utils.get(self.client.guilds, id=int(i['serverid']))
                 await discord.utils.get(server.members, id=int(i['userid'])).remove_roles(discord.utils.get(server.roles, id=int(role['mutedrole'])))
                                                                                   
+            except Exception as e:
+                print(e)
+                print(server)
+                print(i['serverid'])
+            
+            try:
+                if role["logschannel"] != "None": 
+                    embed = discord.Embed(title="Logs | User Unmuted")
+                    embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
+                    embed.add_field(name="Moderator", value='LimeBot', inline=True)
+                    embed.add_field(name='User', value=f"<@{i['userid']}>", inline=True)
+                    embed.add_field(name="Reason", value='Mute Ended', inline=True)
+                    await get(server.channels, id=int(role["logschannel"])).send(embed=embed)
             except:
                 pass
-            
-            if role["logschannel"] != "None": 
-                embed = discord.Embed(title="Logs | User Unmuted")
-                embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
-                embed.add_field(name="Moderator", value='LimeBot', inline=True)
-                embed.add_field(name='User', value=f"<@{i['userid']}>", inline=True)
-                embed.add_field(name="Reason", value='Mute Ended', inline=True)
-                await get(server.channels, id=int(role["logschannel"])).send(embed=embed)
                 
             await self.client.pg_con.execute("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", i['serverid'], i['userid'])                                                                           
     
