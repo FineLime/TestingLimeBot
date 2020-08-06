@@ -101,6 +101,7 @@ class Moderation(commands.Cog):
             unmute = []
         for i in unmute:
             
+            print(f"Attempting to unmute {len(i)} users")
             role = await self.client.pg_con.fetchrow("SELECT * FROM servers WHERE serverid=$1", i['serverid'])
                              
                                     
