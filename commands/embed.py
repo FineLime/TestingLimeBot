@@ -49,7 +49,7 @@ class Embed(commands.Cog):
             if image != "":
                 embed.set_image(image)
                     
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
                  
                     
             
