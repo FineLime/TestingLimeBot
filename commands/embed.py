@@ -13,8 +13,8 @@ class Embed(commands.Cog):
         ps = p.split('=["')
         ce = ""
         t = ""
-        title = "I didn't set a title!"
-        description = "I didn't set a description!"
+        title = ""
+        description = ""
         image = ""
         footer = ""
         
