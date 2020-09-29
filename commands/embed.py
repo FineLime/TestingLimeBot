@@ -45,7 +45,7 @@ class Embed(commands.Cog):
                     
         embed = discord.Embed(title=title, description=description)
         if footer != "":
-            embed.set_footer(footer)
+            embed.set_footer(text=footer)
         if image != "":
             embed.set_image(image)
                     
