@@ -47,7 +47,7 @@ class Embed(commands.Cog):
         if footer != "":
             embed.set_footer(text=footer)
         if image != "":
-            embed.set_image(image)
+            embed.set_image(url=image)
                     
         await ctx.send(embed=embed)
                  
