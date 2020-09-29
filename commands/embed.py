@@ -43,13 +43,13 @@ class Embed(commands.Cog):
                 elif ce == 'footer':
                     footer = t
                     
-            embed = discord.Embed(title=title, description=description)
-            if footer != "":
-                embed.set_footer(footer)
-            if image != "":
-                embed.set_image(image)
+        embed = discord.Embed(title=title, description=description)
+        if footer != "":
+            embed.set_footer(footer)
+        if image != "":
+            embed.set_image(image)
                     
-            await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
                  
                     
             
