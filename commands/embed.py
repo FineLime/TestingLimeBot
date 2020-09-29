@@ -22,7 +22,7 @@ class Embed(commands.Cog):
             if i == 0:
                 ce = ps[1].split('"]')
                 if ps[0].strip().lower() == 'title':
-                    title = ce[0].split
+                    title = ce[0]
                 elif ps[0].strip().lower() == 'description':
                     description = ce[0]
                 elif ps[0].strip().lower() == 'image':
