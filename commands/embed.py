@@ -20,9 +20,9 @@ class Embed(commands.Cog):
         
         for i in range(len(ps)):
             if i == 0:
-                ce = ps[1].split(']"')
+                ce = ps[1].split('"]')
                 if ps[0].strip().lower() == 'title':
-                    title = ce[0]
+                    title = ce[0].split
                 elif ps[0].strip().lower() == 'description':
                     description = ce[0]
                 elif ps[0].strip().lower() == 'image':
