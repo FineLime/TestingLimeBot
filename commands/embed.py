@@ -29,7 +29,7 @@ class Embed(commands.Cog):
                     image = ce[0]
                 elif ps[0].strip().lower() == 'footer':
                     footer = ce[0]
-            elif i == len(ps):
+            elif i == len(ps)-1:
                 break;
             else:
                 ce = ps[i].split('"]')[1].strip().lower()
