@@ -33,7 +33,7 @@ class Embed(commands.Cog):
                 break;
             else:
                 ce = ps[i].split('"]')[1].strip().lower()
-                t = ps[i+1].split(
+                t = ps[i+1].split('"]')[0].strip()
                 if ce == 'title':
                     title = t
                 elif ce == 'description':
