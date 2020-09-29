@@ -38,9 +38,9 @@ class Embed(commands.Cog):
                     title = t
                 elif ce == 'description':
                     description = t
-                elif ce = 'image':
+                elif ce == 'image':
                     image = t
-                elif ce = 'footer':
+                elif ce == 'footer':
                     footer = t
                     
             embed = discord.Embed(title=title, description=description)
