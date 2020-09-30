@@ -12,14 +12,17 @@ class Poll(commands.Cog):
     async def poll(self, ctx, *, poll): 
         #Poll format: ;poll Should x be allowed to join? | :Zero:=Yes / :One:=No /
         poll = poll.split(" | ")
-        pollmessage = poll[0]
+        title = poll[0]
+        pollmessage = ""
         poll = poll[1].split(" / ")
         reactions = []
         for i in poll: 
             a = i.split("=")
             pollmessage += f"\n{a[0].strip()} {a[1].strip()}"
             reactions.append(f"{a[0].strip()}")
-        reactto = await ctx.send(pollmessage)
+            
+        embed = discord.Embed(title=title, description=pollmessage)
+        reactto = await ctx.send(embed=embed)
         for i in reactions:
             await reactto.add_reaction(i)
         
