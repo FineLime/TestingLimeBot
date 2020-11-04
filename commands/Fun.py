@@ -63,64 +63,18 @@ class Fun(commands.Cog):
     async def launch(self, ctx, *, lsp=None):
         
         req = ""
-        if lsp is None:
-            req = urllib.request.Request(
-                "https://launchlibrary.net/1.4/launch/next/1", 
-                headers={
-                'User-Agent': 'LimeBot for discord'
-            })
+        if True:
+            req = requests.get('https://ll.thespacedevs.com/2.0.0/launch/upcoming/?status=1')
         else:
-            lsp = lsp.replace(" ", "%20")
-            reqLSP = urllib.request.Request(
-                f"https://launchlibrary.net/1.4/agency/{lsp}", 
-                headers={
-                'User-Agent': 'LimeBot for discord'
-            })
-            try:
-                r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
-            except:
-                await ctx.send('Could not find a launch from that Launch Service Provider')
-                return
-            r = json.loads(r)
-            print(f"lsp name: {r}")
-            if len(r['agencies']) == 0:
-                reqLSP = urllib.request.Request(
-                    f"https://launchlibrary.net/1.4/agency?name={lsp}", 
-                    headers={
-                    'User-Agent': 'LimeBot for discord'
-                })
-                r = urllib.request.urlopen(reqLSP).read().decode('utf-8')
-                r = json.loads(r)
-                print(f"lsp name: {r}")
-                if len(r['agencies']) == 0:
-                    await ctx.send('Could not find an agency by that name')
-                    
-            
-            req = urllib.request.Request(
-                f"https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}", 
-                headers={
-                'User-Agent': 'LimeBot for discord'
-            })
-            print(f"Requested for https://launchlibrary.net/1.4/launch/next/1?lsp={r['agencies'][0]['id']}")
-        
-        
-        failed = False
-        try:
-            r = urllib.request.urlopen(req).read().decode('utf-8')
-        except:
-            failed=True
-        
-        if failed==True:
-            await ctx.send("No launches from that agency was found")
-            return
+            pass
+                        
+        r = json.loads(r.content)['results'][0]
                   
         try:
             
-            r = json.loads(r)
-            r = r['launches'][0]
-            status = r['status']
+            status = r['status']['id']
             try: 
-                time = datetime.utcfromtimestamp(r['netstamp'])
+                time = datetime.utcfromtimestamp(r['net'])
                 if time < datetime.now(): 
                     time = 'TBD'
             except:
@@ -143,14 +97,11 @@ class Fun(commands.Cog):
                 displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
                 T = f'T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
             link = ""
-            if r['vidURLs']: 
-                link = f"\n\n[Watch here]({r['vidURLs'][0]})"
+            if r['vwebcast_live']: 
+                link = f"\n\n[Watch here]({r['webcast_live']})"
             
-            mission = "There is not mission details avaliable" 
-            missionname = r["name"]
-            if len(r["missions"]) > 0:
-                mission = r["missions"][0]["description"]
-                missionname = r["missions"][0]["name"]
+            mission = r['mission']['description']
+            missionname = r['mission']['name']
             embed = discord.Embed(title=f'{missionname} {displayTime}', description=f'{mission}\n\n{T}{link}')
             await ctx.send(embed=embed)
         except Exception as e:
