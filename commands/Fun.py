@@ -90,7 +90,7 @@ class Fun(commands.Cog):
                 displayTime = '- TBD'     
                 T = 'Launch Time - TBD'
             else: 
-                e = time - datetime.now()
+                e = time - datetime.datetime.now()
                 e = divmod(e.days * 86400 + e.seconds, 60);
                 minutes = e[0]
                 days = math.floor(minutes/1440)
