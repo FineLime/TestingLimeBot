@@ -97,7 +97,7 @@ class Fun(commands.Cog):
                 displayTime = time.strftime("on %B %d, %Y at %I:%M%p UTC")
                 T = f'T- {days} days, {hours} hours, {minutes} minutes, {e[1]} seconds'
             link = ""
-            if r['vwebcast_live']: 
+            if r['webcast_live']: 
                 link = f"\n\n[Watch here]({r['webcast_live']})"
             
             mission = r['mission']['description']
