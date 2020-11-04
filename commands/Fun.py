@@ -77,7 +77,7 @@ class Fun(commands.Cog):
                 time = r['net'].split("T")
                 ymd = time[0].split("-")
                 hms = time[1].split(":")
-                time = datetime.datetime(ymd[0], ymd[1], ymd[2], hms[0], hms[1], hms[2][0:2]).timestamp()
+                time = datetime.datetime(int(ymd[0]), int(ymd[1]), int(ymd[2]), int(hms[0]), int(hms[1]), int(hms[2][0:2])).timestamp()
                 if time < datetime.now(): 
                     time = 'TBD'
             except:
