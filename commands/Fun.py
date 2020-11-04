@@ -74,7 +74,10 @@ class Fun(commands.Cog):
             
             status = r['status']['id']
             try: 
-                time = datetime.utcfromtimestamp(r['net'])
+                time = r['net'].split("T")
+                ymd = r[0].split("-")
+                hms = r[1].split(":")
+                time = datetime.datetime(ymd[0], ymd[1], ymd[2], hms[0], hms[1], hms[2][0:2]).timestamp()
                 if time < datetime.now(): 
                     time = 'TBD'
             except:
