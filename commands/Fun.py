@@ -62,9 +62,9 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def launch(self, ctx, *, lsp=None):
         
-        req = ""
+        r = ""
         if True:
-            req = requests.get('https://ll.thespacedevs.com/2.0.0/launch/upcoming/?status=1')
+            r = requests.get('https://ll.thespacedevs.com/2.0.0/launch/upcoming/?status=1')
         else:
             pass
                         
