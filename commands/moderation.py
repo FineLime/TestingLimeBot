@@ -20,11 +20,11 @@ class Moderation(commands.Cog):
         isMuted = False
         if len(mute):
             await self.client.pg_con.fetch("DELETE FROM mutes WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
-            mute = True
+            isMutd = True
         if len(role):
             
             await user.remove_roles(discord.utils.get(ctx.guild.roles, id=int(role[0]['mutedrole'])))
-            mute = True
+            isMuted = True
             if role[0]["logschannel"] != "None": 
                 embed = discord.Embed(title="Logs | User Unmuted")
                 embed.set_author(name="Limebot", icon_url=self.client.user.avatar_url)
@@ -32,11 +32,18 @@ class Moderation(commands.Cog):
                 embed.add_field(name="User", value=f"{user.name}#{user.discriminator} ({user.mention})", inline=True)
                 embed.add_field(name="Reason", value=reason, inline=True)
                 await get(ctx.guild.channels, id=int(role[0]["logschannel"])).send(embed=embed)
+                
+        if isMuted:
+            await ctx.send(f"{user.mention} was successfully unmuted. :white_check_mark:")
+        else:
+            await ctx.send("{user.mention} is not muted.")
+            
             
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, user:discord.Member, time, *, reason='No reason given'):
         role = await self.client.pg_con.fetch("SELECT * FROM servers WHERE serverid=$1", str(ctx.guild.id))
+        
         if len(role) == 0:
             await ctx.send("There is not a mute role set up in this server! Set one up with ;muterole [role]")
             return
@@ -77,6 +84,8 @@ class Moderation(commands.Cog):
             await self.client.pg_con.execute("INSERT INTO mutes (userid, serverid, unmute) VALUES ($1, $2, $3)", str(user.id), str(ctx.guild.id), round(unmute.timestamp())) 
             
             await user.add_roles(discord.utils.get(ctx.guild.roles, id=int(role['mutedrole']))) 
+            
+            await ctx.send(f"{user.mention} was successfully muted. :white_check_mark:")
             
             try:
                 await user.send(f"You have been muted in **{ctx.guild.name}** for {logtime}\nReason:`{reason}`")
