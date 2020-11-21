@@ -34,7 +34,7 @@ class Membercount(commands.Cog):
             return
 
         mchannel = get(member.guild.channels, id=int(guild['memberschannel']))
-        await mchannel.edit(name=f'Membercount: {len(member.guild.members)}')
+        await mchannel.edit(name=f'Membercount: {member.guild.member_count)}')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -49,7 +49,7 @@ class Membercount(commands.Cog):
             return
 
         mchannel = get(member.guild.channels, id=int(guild['memberschannel']))
-        await mchannel.edit(name=f'Member Count: {len(member.guild.members)}')
+        await mchannel.edit(name=f'Member Count: {member.guild.member_count}')
 
     
         
