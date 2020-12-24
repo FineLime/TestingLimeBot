@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 import random
+import string
 import asyncio
 
 class Eval(commands.Cog): 
