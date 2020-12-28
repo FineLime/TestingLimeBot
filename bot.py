@@ -13,11 +13,15 @@ host = DB[2].split("@")[1]
 port = DB[3].split("/")[0]
 database = DB[3].split("/")[1]
 
+
 async def prefix(bot, message):
     
     return [';', '<@!458265636896768001> ', '<@458265636896768001> ']
 
-client = commands.Bot(command_prefix=prefix, case_insensitive=True)
+intents = discord.Intents.default()
+intents.members = True
+
+client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=intents)
 client.remove_command("help")
 
 status = "for ;help commands"
