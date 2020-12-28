@@ -18,10 +18,9 @@ async def prefix(bot, message):
     
     return [';', '<@!458265636896768001> ', '<@458265636896768001> ']
 
-intents = discord.Intents.default()
-intents.members = True
 
-client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=intents)
+
+client = commands.Bot(command_prefix=prefix, case_insensitive=True)
 client.remove_command("help")
 
 status = "for ;help commands"
