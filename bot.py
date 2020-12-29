@@ -20,7 +20,10 @@ async def prefix(bot, message):
 
 
 
-client = commands.Bot(command_prefix=prefix, case_insensitive=True)
+intents = discord.Intents.default()
+intents.members = True
+
+client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=intents)
 client.remove_command("help")
 
 status = "for ;help commands"
