@@ -11,7 +11,16 @@ class Fun(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
+    
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def expand(self, ctx, emoji:discord.Emoji): 
+        
+        try:
+            ctx.send(emoji.url)
+        except:
+            pass
+        
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def avatar(self, ctx, user:discord.Member = "None"): 
