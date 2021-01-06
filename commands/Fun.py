@@ -14,7 +14,7 @@ class Fun(commands.Cog):
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def expand(self, ctx, emoji:discord.Emoji): 
+    async def expand(self, ctx, emoji:discord.PartialEmoji): 
         
         try:
             ctx.send(emoji.url)
