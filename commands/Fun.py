@@ -17,7 +17,7 @@ class Fun(commands.Cog):
     async def expand(self, ctx, emoji:discord.PartialEmoji): 
         
         try:
-            ctx.send(emoji.url)
+            await ctx.send(emoji.url)
         except:
             pass
         
