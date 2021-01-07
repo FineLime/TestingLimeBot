@@ -8,7 +8,7 @@ class Slots(commands.Cog):
     def __init__(self, client):
         self.client = client
         
-                           
+    '''                       
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def slots(self, ctx): 
@@ -42,7 +42,7 @@ class Slots(commands.Cog):
             win = "Winner!!! You won nothing! Congratz!"
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
 
-
+        '''
 
 def setup(client):
     client.add_cog(Slots(client))
