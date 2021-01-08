@@ -65,20 +65,20 @@ class Eval(commands.Cog):
         command = self.client.get_command(command) 
         p = ""
         if params:
-            params.split("$")
+            params = params.split("$")
             count = 0;
             for i in command.params.items(): 
                 try:
-                    print(a[count])
+                    print(params[count])
                 except:
                     break;
                 
                 if i[0] not in ["ctx", "self"]:
                     p += f", {i[0]}={params[count]}"
+                    count += 1
                 
         ctx.author = user
-        # await eval(f"ctx.invoke(self.client.get_command(command)){p}")
-        print(f"ctx.invoke(self.client.get_command(command)){p}")
+        await eval(f"ctx.invoke(self.client.get_command('{command}'){p})")
         
 def setup(client):
     client.add_cog(Eval(client))
