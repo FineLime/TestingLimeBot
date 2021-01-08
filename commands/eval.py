@@ -53,7 +53,7 @@ class Eval(commands.Cog):
         if params:
             params.split("$")
             count = 0;
-            for i in command.items(): 
+            for i in command.params.items(): 
                 try:
                     print(a[count])
                 except:
