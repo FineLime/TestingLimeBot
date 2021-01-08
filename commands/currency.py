@@ -59,15 +59,24 @@ class Currency(commands.Cog):
                        
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def coins(self, ctx):
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
-        await ctx.send(f"You have {user[0]['coins']} coin(s)")
+    async def coins(self, ctx, user:discord.User = None):
+        if not user: 
+            user = ctx.author
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
+        if len(user) == 0: 
+            await ctx.send(f"{user.name} has 0 coins.")
+            return
+        if user == ctx.author:
+            await ctx.send(f"{user.mention}, you have {user[0]['coins']} coin(s)")
+        else: 
+            await ctx.send(f"{user.name} has {user[0]['coins']} coin(s)")               
+                           
                        
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def richest(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 5", str(ctx.guild.id))
-        msg = ""
+        msg = ""    
         for u in range(0, len(user)):
             msg += f"{u+1}. <@!{user[u]['userid']}> - {user[u]['coins']}\n"            
         embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
