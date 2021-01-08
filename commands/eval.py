@@ -51,7 +51,7 @@ class Eval(commands.Cog):
         try:
             exec(
                 f'async def __ex(): ' +
-                ''.join(f'\n {l}' for l in code.split('\n'))
+                ''.join(f'\n {l}' for l in e.split('\n'))
             )
 
             # Get `__ex` from local variables, call it and return the result
