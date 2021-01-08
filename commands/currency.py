@@ -71,7 +71,37 @@ class Currency(commands.Cog):
         else: 
             await ctx.send(f"{u.name} has {user[0]['coins']} coin(s)")               
                            
-                       
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def gift(self, ctx, u:discord.User, gift:int):
+        if u == ctx.author:
+            await ctx.send("You want to send coins to yourself? Are you braindead or something.")
+            return               
+        if gift < 0: 
+            await ctx.send("Are you trying to rob from them? Feel free to suggest a rob command if you want it.")
+            return               
+        if gift = 0:
+            await ctx.send("Transaction complete! I didn't actually do anything, but I did it!")
+            return
+        
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(u.id))
+        author = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
+        if len(author) == 0:
+            await ctx.send("You don't have any coins, get out of here.")
+            return
+        
+        if author[0]["coins"] < gift:
+            await ctx.send("You're too poor to gift that much.")
+            return
+                           
+        if len(user) == 0: 
+            await ctx.send(f"{u.name} doesn't seem to be in my database, tell them to send a message in the chat (non-command).")
+            return
+        
+        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), user[0]["id"])
+        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), author[0]["id"])
+        await self.client.send(f"You successfully gifted {gift} coins.")
+                           
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def richest(self, ctx):
