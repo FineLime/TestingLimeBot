@@ -47,9 +47,22 @@ class Eval(commands.Cog):
             
     @commands.command()
     @commands.is_owner()
-    async def mimic(self, ctx, user:discord.User, command):
+    async def mimic(self, ctx, user:discord.User, command, *, params=None):
+        command = self.client.get_command(command) 
+        p = ""
+        if params:
+            params.split("$")
+            count = 0;
+            for i in command.items(): 
+                try:
+                    print(a[count])
+                except:
+                    break;
+                    
+                p += f", {i[0]}={params[count]}"
+                
         ctx.author = user
-        await ctx.invoke(self.client.get_command(command))
+        await eval(f"ctx.invoke(self.client.get_command(command)){p}")
         
 def setup(client):
     client.add_cog(Eval(client))
