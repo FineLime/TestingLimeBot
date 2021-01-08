@@ -44,7 +44,7 @@ class Currency(commands.Cog):
             await ctx.send("Minimum bid is 50")
             return
                        
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $2 AND serverid = $3", str(ctx.author.id), str(ctx.guild.id))              
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
         if user[0]["coins"] < bet:
             await ctx.send("You're too poor to bid that much.")
                
