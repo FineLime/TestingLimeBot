@@ -6,6 +6,8 @@ import requests
 import math
 import json
 import urllib.request
+from PIL import Image
+from io import BytesIO
 
 class Fun(commands.Cog): 
 
@@ -20,6 +22,18 @@ class Fun(commands.Cog):
             await ctx.send(emoji.url)
         except:
             pass
+    
+    @commands.command()
+    @commands.cooldown(1, 20, BucketType.user)
+    async def hex(self, ctx, hex): 
+        
+        webhexcolor = hex
+        image = Image.new("RGB", (100,100), hex)
+        with BytesIO() as image_binary:
+	        image.save(image_binary, "PNG")
+	        image_binary.seek(0)
+	        await ctx.send(hex, file=discord.File(fp=image_binary,filename="image.png"))
+        
         
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
