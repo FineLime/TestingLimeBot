@@ -28,13 +28,13 @@ class Currency(commands.Cog):
         if (time.time - user["time"]) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE user = $3 AND server = $4", user['coins']+random.randint(20, 100), str(int(time.time())), author.id, message.guild.id)
             
-        
+    '''
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx):
         user = await self.client.pg_con.fetchone("SELECT * FROM users WHERE server=$1 AND user=$2", str(ctx.guild.id), str(ctx.author.id))
         await ctx.send(f"You have {user['coins']} coin(s)"}
-    
+    '''
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def slots(self, ctx): 
