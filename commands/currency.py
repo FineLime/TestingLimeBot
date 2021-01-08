@@ -73,10 +73,10 @@ class Currency(commands.Cog):
             if bet == 0:
                 win = "Winner!!!\nBut since you're a pepega and didn't bid, you get nothing."
             else:
-                await self.client.pg_con.execute("UPDATE user SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bet*75, str(ctx.author.id), str(ctx.guild.id))
+                await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bet*75, str(ctx.author.id), str(ctx.guild.id))
                 win = f"Winner!!!\nYou won yourself {bet*75} coins!"
         elif bet > 0:
-            await self.client.pg_con.execute("UPDATE user SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
             win += f"\nYou lost {bet} coins."
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
 
