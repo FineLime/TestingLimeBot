@@ -47,6 +47,7 @@ class Currency(commands.Cog):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
         if user[0]["coins"] < bet:
             await ctx.send("You're too poor to bid that much.")
+            return
                
                        
                        
