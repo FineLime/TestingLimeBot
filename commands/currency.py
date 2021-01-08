@@ -39,10 +39,16 @@ class Currency(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def slots(self, ctx, bet:int=0): 
         
-
+        
         if bet > 0 and bet < 50:
             await ctx.send("Minimum bid is 50")
             return
+                       
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $2 AND serverid = $3", str(ctx.author.id), str(ctx.guild.id))              
+        if user[0]["coins"] < bet:
+            await ctx.send("You're too poor to bid that much.")
+               
+                       
                        
         choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
         choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
