@@ -49,7 +49,7 @@ class Eval(commands.Cog):
     @commands.is_owner()
     async def aexec(self, ctx, *, e):
         try:
-            eexec(
+            exec(
                 f'async def __ex(): ' +
                 ''.join(f'\n {l}' for l in code.split('\n'))
             )
