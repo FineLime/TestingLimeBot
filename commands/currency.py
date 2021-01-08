@@ -38,10 +38,10 @@ class Currency(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def richest(self, ctx):
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 10", str(ctx.guild.id))
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 5", str(ctx.guild.id))
         msg = ""
         for u in range(0, len(user)):
-            msg += f"{u}. <@!{user[u]['userid']}>\n"            
+            msg += f"{u+1}. {<@!{user[u]['userid']}> - {user[u]['coins']}\n"            
         embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
                        
         await ctx.send(embed=embed)
