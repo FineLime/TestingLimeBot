@@ -55,8 +55,7 @@ class Eval(commands.Cog):
             )
 
             # Get `__ex` from local variables, call it and return the result
-            await locals()['__ex']()
-            await ctx.send("Code ran! :white_check_mark:")
+            return await locals()['__ex']()
         except Exception as e:
             await ctx.send(f"Failed to run code: \n{e}")
             
