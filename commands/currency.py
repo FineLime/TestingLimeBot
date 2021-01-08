@@ -59,17 +59,17 @@ class Currency(commands.Cog):
                        
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def coins(self, ctx, user:discord.User = None):
+    async def coins(self, ctx, u:discord.User = None):
         if not user: 
-            user = ctx.author
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(user.id))
+            u = ctx.author
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(u.id))
         if len(user) == 0: 
-            await ctx.send(f"{user.name} has 0 coins.")
+            await ctx.send(f"{u.name} has 0 coins.")
             return
         if user == ctx.author:
-            await ctx.send(f"{user.mention}, you have {user[0]['coins']} coin(s)")
+            await ctx.send(f"{u.mention}, you have {user[0]['coins']} coin(s)")
         else: 
-            await ctx.send(f"{user.name} has {user[0]['coins']} coin(s)")               
+            await ctx.send(f"{u.name} has {user[0]['coins']} coin(s)")               
                            
                        
     @commands.command()
