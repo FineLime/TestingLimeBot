@@ -25,7 +25,7 @@ class Currency(commands.Cog):
             return
             
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
-        if (time.time - user[0]["time"]) > 60: 
+        if (time.time - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(20, 100), str(int(time.time())), author.id, message.guild.id)
             
     
