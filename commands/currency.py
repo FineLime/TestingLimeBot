@@ -16,7 +16,7 @@ class Currency(commands.Cog):
         author = message.author
         if author.bot:
             return
-        if message.startswith((";", '<@!458265636896768001> ', '<@458265636896768001> ')):
+        if message.content.startswith((";", '<@!458265636896768001> ', '<@458265636896768001> ')):
             return
         
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
