@@ -13,7 +13,7 @@ class Currency(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message): 
         
-        author = ctx.message.author
+        author = message.author
         if author.bot:
             return
         
