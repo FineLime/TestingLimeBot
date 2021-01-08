@@ -49,7 +49,7 @@ class Eval(commands.Cog):
     @commands.is_owner()
     async def mimic(self, ctx, user:discord.User, command):
         ctx.author = user
-        ctx.invoke(self.client.get_command(command))
+        await ctx.invoke(self.client.get_command(command))
         
 def setup(client):
     client.add_cog(Eval(client))
