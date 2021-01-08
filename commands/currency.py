@@ -11,7 +11,7 @@ class Currency(commands.Cog):
         self.client = client
        
     @commands.Cog.listener()
-    async def on_message(message): 
+    async def on_message(self, message): 
         
         author = ctx.message.author
         if author.bot:
