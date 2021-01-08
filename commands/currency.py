@@ -21,7 +21,7 @@ class Currency(commands.Cog):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(message.guild.id), str(author.id))
         
         if user is None: 
-            await self.client.pg_con.execute('''INSERT INTO Users (user, server, coins, time) VALUES ($1, $2, $3, $4)''', str(author.id), str(message.guild.id), 100, str(int(time.time())))
+            await self.client.pg_con.execute('''INSERT INTO users (user, server, coins, time) VALUES ($1, $2, $3, $4)''', str(author.id), str(message.guild.id), 100, str(int(time.time())))
             return
             
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(message.guild.id), str(author.id))
