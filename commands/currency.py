@@ -60,7 +60,7 @@ class Currency(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx, u:discord.User = None):
-        if not user: 
+        if not u: 
             u = ctx.author
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(u.id))
         if len(user) == 0: 
