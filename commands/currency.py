@@ -80,7 +80,7 @@ class Currency(commands.Cog):
         if gift < 0: 
             await ctx.send("Are you trying to rob from them? Feel free to suggest a rob command if you want it.")
             return               
-        if gift = 0:
+        if gift == 0:
             await ctx.send("Transaction complete! I didn't actually do anything, but I did it!")
             return
         
