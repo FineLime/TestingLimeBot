@@ -44,7 +44,7 @@ class Currency(commands.Cog):
             await ctx.send("You're too poor to bid that much.")
             return
         
-        result = random.choice(["heads, tails"])
+        result = random.choice(["heads", "tails"])
         msg = f"I flipped a coin and it landed on {result}."
         if result != guess: 
             await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
