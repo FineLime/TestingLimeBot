@@ -58,8 +58,9 @@ class Eval(commands.Cog):
                     print(a[count])
                 except:
                     break;
-                    
-                p += f", {i[0]}={params[count]}"
+                
+                if i[0] not in ["ctx", "self"]:
+                    p += f", {i[0]}={params[count]}"
                 
         ctx.author = user
         await eval(f"ctx.invoke(self.client.get_command(command)){p}")
