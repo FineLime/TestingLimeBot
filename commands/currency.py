@@ -26,13 +26,24 @@ class Currency(commands.Cog):
             
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
         if (int(time.time()) - int(user[0]["time"])) > 60: 
-            await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(35, 55), str(int(time.time())), str(author.id), str(message.guild.id))
+            await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
             
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
+        await ctx.send(f"You have {user[0]['coins']} coin(s)")
+                       
+    @commands.command()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def richest(self, ctx):
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 10", str(ctx.guild.id))
+        msg = ""
+        for u in range(0, len(user)):
+            msg += f"{u}. <@!{user[u]["userid"]>\n"            
+        embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
+                       
         await ctx.send(f"You have {user[0]['coins']} coin(s)")
     
     @commands.command()
