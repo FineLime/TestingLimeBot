@@ -100,7 +100,7 @@ class Currency(commands.Cog):
         
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), user[0]["userid"])
         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), author[0]["userid"])
-        await self.client.send(f"You successfully gifted {gift} coins.")
+        await ctx.send(f"You successfully gifted {gift} coins.")
                            
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
