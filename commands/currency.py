@@ -98,8 +98,8 @@ class Currency(commands.Cog):
             await ctx.send(f"{u.name} doesn't seem to be in my database, tell them to send a message in the chat (non-command).")
             return
         
-        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), user[0]["id"])
-        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), author[0]["id"])
+        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), user[0]["userid"])
+        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid=$2 AND userid=$3", gift, str(ctx.guild.id), author[0]["userid"])
         await self.client.send(f"You successfully gifted {gift} coins.")
                            
     @commands.command()
