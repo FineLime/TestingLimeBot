@@ -24,16 +24,16 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute('''INSERT INTO Users (user, server, coins, time) VALUES ($1, $2, $3, $4)''', str(author.id), str(message.guild.id), 100, str(int(time.time())))
             return
             
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(message.guild.id), str(author.id))[0]
-        if (time.time - user["time"]) > 60: 
-            await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE user = $3 AND server = $4", user['coins']+random.randint(20, 100), str(int(time.time())), author.id, message.guild.id)
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(message.guild.id), str(author.id))
+        if (time.time - user[0]["time"]) > 60: 
+            await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE user = $3 AND server = $4", user[0]['coins']+random.randint(20, 100), str(int(time.time())), author.id, message.guild.id)
             
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx):
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(ctx.guild.id), str(ctx.author.id))[0]
-        await ctx.send(f"You have {user['coins']} coin(s)")
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE server=$1 AND user=$2", str(ctx.guild.id), str(ctx.author.id))
+        await ctx.send(f"You have {user[0]['coins']} coin(s)")
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
