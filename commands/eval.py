@@ -63,7 +63,8 @@ class Eval(commands.Cog):
                     p += f", {i[0]}={params[count]}"
                 
         ctx.author = user
-        await eval(f"ctx.invoke(self.client.get_command(command)){p}")
+        # await eval(f"ctx.invoke(self.client.get_command(command)){p}")
+        print(f"ctx.invoke(self.client.get_command(command)){p}")
         
 def setup(client):
     client.add_cog(Eval(client))
