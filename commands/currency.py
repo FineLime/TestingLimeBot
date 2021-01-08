@@ -28,7 +28,32 @@ class Currency(commands.Cog):
         if (int(time.time()) - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
             
-    
+    @commands.command(aliases=["flip", "coin", "flipcoin"])
+    @commands.cooldown(1, 10, BucketType.user)
+    async def coinflip(self, ctx, guess, bid:int): 
+        guess = guess.lower()
+        if bid < 500:
+            await ctx.send("Minimum bid for coinflipping is 500, this aint a children's game.")
+            return
+        if guess.lower() not in ["heads", "tails"]:
+            await ctx.send("Have you have seen a coin before? It has a heads and a tails. Guess what it will land on.")
+            return
+        
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
+        if user[0]["coins"] < bid:
+            await ctx.send("You're too poor to bid that much.")
+            return
+        
+        result = random.choice(["heads, tails"])
+        msg = f"I flipped a coin and it landed on {result}."
+        if result != guess: 
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
+            msg+= "\nLooks like I'll be keeping your money, and don't you go crying to me about it."
+        else:
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
+            msg += f"\nHuh, you won, well here you go, take my {bid} coins."
+        await ctx.send(msg)
+                       
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx):
