@@ -44,7 +44,7 @@ class Currency(commands.Cog):
             msg += f"{u}. <@!{user[u]['userid']}>\n"            
         embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
                        
-        await ctx.send(f"You have {user[0]['coins']} coin(s)")
+        await ctx.send(embed=embed)
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
