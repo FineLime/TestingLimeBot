@@ -41,7 +41,7 @@ class Currency(commands.Cog):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 10", str(ctx.guild.id))
         msg = ""
         for u in range(0, len(user)):
-            msg += f"{u}. <@!{user[u]["userid"]}>\n"            
+            msg += f"{u}. <@!{user[u]['userid']}>\n"            
         embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
                        
         await ctx.send(f"You have {user[0]['coins']} coin(s)")
