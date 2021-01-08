@@ -33,7 +33,7 @@ class Currency(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def coins(self, ctx):
         user = await self.client.pg_con.fetchone("SELECT * FROM users WHERE server=$1 AND user=$2", str(ctx.guild.id), str(ctx.author.id))
-        await ctx.send(f"You have {user["coins"]} coin(s)"}
+        await ctx.send(f"You have {user['coins']} coin(s)"}
     
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
