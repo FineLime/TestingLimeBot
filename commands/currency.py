@@ -64,7 +64,7 @@ class Currency(commands.Cog):
             try:
                 user = MemberConverter().convert(ctx, winner["userid"])
                 user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
-            except:
+            except Exception as e:
                 print(e)
             print(f'{winner["userid"]} WON - ADDED THIS SO IT IS MORE VISIBLE IN LOGS!\nADDED THIS SO IT IS MORE VISIBLE WINNER WINNER WINNER')
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, winner['userid'], winner['serverid'])
