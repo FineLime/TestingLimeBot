@@ -62,7 +62,7 @@ class Currency(commands.Cog):
         
         users_cards = [random.choice(cards)]
         cards.remove(users_cards[0])
-        users.append(random.choice(cards))
+        users_cards.append(random.choice(cards))
         cards.remove(users_cards[1])
         users_total = get_card_value(users_cards)
         
@@ -74,7 +74,7 @@ class Currency(commands.Cog):
         
         message += f"\n\n**{ctx.author.name.upper}'s CARDS:**"
         
-        message += f"\n{users[0]} {users[1]} (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
+        message += f"\n{users_Cards[0]} {users_cards[1]} (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
         
         if dealers_total == users_total == 21:  
             message += "\n\nTIE"
