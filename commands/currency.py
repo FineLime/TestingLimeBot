@@ -92,8 +92,8 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
             while True:
                 msg = await self.client.wait_for('message', timeout=60.0, check=check)
-                msg = msg.lower()
-                if msg.content in ["s", "stand"]: 
+                msg = msg.content.lower()
+                if msg in ["s", "stand"]: 
                     break
                 
                 users_cards.append(random.choice(cards))
