@@ -63,8 +63,8 @@ class Currency(commands.Cog):
             winner = random.choice(tickets)
             coins = len(tickets)*100 
             try:
-                user = MemberConverter().convert(self, winner["userid"])
-                user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
+                user = await MemberConverter().convert(self, winner["userid"])
+                await user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
             except Exception as e:
                 print(e)
             print(f'{winner["userid"]} WON - ADDED THIS SO IT IS MORE VISIBLE IN LOGS!\nADDED THIS SO IT IS MORE VISIBLE WINNER WINNER WINNER')
