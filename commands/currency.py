@@ -154,10 +154,10 @@ class Currency(commands.Cog):
                 message += "\n\nBUST - You Win"
                 if users_total == 21:
                     message += f"\nYou won {int(bid*2.5)} coins."
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
                     message += f"\nYou won {bid*2} coins."
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id))
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id))
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed) 
                 return
@@ -181,11 +181,11 @@ class Currency(commands.Cog):
                 message += "\n\nYou Win"
                 if users_total == 21:
                     message += f"\nYou won {int(bid*2.5)} coins."
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
                     message += f"\nYou won {bid*2} coins."
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id)) 
-                return
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id)) 
+ 
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed)
                 
