@@ -115,7 +115,10 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
             while True:
                 
-                msg = await self.client.wait_for('message', timeout=60.0, check=check)
+                try:
+                    msg = await self.client.wait_for('message', timeout=60.0, check=check)
+                except:
+                    await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take his coins.\nI guess they're mine now.")
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
                     break
@@ -201,12 +204,7 @@ class Currency(commands.Cog):
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id)) 
-            
-            
-    @blackjack.error
-    async def blackjack_error(self, ctx, error):
-        if isinstance(error, asyncio.TimeoutError):
-            await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take his coins.\nI guess they're mine now.")
+
             
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 10, BucketType.user)
