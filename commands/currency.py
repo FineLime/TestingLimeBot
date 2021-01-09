@@ -19,7 +19,8 @@ class Currency(commands.Cog):
             return
         if message.content.startswith((";", '<@!458265636896768001> ', '<@458265636896768001> ')):
             return
-        
+        if message.content.lower in ["hit", "h", "s", "stand"]:
+            return
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
         
         if len(user) == 0: 
