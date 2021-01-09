@@ -73,7 +73,7 @@ class Currency(commands.Cog):
         else: 
             message += f"\n{dealers_cards[0]}  {dealers_cards[1]} (Total: 21)\n A natural BlackJack."
         
-        message += f"\n\n**{ctx.author.name.upper(}'s CARDS:**"
+        message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"
         
         message += f"\n{users_cards[0]} {users_cards[1]}  (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
         
