@@ -91,7 +91,7 @@ class Currency(commands.Cog):
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             while True:
-                msg = await client.wait_for('message', timeout=60.0, check=check)
+                msg = await self.client.wait_for('message', timeout=60.0, check=check)
                 msg = msg.lower()
                 if msg.content in ["s", "stand"]: 
                     break
