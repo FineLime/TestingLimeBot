@@ -118,7 +118,7 @@ class Currency(commands.Cog):
                 try:
                     msg = await self.client.wait_for('message', timeout=60.0, check=check)
                 except:
-                    await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take his coins.\nI guess they're mine now.")
+                    await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
                     break
