@@ -53,7 +53,7 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
         
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=100000)
     async def get_winners(self):
         try:
             tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
