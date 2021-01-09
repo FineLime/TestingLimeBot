@@ -30,7 +30,64 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("UPDATE Users SET coins = 0 WHERE userid = $1 AND serverid = $2", str(author.id), str(message.guild.id))
         if (int(time.time()) - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
+    
+    @commands.commad()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def blackjack(self, ctx, bid):
+        
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id)) 
+        def get_card_value(list):
+            v = 0
+            a = 0
+            for i in list:
+                if i[0] in ["J", "Q", "K"]: 
+                    v += 10
+                elif i[0] == "A":
+                    a += 1
+                else: 
+                    v += int(i[0])
+                    
+            for i in range(0, a):
+                if v + 11 > 21: 
+                    v += 1
+                else:
+                    v += 11
             
+        cards = ["A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥", "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦", "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣"]
+        dealers_cards = [random.choice(cards)]
+        cards.remove(dealers_cards[0])
+        dealers_cards.append(random.choice(cards))
+        cards.remove(dealers_cards[1])
+        dealers_total = get_card_value(dealers_cards)
+        
+        users_cards = [random.choice(cards)]
+        cards.remove(users_cards[0])
+        users.append(random.choice(cards))
+        cards.remove(users_cards[1])
+        users_total = get_card_value(users_cards)
+        
+        message = "**DEALERS CARDS: **" 
+        if dealers_total < 21: 
+            message += f"\n{dealers_cards[0]} 🂠 (Total: ?)" 
+        else: 
+            message += f"\n{dealers_cards[0]} {dealers_cards[1]} (Total: 21)\n A natural BlackJack."
+        
+        message += f"\n\n**{ctx.author.name.upper}'s CARDS:**"
+        
+        message += f"\n{users[0]} {users[1]} (Total: {users_total}){'\n A natural BlackJack.' if users_total == 21 else ''}"
+        
+        if dealers_total == users_total == 21:  
+            message += "\n\nTIE"
+        elif dealers_total == 21:  
+            message += "\n\nDealer Wins!"
+        elif dealers_total == users_total == 21:  
+            message += "\n\nYou win!"
+        else: 
+            message += "\n\nSend H to hit, S to stand"
+            
+        embed = discord.Embed(title="BlackJack", description=message)
+        await ctx.send(embed=embed)
+        
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 10, BucketType.user)
     async def coinflip(self, ctx, guess, bid:int): 
@@ -66,7 +123,7 @@ class Currency(commands.Cog):
         if len(user) == 0: 
             await ctx.send(f"{u.name} has 0 coins.")
             return
-        if user == ctx.author:
+        if u == ctx.author:
             await ctx.send(f"{u.mention}, you have {user[0]['coins']} coin(s)")
         else: 
             await ctx.send(f"{u.name} has {user[0]['coins']} coin(s)")               
