@@ -104,7 +104,7 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
         elif users_total == 21:  
             message += "\n\nYou win!"
-            message += f"\nYou won {int(bid*2.5)} coins."
+            message += f"\nYou won {int(bid*2.5-bid)} coins."
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
@@ -153,10 +153,10 @@ class Currency(commands.Cog):
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nBUST - You Win"
                 if users_total == 21:
-                    message += f"\nYou won {int(bid*2.5)} coins."
+                    message += f"\nYou won {int(bid*2.5-bid)} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
-                    message += f"\nYou won {bid*2} coins."
+                    message += f"\nYou won {bid*2-bid} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id))
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed) 
@@ -180,10 +180,10 @@ class Currency(commands.Cog):
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nYou Win"
                 if users_total == 21:
-                    message += f"\nYou won {int(bid*2.5)} coins."
+                    message += f"\nYou won {int(bid*2.5-bid)} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
-                    message += f"\nYou won {bid*2} coins."
+                    message += f"\nYou won {bid*2-bid} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid*2, str(ctx.guild.id), str(ctx.author.id)) 
  
                 embed = discord.Embed(title="BlackJack", description=message)
@@ -198,7 +198,7 @@ class Currency(commands.Cog):
             message += "\n\nTIE"
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
-            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id)) 
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id)) 
             
             
             
