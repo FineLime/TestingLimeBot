@@ -50,7 +50,7 @@ class Fun(commands.Cog):
     @avatar.error
     async def avatar_error(self, ctx, error):
         if isinstance(error, commands.badArgument):
-            await ctx("I couldn't find a member by that name.")
+            await ctx.send("I couldn't find a member by that name.")
             
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
