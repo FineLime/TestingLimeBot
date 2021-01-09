@@ -54,7 +54,7 @@ class Currency(commands.Cog):
                     v += 11
             return v
             
-        cards = ["A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥", "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦", "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣"]
+        cards = ["A\♠", "2\♠", "3\♠", "4\♠", "5\♠", "6\♠", "7\♠", "8\♠", "9\♠", "10\♠", "J\♠", "Q\♠", "K\♠", "A\♥", "2\♥", "3\♥", "4\♥", "5\♥", "6\♥", "7\♥", "8\♥", "9\♥", "10\♥", "J\♥", "Q\♥", "K\♥", "A\♦", "2\♦", "3\♦", "4\♦", "5\♦", "6\♦", "7\♦", "8\♦", "9\♦", "10\♦", "J\♦", "Q\♦", "K\♦", "A\♣", "2\♣", "3\♣", "4\♣", "5\♣", "6\♣", "7\♣", "8\♣", "9\♣", "10\♣", "J\♣", "Q\♣", "K\♣"]
         dealers_cards = [random.choice(cards)]
         cards.remove(dealers_cards[0])
         dealers_cards.append(random.choice(cards))
@@ -69,13 +69,13 @@ class Currency(commands.Cog):
         
         message = "**DEALERS CARDS: **" 
         if dealers_total < 21: 
-            message += f"\n{dealers_cards[0]} 🂠 (Total: ?)" 
+            message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
         else: 
-            message += f"\n{dealers_cards[0]} {dealers_cards[1]} (Total: 21)\n A natural BlackJack."
+            message += f"\n{dealers_cards[0]}  {dealers_cards[1]} (Total: 21)\n A natural BlackJack."
         
-        message += f"\n\n**{ctx.author.name.upper}'s CARDS:**"
+        message += f"\n\n**{ctx.author.name.upper(}'s CARDS:**"
         
-        message += f"\n{users_cards[0]} {users_cards[1]} (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
+        message += f"\n{users_cards[0]} {users_cards[1]}  (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
         
         if dealers_total == users_total == 21:  
             message += "\n\nTIE"
