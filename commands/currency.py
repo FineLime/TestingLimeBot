@@ -40,7 +40,7 @@ class Currency(commands.Cog):
             v = 0
             a = 0
             for i in list:
-                if i[0] in ["J", "Q", "K"]: 
+                if i[0] in ["J", "Q", "K"] or i.startswith("10"): 
                     v += 10
                 elif i[0] == "A":
                     a += 1
