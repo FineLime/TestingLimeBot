@@ -110,7 +110,7 @@ class Currency(commands.Cog):
                 message = "**DEALERS CARDS: **" 
                 message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"          
-                message += f"\n{'  '.join(users_cards[0])} (Total: {users_total})"
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed)
             await ctx.send("ended - test")
