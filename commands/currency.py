@@ -49,7 +49,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have enough for a lottery ticket")
             return
         await self.client.pg_con.execute("UPDATE users SET coins = coins - 100 WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
-        await self.client.pg_con.execute("INSERT INTO lotterytickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
+        await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
         
     @tasks.loop(seconds=3600)
