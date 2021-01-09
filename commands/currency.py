@@ -206,7 +206,7 @@ class Currency(commands.Cog):
     @blackjack.error
     async def blackjack_error(self, ctx, error):
         if isinstance(error, asyncio.TimeoutError):
-            await ctx(f"{ctx.author.mention} ran away from the blackjack table but forgot to take his coins.\nI guess they're mine now.")
+            await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take his coins.\nI guess they're mine now.")
             
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 10, BucketType.user)
