@@ -36,6 +36,10 @@ class Currency(commands.Cog):
     async def blackjack(self, ctx, bid):
         
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
+        def check(m): 
+            return m.author == ctx.author and m.content.lower() in ["hit", "stand", "h", "s"]
+        
+        def 
         def get_card_value(list):
             v = 0
             a = 0
@@ -81,11 +85,29 @@ class Currency(commands.Cog):
             message += "\n\nTIE"
         elif dealers_total == 21:  
             message += "\n\nDealer Wins!"
-        elif dealers_total == users_total == 21:  
+        elif users_total == 21:  
             message += "\n\nYou win!"
         else: 
             message += "\n\nSend H to hit, S to stand"
-            
+            embed = discord.Embed(title="BlackJack", description=message)
+            await ctx.send(embed=embed)
+            while True:
+                msg = await client.wait_for('message', timeout=60.0, check=check)
+                msg = msg.lower()
+                if msg.content in ["s", "stand"]: 
+                    break
+                
+                users_cards.append(random.choice(cards)
+                users_total = get_card_value(users_cards)
+                if users_total >= 21:
+                    break
+                       
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"          
+                message += f"\n{'  '.join(users_cards[0])} (Total: {users_total})"
+            await ctx.send("ended - test")
+                                   
         embed = discord.Embed(title="BlackJack", description=message)
         await ctx.send(embed=embed)
         
