@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, tasks
+from discord.ext.commands import MemberConverter
 from discord.ext.commands.cooldowns import BucketType
 import random
 import time
