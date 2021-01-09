@@ -113,7 +113,10 @@ class Currency(commands.Cog):
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             while True:
-                msg = await self.client.wait_for('message', timeout=60.0, check=check)
+                try:
+                    msg = await self.client.wait_for('message', timeout=60.0, check=check)
+                except:
+                    await ctx.send(f"{user.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
                     break
@@ -202,8 +205,6 @@ class Currency(commands.Cog):
             
             
             
-                                  
-        
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 10, BucketType.user)
     async def coinflip(self, ctx, guess, bid:int): 
