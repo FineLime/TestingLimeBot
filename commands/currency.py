@@ -10,6 +10,7 @@ class Currency(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        asyncio.sleep(5)
         self.get_winners.start()
        
     @commands.Cog.listener()
@@ -70,8 +71,6 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("DELETE * FROM tickets")
         except Exception as e: 
             print(e)
-            print(e.message)
-            print(e.args)
               
             
             
