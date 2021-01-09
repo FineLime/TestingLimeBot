@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands.cooldowns import BucketType
 import random
 import time
@@ -10,6 +10,7 @@ class Currency(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.get_winners.start()
        
     @commands.Cog.listener()
     async def on_message(self, message): 
@@ -33,6 +34,44 @@ class Currency(commands.Cog):
         if (int(time.time()) - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
     
+    @commands.group()
+    @commands.cooldown(1, 10, BucketType.user)
+    async def lottery(self, ctx):
+        pass
+    
+    @lottery.command 
+    async def buy(self, ctx):
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
+        if len(user) == 0:
+            await ctx.send("You don't have any coins.")
+            return
+        if user[0]['coins'] < 100:
+            await ctx.send("You don't have enough for a lottery ticket")
+            return
+        await self.client.pg_con.execute("UPDATE users SET coins = coins - 100 WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
+        await self.client.pg_con.execute("INSERT INTO lotterytickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
+        await ctx.send("You bought a lottery ticket for 100")
+        
+    @tasks.loop(seconds=3600)
+    async def get_winners(self):
+        tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
+        if len(tickets) == 0:
+            return
+        winner = random.choice(tickets)
+        coins = len(tickets)*100 
+        try:
+            user = MemberConverter().convert(ctx, winner["userid"])
+            user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
+        except:
+            pass
+        print(f'{winner["userid"]} WON - ADDED THIS SO IT IS MORE VISIBLE IN LOGS!\nADDED THIS SO IT IS MORE VISIBLE WINNER WINNER WINNER')
+        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, winner['userid'], winner['serverid'])
+        await self.client.pg_con.execute("DELETE * FROM tickets")
+              
+            
+            
+        
+                
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def blackjack(self, ctx, bid:int):
