@@ -35,7 +35,7 @@ class Currency(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def blackjack(self, ctx, bid):
         
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id)) 
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         def get_card_value(list):
             v = 0
             a = 0
