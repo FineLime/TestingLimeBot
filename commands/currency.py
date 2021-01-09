@@ -10,7 +10,7 @@ class Currency(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        asyncio.sleep(5)
+        asyncio.sleep(10)
         self.get_winners.start()
        
     @commands.Cog.listener()
@@ -53,7 +53,7 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
         
-    @tasks.loop(seconds=1800)
+    @tasks.loop(seconds=20)
     async def get_winners(self):
         try:
             tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
@@ -65,7 +65,7 @@ class Currency(commands.Cog):
                 user = MemberConverter().convert(ctx, winner["userid"])
                 user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
             except:
-                pass
+                print(e)
             print(f'{winner["userid"]} WON - ADDED THIS SO IT IS MORE VISIBLE IN LOGS!\nADDED THIS SO IT IS MORE VISIBLE WINNER WINNER WINNER')
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, winner['userid'], winner['serverid'])
             await self.client.pg_con.execute("DELETE FROM tickets")
