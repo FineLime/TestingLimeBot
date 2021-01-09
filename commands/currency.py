@@ -111,9 +111,64 @@ class Currency(commands.Cog):
                 message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"          
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                message += "\n\nSend H to hit, S to stand"
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed)
-            await ctx.send("ended - test")
+                
+            if users_total > 21: 
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                message += "\n\nBUST - Dealer Wins"
+                embed = discord.Embed(title="BlackJack", description=message)
+                await ctx.send(embed=embed)
+                return
+            
+            while dealers_total < 17:
+                dealers_cards.append(random.choice(cards))
+                dealers_total = get_card_value(dealers_cards)
+                
+            if dealers_total > 21: 
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                message += "\n\nBUST - You Win"
+                embed = discord.Embed(title="BlackJack", description=message)
+                await ctx.send(embed=embed)
+                return
+            
+            if dealers_total > users_total:
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                message += "\n\nDealer Wins"
+                embed = discord.Embed(title="BlackJack", description=message)
+                await ctx.send(embed=embed)
+                return
+                
+            if users_total > dealers_total:
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                message += "\n\nYou Win"
+                embed = discord.Embed(title="BlackJack", description=message)
+                await ctx.send(embed=embed)
+                return
+            
+            message = "**DEALERS CARDS: **" 
+            message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
+            message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+            message += "\n\nTIE"
+            embed = discord.Embed(title="BlackJack", description=message)
+            await ctx.send(embed=embed)
+            
+            
+            
                                   
         
     @commands.command(aliases=["flip", "coin", "flipcoin"])
