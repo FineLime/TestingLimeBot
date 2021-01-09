@@ -74,7 +74,7 @@ class Currency(commands.Cog):
         
         message += f"\n\n**{ctx.author.name.upper}'s CARDS:**"
         
-        message += f"\n{users[0]} {users[1]} (Total: {users_total}){'\n A natural BlackJack.' if users_total == 21 else ''}"
+        message += f"\n{users[0]} {users[1]} (Total: {users_total}){chr(10) + 'A natural BlackJack.' if users_total == 21 else ''}"
         
         if dealers_total == users_total == 21:  
             message += "\n\nTIE"
