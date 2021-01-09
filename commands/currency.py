@@ -96,7 +96,7 @@ class Currency(commands.Cog):
                 if msg.content in ["s", "stand"]: 
                     break
                 
-                users_cards.append(random.choice(cards)
+                users_cards.append(random.choice(cards))
                 users_total = get_card_value(users_cards)
                 if users_total >= 21:
                     break
