@@ -39,7 +39,7 @@ class Currency(commands.Cog):
     async def lottery(self, ctx):
         await ctx.send("type `;lottery buy` to buy a ticket")
     
-    @lottery.command 
+    @lottery.command()
     async def buy(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
         if len(user) == 0:
