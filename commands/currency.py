@@ -38,8 +38,7 @@ class Currency(commands.Cog):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         def check(m): 
             return m.author == ctx.author and m.content.lower() in ["hit", "stand", "h", "s"]
-        
-        def 
+       
         def get_card_value(list):
             v = 0
             a = 0
