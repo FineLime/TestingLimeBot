@@ -188,6 +188,7 @@ class Currency(commands.Cog):
  
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed)
+                return
                 
             
             message = "**DEALERS CARDS: **" 
