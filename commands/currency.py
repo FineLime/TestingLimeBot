@@ -34,10 +34,10 @@ class Currency(commands.Cog):
         if (int(time.time()) - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
     
-    @commands.group()
+    @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 10, BucketType.user)
     async def lottery(self, ctx):
-        pass
+        await ctx.send("type `;lottery buy` to buy a ticket")
     
     @lottery.command 
     async def buy(self, ctx):
