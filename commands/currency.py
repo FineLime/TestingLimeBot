@@ -133,7 +133,7 @@ class Currency(commands.Cog):
                 
             if users_total > 21: 
                 message = "**DEALERS CARDS: **" 
-                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nBUST - Dealer Wins"
@@ -148,7 +148,7 @@ class Currency(commands.Cog):
                 
             if dealers_total > 21: 
                 message = "**DEALERS CARDS: **" 
-                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nBUST - You Win"
@@ -164,7 +164,7 @@ class Currency(commands.Cog):
             
             if dealers_total > users_total:
                 message = "**DEALERS CARDS: **" 
-                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nDealer Wins"
@@ -175,7 +175,7 @@ class Currency(commands.Cog):
                 
             if users_total > dealers_total:
                 message = "**DEALERS CARDS: **" 
-                message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nYou Win"
@@ -191,7 +191,7 @@ class Currency(commands.Cog):
                 
             
             message = "**DEALERS CARDS: **" 
-            message += f"\n{'  '.join(dealers_cards)} (Total: dealers_total)" 
+            message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
             message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
             message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
             message += "\n\nTIE"
