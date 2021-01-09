@@ -82,10 +82,16 @@ class Currency(commands.Cog):
         
         if dealers_total == users_total == 21:  
             message += "\n\nTIE"
+            embed = discord.Embed(title="BlackJack", description=message)
+            await ctx.send(embed=embed)
         elif dealers_total == 21:  
             message += "\n\nDealer Wins!"
+            embed = discord.Embed(title="BlackJack", description=message)
+            await ctx.send(embed=embed)
         elif users_total == 21:  
             message += "\n\nYou win!"
+            embed = discord.Embed(title="BlackJack", description=message)
+            await ctx.send(embed=embed)
         else: 
             message += "\n\nSend H to hit, S to stand"
             embed = discord.Embed(title="BlackJack", description=message)
@@ -105,10 +111,10 @@ class Currency(commands.Cog):
                 message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"          
                 message += f"\n{'  '.join(users_cards[0])} (Total: {users_total})"
+                embed = discord.Embed(title="BlackJack", description=message)
+                await ctx.send(embed=embed)
             await ctx.send("ended - test")
-                                   
-        embed = discord.Embed(title="BlackJack", description=message)
-        await ctx.send(embed=embed)
+                                  
         
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 10, BucketType.user)
