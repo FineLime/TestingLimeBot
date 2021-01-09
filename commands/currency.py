@@ -31,7 +31,7 @@ class Currency(commands.Cog):
         if (int(time.time()) - int(user[0]["time"])) > 60: 
             await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
     
-    @commands.commad()
+    @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def blackjack(self, ctx, bid):
         
