@@ -14,10 +14,6 @@ class Currency(commands.Cog):
         asyncio.sleep(10)
         self.get_winners.start()
     
-    class fakectx():
-        def __init__(self, bot, guild):
-            self.bot = bot
-            self.guild = guild
             
     @commands.Cog.listener()
     async def on_message(self, message): 
@@ -70,6 +66,11 @@ class Currency(commands.Cog):
             winner = random.choice(tickets)
             coins = len(tickets)*100 
             try:
+                class fakectx():
+                    def __init__(self, bot, guild):
+                    self.bot = bot
+                    self.guild = guild
+                    
                 guild = discord.utils.get(self.client.guilds, id=int(winner['serverid']))
                 fake = fakectx(self.client, guild)
                 user = await MemberConverter().convert(self, winner["userid"])
