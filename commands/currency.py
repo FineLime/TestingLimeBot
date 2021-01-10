@@ -122,7 +122,7 @@ class Currency(commands.Cog):
         
                 
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 5, BucketType.user)
     async def blackjack(self, ctx, bid:int):
         
         first_run = True
@@ -543,7 +543,7 @@ class Currency(commands.Cog):
 
             
     @commands.command(aliases=["flip", "coin", "flipcoin"])
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 5, BucketType.user)
     async def coinflip(self, ctx, guess, bid:int): 
         guess = guess.lower()
         if bid < 250:
@@ -583,7 +583,7 @@ class Currency(commands.Cog):
             await ctx.send(f"{u.name} has {user[0]['coins']} coin(s)")               
                            
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 3, BucketType.user)
     async def gift(self, ctx, u:discord.User, gift:int):
         if u == ctx.author:
             await ctx.send("You want to send coins to yourself? Are you braindead or something.")
@@ -614,7 +614,7 @@ class Currency(commands.Cog):
         await ctx.send(f"You successfully gifted {gift} coins.")
                            
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 5, BucketType.user)
     async def richest(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 5", str(ctx.guild.id))
         msg = ""    
@@ -625,7 +625,7 @@ class Currency(commands.Cog):
         await ctx.send(embed=embed)
     
     @commands.command()
-    @commands.cooldown(1, 10, BucketType.user)
+    @commands.cooldown(1, 5, BucketType.user)
     async def slots(self, ctx, bet:int=0): 
         
         
@@ -677,6 +677,38 @@ class Currency(commands.Cog):
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
 
 
-
+    @commands.group()
+    @commands.is_owner()
+    async def shop(self, ctx):
+        pass
+    
+    @shop.command()
+    @commands.cooldown(1, 5, BucketType.user)
+    async def buy(self, ctx, *, item): 
+        user = await self.client.pg_con.execute("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
+        if len(user) == 0:
+            await ctx.send("Silence, I don't want to hear what you want to buy, I can see you have no money")
+            return
+                           
+        item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemname = $1", item)
+        if len(item) == 0:
+            try:
+                item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemid = $1", int(item))
+            excpet:
+                pass
+        if len(item) == 0:
+            await ctx.send("Could not find that item in the shop")
+            return
+                             
+        if user[0]['coins'] >= item[0]['price']:
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", item[0]['price'], str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute("INSERT INTO useritems (userid, serverid, itemid, itemname) VALUES ($1, $2, $3, $4)", user['userid'], user['serverid'], item['itemid'], item['itemname'])
+            await ctx.send(f"Purchased {item['itemname']}!")
+        else:
+            await ctx.send("You can't afford that.")
+                           
+        
+            
+                           
 def setup(client):
     client.add_cog(Currency(client))
