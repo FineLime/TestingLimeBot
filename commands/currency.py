@@ -42,7 +42,13 @@ class Currency(commands.Cog):
                 await self.client.pg_con.execute("UPDATE Users SET coins = 0 WHERE userid = $1 AND serverid = $2", str(author.id), str(message.guild.id))
             if (int(time.time()) - int(user[0]["time"])) > 60: 
                 await self.client.pg_con.execute("UPDATE Users SET coins = coins + $1, time = $2 WHERE userid = $3 AND serverid = $4", random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
-
+    
+    @commands.command()
+    @commands.is_owner()
+    async def give(self, ctx, user:discord.User, coins:int):
+        await self.client.EXECUTE("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
+        await ctx.send("Done")
+        
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 10, BucketType.user)
     async def lottery(self, ctx):
@@ -664,7 +670,7 @@ class Currency(commands.Cog):
                 win = "Winner!!!\nBut since you're a pepega and didn't bid, you get nothing."
             else:
                 await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bet*75, str(ctx.author.id), str(ctx.guild.id))
-                win = f"Winner!!!\nYou won yourself {bet*75} coins!"
+                win = f"Winner!!!\nYou won yourself {bet*100} coins!"
         elif bet > 0:
             await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
             win += f"\nYou lost {bet} coins."
