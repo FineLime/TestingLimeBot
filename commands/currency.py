@@ -715,7 +715,6 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
                            
     @commands.group()
-    @commands.is_owner()
     async def shop(self, ctx):
         pass
     
