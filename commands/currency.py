@@ -98,7 +98,10 @@ class Currency(commands.Cog):
         
         first_run = True
         double_down = False
-        error = ""
+        split_cards = False
+        bid2 = bid
+        outcome = 0
+        current = 1
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if bid < 500:
             await ctx.send("Minimum bid is 500")
@@ -120,6 +123,10 @@ class Currency(commands.Cog):
                     return True
                 elif m.content.lower() in ["d"]:
                     return True
+                elif m.content.lower() in ["split"] and split_cards == False:
+                    return True
+                else:
+                    return False
             return m.content.lower() in ["hit", "stand", "h", "s"]
        
         def get_card_value(list):
@@ -147,12 +154,15 @@ class Currency(commands.Cog):
         cards.remove(dealers_cards[1])
         dealers_total = get_card_value(dealers_cards)
         
+        
         users_cards = [random.choice(cards)]
         cards.remove(users_cards[0])
         users_cards.append(random.choice(cards))
         cards.remove(users_cards[1])
         users_total = get_card_value(users_cards)
         
+        users_cards2 = []
+        users_total2 = 0
         message = "**DEALERS CARDS: **" 
         if dealers_total < 21: 
             message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
@@ -181,6 +191,8 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
         else: 
             message += "\n\nSend H to hit, S to stand, D to double down"
+            if users_cards[0][:-2] == users_cards[1][:-2]: 
+                  message += "Split to Split"
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             while True:
@@ -191,9 +203,87 @@ class Currency(commands.Cog):
                     print(e)
                     await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
                     return
-                if error == "dd fail":
-                    await ctx.send("You do not have enough money to double down.")
-                    continue
+                
+                if split_cards: 
+                    if msg in ["s", "stand"]: 
+                        if current == 1:
+                            current == 2
+                            continue
+                        else:
+                            break
+                    if msg in ["d"]:
+                        check_coins = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
+                        check_bid = bid if current == 1 else bid2
+                        if check_bid > check_coins[0]['coins']:
+                            await ctx.send("You do not have enough money to double down")
+                            continue
+                        else:
+                            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                            if current == 1:
+                                bid *= 2
+                                users_cards.append(random.choice(cards))
+                                users_total = get_card_value(users_cards)
+                                message = "**DEALERS CARDS: **" 
+                                message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                                message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                                message += "\n\nSend H to hit, S to stand, D to Double Down"
+                                embed = discord.Embed(title="BlackJack", description=message)
+                                await ctx.send(embed=embed)
+                                continue
+                            else:
+                                bid2 *= 2
+                                users_cards2.append(random.choice(cards))
+                                users_total2 = get_card_value(users_cards2)
+                                break
+                                    
+                    if msg in ["h", "hit"]:
+                        if current == 1:
+                            users_cards.append(random.choice(cards))
+                            users_total = get_card_value(users_cards)
+                            if users_total >= 21:
+                                current = 2
+                                first_run = True
+                                message = "**DEALERS CARDS: **" 
+                                message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                                message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                                message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                                message += "\n\nSend H to hit, S to stand, D to Double Down"
+                                embed = discord.Embed(title="BlackJack", description=message)
+                                await ctx.send(embed=embed)
+                                continue
+                            message = "**DEALERS CARDS: **" 
+                            message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                            message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                            message += "\n\nSend H to hit, S to stand"
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                            message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                            embed = discord.Embed(title="BlackJack", description=message)
+                            await ctx.send(embed=embed)
+                            continue
+                        else: 
+                            users_cards2.append(random.choice(cards))
+                            users_total2 = get_card_value(users_cards2)
+                            if users_total2 >= 21:
+                                break
+                            message = "**DEALERS CARDS: **" 
+                            message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                            message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                            message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                            message += "\n\nSend H to hit, S to stand"
+                            embed = discord.Embed(title="BlackJack", description=message)
+                            await ctx.send(embed=embed)
+                            continue
+                            
+                                    
+                                
                 first_run = False
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
@@ -211,6 +301,31 @@ class Currency(commands.Cog):
                         users_total = get_card_value(users_cards)
                         break
                  
+                if msg == "split":
+                    check_coins = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
+                    if bid > check_coins[0]['coins']:
+                        await ctx.send("You do not have enough money to double down")
+                        continue
+                    else: 
+                        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        users_cards.pop()
+                        users_cards2.append(users_cards[0])
+                        users_cards.append(random.choice(cards))
+                        users_card2.append(random.choice(cards))
+                        users_total = get_card_value(users_cards)
+                        users_total2 = get_card_value(users_cards2)
+                        message = "**DEALERS CARDS: **" 
+                        message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                        message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                        message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                        message += "\n\nSend H to hit, S to stand, D to double down"
+                        message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                        message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                        embed = discord.Embed(title="BlackJack", description=message)
+                        await ctx.send(embed=embed)
+                        split_cards = True
+                        continue
+                  
                 users_cards.append(random.choice(cards))
                 users_total = get_card_value(users_cards)
                 if users_total >= 21:
@@ -223,8 +338,9 @@ class Currency(commands.Cog):
                 message += "\n\nSend H to hit, S to stand"
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed)
-                
-            if users_total > 21: 
+            
+                  
+            if users_total > 21 and split_cards == False: 
                 message = "**DEALERS CARDS: **" 
                 message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
@@ -238,7 +354,64 @@ class Currency(commands.Cog):
             while dealers_total < 17:
                 dealers_cards.append(random.choice(cards))
                 dealers_total = get_card_value(dealers_cards)
+            
+            if split_cards:
+                message = "**DEALERS CARDS: **" 
+                message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**" 
+                message += f"\n{'  '.join(users_cards)} (Total: {users_total})\n"
+                if users_total > 21:
+                    message+="YOU WENT BUST"
+                    outcome -= bid
+                elif users_total > dealers_total: 
+                    message+="WON"
+                    if users_total == 21:
+                        outcome += int(bid/2)
+                    outcome += bid
+                elif dealers_total <= 21:
+                    message += "LOST"
+                    outcome -= bid
+                elif user_total == dealer_total:
+                    message += "TIE"
+                else:
+                    message += "DEALER WENT BUST"
+                    outcome += bid
+                 
+                message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**" 
+                message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})\n"
+                  
+                if users_total2 > 21:
+                    message+="BUST"
+                    outcome -= bid2
+                elif users_total2 > dealers_total: 
+                    message+="WON"
+                    if users_total == 21:
+                        outcome += int(bid2/2)
+                    outcome += bid2
+                elif dealers_total <= 21:
+                    message += "LOST"
+                    outcome -= bid2
+                elif user_total2 == dealer_total:
+                    message += "TIE"
+                else:
+                    message += "DEALER WENT BUST"
+                    outcome += bid2
+                  
+                messsage+="\n\n"
+                if outcome == 0:
+                    message+="You earned nothing."
+                elif outcome > 0:
+                    message+=f"You earned {outcome}."
+                else:
+                    message+=f"You lost {outcome}."
+                  
+                await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", outcome, str(ctx.guild.id), str(ctx.author.id))
+                  
                 
+                    
+                  
+               
+                        
             if dealers_total > 21: 
                 message = "**DEALERS CARDS: **" 
                 message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
