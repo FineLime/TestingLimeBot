@@ -45,6 +45,11 @@ class Currency(commands.Cog):
         await ctx.send("type `;lottery buy` to buy a ticket")
     
     @lottery.command()
+    async def pot(self, ctx):
+        tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
+        pot = len(tickets)*100
+        await ctx.send(f"Current lottery pot is: {pot}")
+    @lottery.command()
     async def buy(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
         if len(user) == 0:
