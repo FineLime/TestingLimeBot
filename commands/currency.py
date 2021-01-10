@@ -103,6 +103,7 @@ class Currency(commands.Cog):
         bid2 = bid
         outcome = 0
         current = 1
+        natural = [False, False]
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if bid < 500:
             await ctx.send("Minimum bid is 500")
@@ -210,6 +211,8 @@ class Currency(commands.Cog):
                 if split_cards: 
                     if msg in ["s", "stand"]: 
                         if current == 1:
+                            if natural[1]:
+                                break
                             message = "**DEALERS CARDS: **" 
                             message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                             message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
@@ -236,6 +239,8 @@ class Currency(commands.Cog):
                                 bid *= 2
                                 users_cards.append(random.choice(cards))
                                 users_total = get_card_value(users_cards)
+                                if natural[1]:
+                                    break
                                 message = "**DEALERS CARDS: **" 
                                 message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
@@ -257,6 +262,8 @@ class Currency(commands.Cog):
                             users_cards.append(random.choice(cards))
                             users_total = get_card_value(users_cards)
                             if users_total >= 21:
+                                if natural[1]:
+                                    break
                                 current = 2
                                 first_run = True
                                 message = "**DEALERS CARDS: **" 
@@ -326,16 +333,32 @@ class Currency(commands.Cog):
                         users_cards2.append(random.choice(cards))
                         users_total = get_card_value(users_cards)
                         users_total2 = get_card_value(users_cards2)
+                        if users_total == 21:
+                            natural[0] = True
+                        if users_total2 == 21:
+                            natural[1] == True
+                        if natural[0] and natural[1]:
+                            break
+                        split_cards = True
                         message = "**DEALERS CARDS: **" 
                         message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                         message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
                         message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
-                        message += "\n\nSend H to hit, S to stand, D to double down"
-                        message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                        if natural[0]:
+                            message += "\n\nA natural BlackJack"
+                            current = 2
+                        else:
+                            message += "\n\nSend H to hit, S to stand, D to double down"
+                        
+                        message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"  
                         message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                        if natural[1]: 
+                            message += "\n\nA natural BlackJack"
+                        elif natural[0]: 
+                            message += "\n\nSend H to hit, S to stand, D to double down"
+                        
                         embed = discord.Embed(title="BlackJack", description=message)
                         await ctx.send(embed=embed)
-                        split_cards = True
                         continue
                   
                 users_cards.append(random.choice(cards))
@@ -372,7 +395,10 @@ class Currency(commands.Cog):
                 message += f"\n{'  '.join(dealers_cards)} (Total: {dealers_total})" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})\n"
-                if users_total > 21:
+                if natural[0]: 
+                    message+="A natural blackjack!"
+                    outcome += int(bid*1.5)
+                elif users_total > 21:
                     message+="YOU WENT BUST"
                     outcome -= bid
                 elif users_total > dealers_total: 
@@ -386,13 +412,18 @@ class Currency(commands.Cog):
                 elif users_total == dealers_total:
                     message += "TIE"
                 else:
+                    if users_total == 21:
+                        outcome += int(bid/2)
                     message += "DEALER WENT BUST"
                     outcome += bid
                  
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**" 
                 message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})\n"
-                  
-                if users_total2 > 21:
+                
+                if natural[1]: 
+                    message+="A natural blackjack!"
+                    outcome += int(bid2*1.5)
+                elif users_total2 > 21:
                     message+="BUST"
                     outcome -= bid2
                 elif users_total2 > dealers_total: 
