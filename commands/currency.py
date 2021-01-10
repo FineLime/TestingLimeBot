@@ -71,7 +71,7 @@ class Currency(commands.Cog):
         time_now = time.time()
         next_l = self.next_lottery = time_now
         time_left = ''
-        if next_l < 60
+        if next_l < 60:
             time_left = f'{time_left:9.2f} seconds left until lottery is drawn.'
         else:
             time_left = next_l/60
