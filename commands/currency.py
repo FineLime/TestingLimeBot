@@ -702,7 +702,7 @@ class Currency(commands.Cog):
                              
         if user[0]['coins'] >= item[0]['price']:
             await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", item[0]['price'], str(ctx.author.id), str(ctx.guild.id))
-            await self.client.pg_con.execute("INSERT INTO useritems (userid, serverid, itemid, itemname) VALUES ($1, $2, $3, $4)", user['userid'], user['serverid'], item['itemid'], item['itemname'])
+            await self.client.pg_con.execute("INSERT INTO useritems (userid, serverid, itemid, itemname) VALUES ($1, $2, $3, $4)", user[0]['userid'], user[0]['serverid'], item[0]['itemid'], item[0]['itemname'])
             await ctx.send(f"Purchased {item['itemname']}!")
         else:
             await ctx.send("You can't afford that.")
