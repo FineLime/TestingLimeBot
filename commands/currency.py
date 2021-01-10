@@ -11,32 +11,38 @@ class Currency(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.bot = client
         asyncio.sleep(10)
         self.get_winners.start()
-       
+    
+    class fakectx():
+        def __init__(self, bot, guild):
+            self.bot = bot
+            self.guild = guild
+            
     @commands.Cog.listener()
     async def on_message(self, message): 
         
         author = message.author
         if author.bot:
             return
-        if message.content.startswith((";", '<@!458265636896768001> ', '<@458265636896768001> ')):
+        elif message.content.startswith((";", '<@!458265636896768001> ', '<@458265636896768001> ')):
             return
-        if message.content.lower in ["hit", "h", "s", "stand"]:
+        elif message.content.lower in ["hit", "h", "s", "stand"]:
             return
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
         
-        if len(user) == 0: 
-            await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time) VALUES ($1, $2, $3, $4)", str(author.id), str(message.guild.id), 100, str(int(time.time())))
-            return
+        else:
+            user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
+        
+            if len(user) == 0: 
+                await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time) VALUES ($1, $2, $3, $4)", str(author.id), str(message.guild.id), 100, str(int(time.time())))
+                return
             
-        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
-        if user[0]["coins"] < 0:
-            await self.client.pg_con.execute("UPDATE Users SET coins = 0 WHERE userid = $1 AND serverid = $2", str(author.id), str(message.guild.id))
-        if (int(time.time()) - int(user[0]["time"])) > 60: 
-            await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
-    
+            user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
+            if user[0]["coins"] < 0:
+                await self.client.pg_con.execute("UPDATE Users SET coins = 0 WHERE userid = $1 AND serverid = $2", str(author.id), str(message.guild.id))
+            if (int(time.time()) - int(user[0]["time"])) > 60: 
+                await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
+
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 10, BucketType.user)
     async def lottery(self, ctx):
@@ -64,6 +70,8 @@ class Currency(commands.Cog):
             winner = random.choice(tickets)
             coins = len(tickets)*100 
             try:
+                guild = discord.utils.get(self.client.guilds, id=int(winner['serverid']))
+                fake = fakectx(self.client, guild)
                 user = await MemberConverter().convert(self, winner["userid"])
                 await user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
             except Exception as e:
