@@ -637,6 +637,8 @@ class Currency(commands.Cog):
         if user[0]["coins"] < bet:
             await ctx.send("You're too poor to bid that much.")
             return
+        else:
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
                
                        
                        
@@ -664,17 +666,36 @@ class Currency(commands.Cog):
         fslots5 = random.choice(choices2)
         fslots6 = random.choice(choices3)
 
-        win = "Sorry, you lost!"
-        if slots1 == slots2 == slots3: 
-            if bet == 0:
-                win = "Winner!!!\nBut since you're a pepega and didn't bid, you get nothing."
+        winmessage = "Sorry, you lost!"
+        win = 0
+        if slots1 == slots2 == slots3 and fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6: 
+            winmessage = "Holy shit, what the fuck!"
+            win = bid*512
+                           
+        elif slots1 == slots2 == slots3: 
+            if fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6: 
+                winmessage = "That's amazing!" 
+                win = bid*124
             else:
-                await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bet*100, str(ctx.author.id), str(ctx.guild.id))
-                win = f"Winner!!!\nYou won yourself {bet*100} coins!"
-        elif bet > 0:
-            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
-            win += f"\nYou lost {bet} coins."
-        await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{win}")
+                winmessage = "Winner!!!"
+                win = bid*100
+        elif fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6:  
+            winmessage = "Hey, that's pretty cool!" 
+            win = bid*
+        elif fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6:
+            winmessage = "Not a dub but have a bonus"
+            win = bid*20
+        else: 
+            winmessage = f"You lost!"
+        
+        if win > 0: 
+            winmessage += f"\nYou won {win} coins"
+        else:
+            winmessage += f"\nYou lost {bid}"
+                           
+                           
+        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id)) 
+        await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{winmessage}")
 
 
     @commands.group()
@@ -703,7 +724,7 @@ class Currency(commands.Cog):
         if user[0]['coins'] >= item[0]['price']:
             await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", item[0]['price'], str(ctx.author.id), str(ctx.guild.id))
             await self.client.pg_con.execute("INSERT INTO useritems (userid, serverid, itemid, itemname) VALUES ($1, $2, $3, $4)", user[0]['userid'], user[0]['serverid'], item[0]['itemid'], item[0]['itemname'])
-            await ctx.send(f"Purchased {item['itemname']}!")
+            await ctx.send(f"Purchased {item[0]['itemname']}!")
         else:
             await ctx.send("You can't afford that.")
                            
