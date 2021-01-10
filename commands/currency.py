@@ -118,15 +118,8 @@ class Currency(commands.Cog):
             if first_run:
                 if m.content.lower() in ["hit", "stand", "h", "s"]: 
                     return True
-                elif m.content.lower() in ["d", "double", "double down"]:
-                    if bid > user['coins']:
-                        error = "dd fail"
-                        return True
-                    else:
-                        bid *= 2
-                        double_down = True
-                        return True
-            
+                elif m.content.lower() in ["d"]:
+                    return True
             return m.content.lower() in ["hit", "stand", "h", "s"]
        
         def get_card_value(list):
@@ -205,16 +198,22 @@ class Currency(commands.Cog):
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
                     break
-                
+            
                 users_cards.append(random.choice(cards))
                 users_total = get_card_value(users_cards)
+                  
+                if msg in ["d"]: 
+                  if bid > user['coins']:
+                        error = "dd fail"
+                        return True
+                    else:
+                        bid *= 2
+                        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        break
+                  
                 if users_total >= 21:
                     break
                   
-                if double_down: 
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
-                    break
-                       
                 message = "**DEALERS CARDS: **" 
                 message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**"          
