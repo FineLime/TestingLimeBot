@@ -3,15 +3,18 @@ from discord.ext import commands, tasks
 from discord.ext.commands import MemberConverter
 from discord.ext.commands.cooldowns import BucketType
 import random
+import math
 import time
 import asyncpg
 import asyncio
+import time
 
 class Currency(commands.Cog): 
     
     #i regret this
     def __init__(self, client):
         self.client = client
+        self.next_lottery = time.time() 
         asyncio.sleep(10)
         self.get_winners.start()
     
@@ -62,6 +65,19 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins - 100 WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
         await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
+    
+    @lottery.command()
+    async def next(self, ctx):
+        time_now = time.time()
+        next_l = self.next_lottery = time_now
+        time_left = ''
+        if next_l < 60
+            time_left = f'{time_left:9.2f} seconds left until lottery is drawn.'
+        else:
+            time_left = next_l/60
+            time_left = f'{math.ceil(next_l/60)} minutes left until lottery is drawn.'
+        await ctx.send(time_left)
+        
         
     @tasks.loop(seconds=1800)
     async def get_winners(self):
@@ -88,6 +104,7 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("DELETE FROM tickets")
         except Exception as e: 
             print(e)
+        self.next_lottery += 30*60
               
             
             
