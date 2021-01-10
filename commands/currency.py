@@ -694,7 +694,7 @@ class Currency(commands.Cog):
         if len(item) == 0:
             try:
                 item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemid = $1", int(item))
-            excpet:
+            except:
                 pass
         if len(item) == 0:
             await ctx.send("Could not find that item in the shop")
