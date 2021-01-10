@@ -207,8 +207,8 @@ class Currency(commands.Cog):
                         error = "dd fail"
                         return True
                     else:
-                        bid *= 2
                         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        bid *= 2
                         break
                   
                 if users_total >= 21:
