@@ -73,7 +73,7 @@ class Currency(commands.Cog):
                     
                 guild = discord.utils.get(self.client.guilds, id=int(winner['serverid']))
                 fake = fakectx(self.client, guild)
-                user = await MemberConverter().convert(self, winner["userid"])
+                user = await MemberConverter().convert(fake, winner["userid"])
                 await user.send(f"You won the lottery in {discord.utils.get(self.client.guilds, id=int(winner['serverid']))}!")
             except Exception as e:
                 print(e)
