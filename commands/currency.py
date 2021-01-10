@@ -684,16 +684,16 @@ class Currency(commands.Cog):
     
     @shop.command()
     @commands.cooldown(1, 5, BucketType.user)
-    async def buy(self, ctx, *, item): 
+    async def buy(self, ctx, *, i): 
         user = await self.client.pg_con.execute("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
         if len(user) == 0:
             await ctx.send("Silence, I don't want to hear what you want to buy, I can see you have no money")
             return
                            
-        item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemname = $1", item)
+        item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemname = $1", i)
         if len(item) == 0:
             try:
-                item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemid = $1", int(item))
+                item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemid = $1", int(i))
             except:
                 pass
         if len(item) == 0:
