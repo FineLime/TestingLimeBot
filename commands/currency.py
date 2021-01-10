@@ -691,7 +691,7 @@ class Currency(commands.Cog):
         if win > 0: 
             winmessage += f"\nYou won {win} coins"
         else:
-            winmessage += f"\nYou lost {bid}"
+            winmessage += f"\nYou lost {bid} coins"
                            
                            
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id)) 
