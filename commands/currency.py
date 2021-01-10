@@ -123,6 +123,7 @@ class Currency(commands.Cog):
                         error = "dd fail"
                         return True
                     else:
+                        bid *= 2
                         double_down = True
                         return True
             
