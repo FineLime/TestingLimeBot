@@ -446,8 +446,10 @@ class Currency(commands.Cog):
                 elif outcome > 0:
                     message+=f"You earned {outcome}."
                 else:
-                    message+=f"You lost {outcome}."
-                  
+                    message+=f"You lost {0-outcome}."
+                
+                outcome += bid
+                outcome += bid2
                 await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", outcome, str(ctx.guild.id), str(ctx.author.id))
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed) 
