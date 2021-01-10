@@ -670,7 +670,7 @@ class Currency(commands.Cog):
         win = 0
         if slots1 == slots2 == slots3 and fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6: 
             winmessage = "Holy shit, what the fuck!"
-            win = bid*512
+            win = bid*1024
                            
         elif slots1 == slots2 == slots3: 
             if fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6: 
@@ -697,7 +697,23 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id)) 
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{winmessage}")
 
-
+    
+    @commands.command()
+    @commands.cooldown(1, 600, BucketType.user)
+    async def mine(self, ctx): 
+        pickaxe = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1", str(ctx.author.id), str(ctx.guild.id))
+        if len(pickaxe) == 0: 
+            await ctx.send("You don't have a pickaxe.")
+            return
+        if random.randint(0, 20) == 17: 
+            await ctx.send("You tried to mine but your pickaxe broke!")
+            await self.client.pg_con.execute("DELETE FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1 LIMIT 1", str(ctx.author.id), str(ctx.guild.id))
+            return
+        else:
+            win = random.randint(10, 150) 
+            await ctx.send(f"You successfully mined {win} coins worth of ore.")
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
+                           
     @commands.group()
     @commands.is_owner()
     async def shop(self, ctx):
