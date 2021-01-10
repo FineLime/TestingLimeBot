@@ -11,6 +11,7 @@ class Currency(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.bot = client
         asyncio.sleep(10)
         self.get_winners.start()
        
