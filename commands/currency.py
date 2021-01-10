@@ -210,7 +210,17 @@ class Currency(commands.Cog):
                 if split_cards: 
                     if msg in ["s", "stand"]: 
                         if current == 1:
-                            current == 2
+                            message = "**DEALERS CARDS: **" 
+                            message += f"\n{dealers_cards[0]}  🂠 (Total: ?)" 
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 1:**"          
+                            message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
+                            message += f"\n\n**{ctx.author.name.upper()}\'s CARDS 2:**"          
+                            message += f"\n{'  '.join(users_cards2)} (Total: {users_total2})"
+                            message += "\n\nSend H to hit, S to stand, D to Double Down"
+                            embed = discord.Embed(title="BlackJack", description=message)
+                            await ctx.send(embed=embed)
+                            current = 2
+                            first_run = True
                             continue
                         else:
                             break
@@ -399,7 +409,7 @@ class Currency(commands.Cog):
                     message += "DEALER WENT BUST"
                     outcome += bid2
                   
-                messsage+="\n\n"
+                message+="\n\n"
                 if outcome == 0:
                     message+="You earned nothing."
                 elif outcome > 0:
