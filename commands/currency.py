@@ -192,7 +192,7 @@ class Currency(commands.Cog):
         else: 
             message += "\n\nSend H to hit, S to stand, D to double down"
             if users_cards[0][:-2] == users_cards[1][:-2]: 
-                  message += "Split to Split"
+                  message += ", Split to Split"
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             while True:
@@ -311,7 +311,7 @@ class Currency(commands.Cog):
                         users_cards.pop()
                         users_cards2.append(users_cards[0])
                         users_cards.append(random.choice(cards))
-                        users_card2.append(random.choice(cards))
+                        users_cards2.append(random.choice(cards))
                         users_total = get_card_value(users_cards)
                         users_total2 = get_card_value(users_cards2)
                         message = "**DEALERS CARDS: **" 
