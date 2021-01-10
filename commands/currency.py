@@ -65,6 +65,10 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins - 100 WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
         await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
+    @lottery.command()
+    async def tickets(self, ctx):
+        tickets = await self.client.pg_con.fetch("SELECT * FROM tickets WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
+        await ctx.send(f"{ctx.mention}, you have {len(tickets)} tickets.")
     
     @lottery.command()
     async def next(self, ctx):
@@ -72,7 +76,7 @@ class Currency(commands.Cog):
         next_l = self.next_lottery - time_now
         time_left = ''
         if next_l < 60:
-            time_left = f'{time_left:9.2f} seconds left until lottery is drawn.'
+            time_left = f'{next_l:9.2f} seconds left until lottery is drawn.'
         else:
             time_left = next_l/60
             time_left = f'{math.ceil(next_l/60)} minutes left until lottery is drawn.'
