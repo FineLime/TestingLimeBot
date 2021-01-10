@@ -626,19 +626,19 @@ class Currency(commands.Cog):
     
     @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
-    async def slots(self, ctx, bet:int=0): 
+    async def slots(self, ctx, bid:int=0): 
         
         
-        if bet > 0 and bet < 50:
+        if bid > 0 and bid < 50:
             await ctx.send("Minimum bid is 50")
             return
                        
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
-        if user[0]["coins"] < bet:
+        if user[0]["coins"] < bid:
             await ctx.send("You're too poor to bid that much.")
             return
         else:
-            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bet, str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
                
                        
                        
