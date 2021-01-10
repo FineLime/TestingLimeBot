@@ -127,8 +127,8 @@ class Currency(commands.Cog):
         current = 1
         natural = [False, False]
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
-        if bid < 500:
-            await ctx.send("Minimum bid is 500")
+        if bid < 250:
+            await ctx.send("Minimum bid is 250")
             return
         if len(user) == 0:
             await ctx.send("You have no coins, get out of here")
@@ -540,8 +540,8 @@ class Currency(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def coinflip(self, ctx, guess, bid:int): 
         guess = guess.lower()
-        if bid < 500:
-            await ctx.send("Minimum bid for coinflipping is 500, this aint a children's game.")
+        if bid < 250:
+            await ctx.send("Minimum bid for coinflipping is 250, this aint a children's game.")
             return
         if guess.lower() not in ["heads", "tails"]:
             await ctx.send("Have you have seen a coin before? It has a heads and a tails. Guess what it will land on.")
