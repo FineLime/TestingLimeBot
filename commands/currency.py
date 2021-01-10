@@ -199,9 +199,6 @@ class Currency(commands.Cog):
                 if msg in ["s", "stand"]: 
                     break
             
-                users_cards.append(random.choice(cards))
-                users_total = get_card_value(users_cards)
-                  
                 if msg in ["d"]: 
                     check_coins = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
                     if bid > check_coins[0]['coins']:
@@ -210,8 +207,12 @@ class Currency(commands.Cog):
                     else:
                         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
                         bid *= 2
+                        users_cards.append(random.choice(cards))
+                        users_total = get_card_value(users_cards)
                         break
-                  
+                 
+                users_cards.append(random.choice(cards))
+                users_total = get_card_value(users_cards)
                 if users_total >= 21:
                     break
                   
