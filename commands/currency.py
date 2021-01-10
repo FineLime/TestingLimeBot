@@ -8,7 +8,8 @@ import asyncpg
 import asyncio
 
 class Currency(commands.Cog): 
-
+    
+    #i regret this
     def __init__(self, client):
         self.client = client
         asyncio.sleep(10)
