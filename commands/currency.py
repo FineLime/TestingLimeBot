@@ -203,7 +203,8 @@ class Currency(commands.Cog):
                 users_total = get_card_value(users_cards)
                   
                 if msg in ["d"]: 
-                    if bid > user[0]['coins']:
+                    check_coins = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
+                    if bid > check_coins[0]['coins']:
                         await ctx.send("You do not have enough money to double down")
                         continue
                     else:
