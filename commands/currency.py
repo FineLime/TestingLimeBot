@@ -68,8 +68,8 @@ class Currency(commands.Cog):
             try:
                 class fakectx():
                     def __init__(self, bot, guild):
-                    self.bot = bot
-                    self.guild = guild
+                        self.bot = bot
+                        self.guild = guild
                     
                 guild = discord.utils.get(self.client.guilds, id=int(winner['serverid']))
                 fake = fakectx(self.client, guild)
