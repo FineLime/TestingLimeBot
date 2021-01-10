@@ -203,7 +203,7 @@ class Currency(commands.Cog):
                 users_total = get_card_value(users_cards)
                   
                 if msg in ["d"]: 
-                    if bid > user['coins']:
+                    if bid > user[0]['coins']:
                         error = "dd fail"
                         return True
                     else:
