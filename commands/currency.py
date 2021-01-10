@@ -204,8 +204,8 @@ class Currency(commands.Cog):
                   
                 if msg in ["d"]: 
                     if bid > user[0]['coins']:
-                        error = "dd fail"
-                        return True
+                        await ctx.send("You do not have enough money to double down")
+                        continue
                     else:
                         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
                         bid *= 2
