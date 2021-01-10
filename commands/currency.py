@@ -205,6 +205,8 @@ class Currency(commands.Cog):
                     await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
                     return
                 
+                first_run = False
+                msg = msg.content.lower()
                 if split_cards: 
                     if msg in ["s", "stand"]: 
                         if current == 1:
@@ -285,8 +287,7 @@ class Currency(commands.Cog):
                             
                                     
                                 
-                first_run = False
-                msg = msg.content.lower()
+                
                 if msg in ["s", "stand"]: 
                     break
             
@@ -372,7 +373,7 @@ class Currency(commands.Cog):
                 elif dealers_total <= 21:
                     message += "LOST"
                     outcome -= bid
-                elif users_total == dealer_total:
+                elif users_total == dealers_total:
                     message += "TIE"
                 else:
                     message += "DEALER WENT BUST"
@@ -392,7 +393,7 @@ class Currency(commands.Cog):
                 elif dealers_total <= 21:
                     message += "LOST"
                     outcome -= bid2
-                elif users_total2 == dealer_total:
+                elif users_total2 == dealers_total:
                     message += "TIE"
                 else:
                     message += "DEALER WENT BUST"
