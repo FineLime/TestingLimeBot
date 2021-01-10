@@ -69,7 +69,7 @@ class Currency(commands.Cog):
     @lottery.command()
     async def next(self, ctx):
         time_now = time.time()
-        next_l = self.next_lottery = time_now
+        next_l = self.next_lottery - time_now
         time_left = ''
         if next_l < 60:
             time_left = f'{time_left:9.2f} seconds left until lottery is drawn.'
