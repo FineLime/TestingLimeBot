@@ -46,7 +46,7 @@ class Currency(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def give(self, ctx, user:discord.User, coins:int):
-        await self.client.EXECUTE("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
+        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
         await ctx.send("Done")
         
     @commands.group(invoke_without_command=True)
