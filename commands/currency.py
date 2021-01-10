@@ -194,8 +194,10 @@ class Currency(commands.Cog):
                 
                 try:
                     msg = await self.client.wait_for('message', timeout=60.0, check=check)
-                except:
+                except Exception as e:
+                    print(e)
                     await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
+                    return
                 if error == "dd fail":
                     await ctx.send("You do not have enough money to double down.")
                     continue
