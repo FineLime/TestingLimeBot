@@ -675,13 +675,13 @@ class Currency(commands.Cog):
         elif slots1 == slots2 == slots3: 
             if fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6: 
                 winmessage = "That's amazing!" 
-                win = bid*124
+                win = bid*128
             else:
                 winmessage = "Winner!!!"
                 win = bid*100
         elif fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6:  
             winmessage = "Hey, that's pretty cool!" 
-            win = bid*
+            win = bid*64
         elif fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6:
             winmessage = "Not a dub but have a bonus"
             win = bid*20
