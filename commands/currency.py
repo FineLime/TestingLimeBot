@@ -372,7 +372,7 @@ class Currency(commands.Cog):
                 elif dealers_total <= 21:
                     message += "LOST"
                     outcome -= bid
-                elif user_total == dealer_total:
+                elif users_total == dealer_total:
                     message += "TIE"
                 else:
                     message += "DEALER WENT BUST"
@@ -392,7 +392,7 @@ class Currency(commands.Cog):
                 elif dealers_total <= 21:
                     message += "LOST"
                     outcome -= bid2
-                elif user_total2 == dealer_total:
+                elif users_total2 == dealer_total:
                     message += "TIE"
                 else:
                     message += "DEALER WENT BUST"
