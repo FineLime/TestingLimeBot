@@ -98,6 +98,7 @@ class Currency(commands.Cog):
         
         first_run = True
         double_down = False
+        error = ""
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if bid < 500:
             await ctx.send("Minimum bid is 500")
@@ -119,10 +120,9 @@ class Currency(commands.Cog):
                     return True
                 elif m.content.lower() in ["d", "double", "double down"]:
                     if bid > user['coins']:
-                        await ctx.send("You do not have enough to double down.")
-                        return False
-                    else: 
-                        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        error = "dd fail"
+                        return True
+                    else:
                         double_down = True
                         return True
             
@@ -195,6 +195,9 @@ class Currency(commands.Cog):
                     msg = await self.client.wait_for('message', timeout=60.0, check=check)
                 except:
                     await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
+                if error == "dd fail":
+                    await ctx.send("You do not have enough money to double down.")
+                    continue
                 first_run = False
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
@@ -206,6 +209,7 @@ class Currency(commands.Cog):
                     break
                   
                 if double_down: 
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
                     break
                        
                 message = "**DEALERS CARDS: **" 
