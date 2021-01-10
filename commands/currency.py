@@ -96,6 +96,8 @@ class Currency(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def blackjack(self, ctx, bid:int):
         
+        first_run = True
+        double_down = False
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if bid < 500:
             await ctx.send("Minimum bid is 500")
@@ -110,7 +112,21 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id)) 
         
         def check(m): 
-            return m.author == ctx.author and m.content.lower() in ["hit", "stand", "h", "s"]
+            if ctx.author != m.author:
+                  return False
+            if first_run:
+                if m.content.lower() in ["hit", "stand", "h", "s"]: 
+                    return True
+                elif m.content.lower() in ["d", "double", "double down"]:
+                    if bid > user['coins']:
+                        await ctx.send("You do not have enough to double down.")
+                        return False
+                    else: 
+                        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        double_down = True
+                        return True
+            
+            return m.content.lower() in ["hit", "stand", "h", "s"]
        
         def get_card_value(list):
             v = 0
@@ -170,7 +186,7 @@ class Currency(commands.Cog):
             await ctx.send(embed=embed)
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
         else: 
-            message += "\n\nSend H to hit, S to stand"
+            message += "\n\nSend H to hit, S to stand, D to double down"
             embed = discord.Embed(title="BlackJack", description=message)
             await ctx.send(embed=embed)
             while True:
@@ -179,6 +195,7 @@ class Currency(commands.Cog):
                     msg = await self.client.wait_for('message', timeout=60.0, check=check)
                 except:
                     await ctx.send(f"{ctx.author.mention} ran away from the blackjack table but forgot to take their coins.\nI guess they're mine now.")
+                first_run = False
                 msg = msg.content.lower()
                 if msg in ["s", "stand"]: 
                     break
@@ -186,6 +203,9 @@ class Currency(commands.Cog):
                 users_cards.append(random.choice(cards))
                 users_total = get_card_value(users_cards)
                 if users_total >= 21:
+                    break
+                  
+                if double_down: 
                     break
                        
                 message = "**DEALERS CARDS: **" 
