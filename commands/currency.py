@@ -37,7 +37,7 @@ class Currency(commands.Cog):
             if user[0]["coins"] < 0:
                 await self.client.pg_con.execute("UPDATE Users SET coins = 0 WHERE userid = $1 AND serverid = $2", str(author.id), str(message.guild.id))
             if (int(time.time()) - int(user[0]["time"])) > 60: 
-                await self.client.pg_con.execute("UPDATE Users SET coins = $1, time = $2 WHERE userid = $3 AND serverid = $4", user[0]['coins']+random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
+                await self.client.pg_con.execute("UPDATE Users SET coins = coins + $1, time = $2 WHERE userid = $3 AND serverid = $4", random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
 
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 10, BucketType.user)
@@ -57,7 +57,7 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("INSERT INTO tickets (userid, serverid) VALUES ($1, $2)", str(ctx.author.id), str(ctx.guild.id))
         await ctx.send("You bought a lottery ticket for 100")
         
-    @tasks.loop(seconds=20)
+    @tasks.loop(seconds=1800)
     async def get_winners(self):
         try:
             tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
