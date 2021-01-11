@@ -894,9 +894,10 @@ class Currency(commands.Cog):
         item = await self.client.pg_con.fetch("SELECT * FROM items WHERE itemname = $1", i)
         if len(item) == 0:
             try:
-                item = await self.client.pg_con.execute("SELECT * FROM items WHERE itemid = $1", int(i))
-            except:
-                pass
+                item = await self.client.pg_con.fetch("SELECT * FROM items WHERE itemid = $1", int(i))
+            except Exception as e:
+                print(e)
+                return
         if len(item) == 0:
             await ctx.send("Could not find that item in the shop")
             return
