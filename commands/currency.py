@@ -704,6 +704,7 @@ class Currency(commands.Cog):
         pickaxe = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1", str(ctx.author.id), str(ctx.guild.id))
         if len(pickaxe) == 0: 
             await ctx.send("You don't have a pickaxe.")
+            mine.reset_cooldown(ctx)
             return
         if random.randint(0, 20) == 17: 
             await ctx.send("You tried to mine but your pickaxe broke!")
@@ -736,6 +737,7 @@ class Currency(commands.Cog):
         rod = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 2", str(ctx.author.id), str(ctx.guild.id))
         if len(rod) == 0: 
             await ctx.send("You don't have a fishing rod.")
+            fish.reset_cooldown(ctx)
             return
         if random.randint(0, 20) == 17: 
             await ctx.send("Your fishing rod broke while fishing! You came home with nothing.")
