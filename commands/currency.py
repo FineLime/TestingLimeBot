@@ -707,7 +707,7 @@ class Currency(commands.Cog):
             return
         if random.randint(0, 20) == 17: 
             await ctx.send("You tried to mine but your pickaxe broke!")
-            await self.client.pg_con.execute("DELETE FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1 LIMIT 1", str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 1 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
         else:
             win = random.randint(10, 150) 
@@ -739,7 +739,7 @@ class Currency(commands.Cog):
             return
         if random.randint(0, 20) == 17: 
             await ctx.send("Your fishing rod broke while fishing! You came home with nothing.")
-            await self.client.pg_con.execute("DELETE FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1 LIMIT 1", str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 2 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
         else:
             win = random.randint(0, 100)
