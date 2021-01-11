@@ -746,7 +746,7 @@ class Currency(commands.Cog):
             win = random.randint(0, 100)
             if win < 80: 
                 win = random.randint(25, 75)
-                await ctx.send(f"You went fishing and caught {win} coins worth of ore.")
+                await ctx.send(f"You went fishing and caught {win} coins worth of fish.")
             elif win < 92: 
                 win = random.randint(75, 150)
                 await ctx.send(f"While fishing you caught a huge one worth {win} coins.")
