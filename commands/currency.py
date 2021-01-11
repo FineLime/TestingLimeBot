@@ -766,6 +766,12 @@ class Currency(commands.Cog):
                            
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
     
+    @fish.error
+    async def mine_error(self, ctx, error):
+        if isinstance(error, commands.errors.CommandOnCooldown):
+            t_left = math.ceil(float(str(error).split(" ")[-1][:-1]))
+            await ctx.send(f"You're too tired to go fishing, try again in {t_left} seconds.")
+                           
     @commands.command()
     @commands.cooldown(1, 600, BucketType.user)
     async def hunt(self, ctx): 
@@ -852,6 +858,12 @@ class Currency(commands.Cog):
                 await ctx.send(f"You lost {win} coins!")
             else:
                 await ctx.send(f"You went home with nothing!")        
+    
+    @hunt.error
+    async def mine_error(self, ctx, error):
+        if isinstance(error, commands.errors.CommandOnCooldown):
+            t_left = math.ceil(float(str(error).split(" ")[-1][:-1]))
+            await ctx.send(f"You're too tired to go hunting, try again in {t_left} seconds.")
                            
     @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
