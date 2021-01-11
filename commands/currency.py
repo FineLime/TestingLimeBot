@@ -642,9 +642,9 @@ class Currency(commands.Cog):
                
                        
                        
-        choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":game_die:"]
-        choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":game_die:"]
-        choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":game_die:"]
+        choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":trophy:"]
+        choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":trophy:"]
+        choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":coin:", ":dvd:", ":trophy:"]
 
         slots1 = random.choice(choices1)
         slots2 = random.choice(choices2)
