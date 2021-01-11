@@ -703,13 +703,15 @@ class Currency(commands.Cog):
             winmessage = f"You lost!"
         
         if win > 0: 
-            winmessage += f"\n{ctx.author.mention} won {win} coins."
-            if bid == 0:
-                winmessage += f"\n{ctx.author.mention} won nothing, what a pepega for not bidding."
+            if bid > 0:            
+                winmessage += f"\n{**ctx.author.user**} won {win} coins."
+            else:
+                winmessage += f"\n{**ctx.author.user**} won nothing, what a pepega for not bidding."
         else:
-            winmessage += f"\n{ctx.author.mention} lost {bid} coins."
-            if bid == 0:
-                winmessage += f"\n{ctx.author.mention} lost nothing."
+            if bid > 0:
+                winmessage += f"\n{**ctx.author.user**} lost {bid} coins."
+            else:
+                winmessage += f"\n{**ctx.author.user**} lost nothing."
                            
                           
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id)) 
