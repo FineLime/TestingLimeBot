@@ -706,7 +706,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a pickaxe.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 20) == 17: 
+        if random.randint(0, 12) == 8: 
             await ctx.send("You tried to mine but your pickaxe broke!")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 1 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
@@ -739,7 +739,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a fishing rod.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 20) == 17: 
+        if random.randint(0, 12) == 8: 
             await ctx.send("Your fishing rod broke while fishing! You came home with nothing.")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 2 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
@@ -790,7 +790,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a sword and you're too weak to hunt with your fists.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 20) == 17: 
+        if random.randint(0, 12) == 8: 
             await ctx.send("You go to slash at a rabbit but then the sword snapped. You go home with nothing but a broken sword.")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 3 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
