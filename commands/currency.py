@@ -270,6 +270,7 @@ class Currency(commands.Cog):
                             if current == 1:
                                 bid *= 2
                                 users_cards.append(random.choice(cards))
+                                cards.remove(users_cards[-1])
                                 users_total = get_card_value(users_cards)
                                 if natural[1]:
                                     break
@@ -286,12 +287,14 @@ class Currency(commands.Cog):
                             else:
                                 bid2 *= 2
                                 users_cards2.append(random.choice(cards))
+                                cards.remove(users_cards2[-1])
                                 users_total2 = get_card_value(users_cards2)
                                 break
                                     
                     if msg in ["h", "hit"]:
                         if current == 1:
                             users_cards.append(random.choice(cards))
+                            cards.remove(users_cards[-1])
                             users_total = get_card_value(users_cards)
                             if users_total >= 21:
                                 if natural[1]:
@@ -320,6 +323,7 @@ class Currency(commands.Cog):
                             continue
                         else: 
                             users_cards2.append(random.choice(cards))
+                            cards.remove(users_cards2[-1])
                             users_total2 = get_card_value(users_cards2)
                             if users_total2 >= 21:
                                 break
@@ -349,6 +353,7 @@ class Currency(commands.Cog):
                         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
                         bid *= 2
                         users_cards.append(random.choice(cards))
+                        cards.remove(users_cards[-1])
                         users_total = get_card_value(users_cards)
                         break
                  
@@ -359,10 +364,13 @@ class Currency(commands.Cog):
                         continue
                     else: 
                         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id))
+                        
+                        users_cards2.append(users_cards[1])
                         users_cards.pop()
-                        users_cards2.append(users_cards[0])
                         users_cards.append(random.choice(cards))
+                        cards.remove(users_cards[-1])
                         users_cards2.append(random.choice(cards))
+                        cards.remove(users_cards2[-1])
                         users_total = get_card_value(users_cards)
                         users_total2 = get_card_value(users_cards2)
                         if users_total == 21:
@@ -394,6 +402,7 @@ class Currency(commands.Cog):
                         continue
                   
                 users_cards.append(random.choice(cards))
+                cards.remove(users_cards[-1])
                 users_total = get_card_value(users_cards)
                 if users_total >= 21:
                     break
@@ -420,6 +429,7 @@ class Currency(commands.Cog):
             
             while dealers_total < 17:
                 dealers_cards.append(random.choice(cards))
+                cards.remove(dealers_cards[-1])
                 dealers_total = get_card_value(dealers_cards)
             
             if split_cards:
@@ -710,7 +720,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a pickaxe.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 12) == 8: 
+        if random.randint(0, 16) == 8: 
             await ctx.send("You tried to mine but your pickaxe broke!")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 1 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
@@ -743,7 +753,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a fishing rod.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 12) == 8: 
+        if random.randint(0, 16) == 8: 
             await ctx.send("Your fishing rod broke while fishing! You came home with nothing.")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 2 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
@@ -794,7 +804,7 @@ class Currency(commands.Cog):
             await ctx.send("You don't have a sword and you're too weak to hunt with your fists.")
             ctx.command.reset_cooldown(ctx)
             return
-        if random.randint(0, 12) == 8: 
+        if random.randint(0, 16) == 8: 
             await ctx.send("You go to slash at a rabbit but then the sword snapped. You go home with nothing but a broken sword.")
             await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 3 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
             return
