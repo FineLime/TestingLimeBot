@@ -773,7 +773,7 @@ class Currency(commands.Cog):
         def check(m): 
             if ctx.author != m.author:
                 return False
-            if m.content.lower() in ["fight", "flee"]
+            if m.content.lower() in ["fight", "flee"]:
                 return True
             else:
                 return False
@@ -794,7 +794,7 @@ class Currency(commands.Cog):
                            
                 await ctx.send("While hunting you encounter a rabbit.\nWill you `fight` or `flee`")
                 msg = await self.client.wait_for('message', timeout=20.0, check=check)
-                if msg.content.lower() == "fight":]
+                if msg.content.lower() == "fight":
                     win = random.randint(10, 50)
                     await ctx.send("You fought a rabbit and successfully won, how brave of you.")
                 else:
@@ -805,7 +805,7 @@ class Currency(commands.Cog):
                            
                 await ctx.send("While hunting you encounter a deer.\nWill you `fight` or `flee` (Success 90%)")
                 msg = await self.client.wait_for('message', timeout=20.0, check=check)
-                if msg.content.lower() == "fight":]
+                if msg.content.lower() == "fight":
                     if random.randint(0, 100) <= 90:
                         win = random.randint(120, 180)
                         await ctx.send("You hunted down the deer and went home with it!")
@@ -820,7 +820,7 @@ class Currency(commands.Cog):
                            
                 await ctx.send("While hunting you encounter a boar.\nWill you `fight` or `flee` (Success 75%)")
                 msg = await self.client.wait_for('message', timeout=20.0, check=check)
-                if msg.content.lower() == "fight":]
+                if msg.content.lower() == "fight":
                     if random.randint(0, 100) <= 75:
                         win = random.randint(250, 450)
                         await ctx.send("After a tough fight, you won and went home with a boar!")
@@ -834,7 +834,7 @@ class Currency(commands.Cog):
             else: 
                 await ctx.send("While hunting you encoun-WTF IS THAT A DRAGON? GET IT!\nWill you `fight` or `flee` (Success 50%)")
                 msg = await self.client.wait_for('message', timeout=20.0, check=check)
-                if msg.content.lower() == "fight":]
+                if msg.content.lower() == "fight":
                     if random.randint(0, 100) <= 50:
                         win = random.randint(8000, 12000)
                         await ctx.send("Did.. you just defeat a DRAGON?")
