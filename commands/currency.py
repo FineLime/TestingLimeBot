@@ -642,9 +642,9 @@ class Currency(commands.Cog):
                
                        
                        
-        choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
-        choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
-        choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:"]
+        choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:", ":cd:"]
+        choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:", ":cd:"]
+        choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":game_die:", ":tada:", ":o:", ":large_orange_diamond:", ":cd:"]
 
         slots1 = random.choice(choices1)
         slots2 = random.choice(choices2)
@@ -717,9 +717,8 @@ class Currency(commands.Cog):
     @mine.error
     async def mine_error(self, ctx, error):
         if isinstance(error, commands.errors.CommandOnCooldown):
-            await ctx.send("You're on cooldown")
-            print(error)
-            print(error.args)
+            t_left = math.ceil(float(error[:-1]))
+            await ctx.send(f"You're too tired to go mining, try again in {t_left} seconds.")
                            
     @commands.command()
     @commands.cooldown(1, 600, BucketType.user)
