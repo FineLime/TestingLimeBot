@@ -717,7 +717,7 @@ class Currency(commands.Cog):
     @mine.error
     async def mine_error(self, ctx, error):
         if isinstance(error, commands.errors.CommandOnCooldown):
-            t_left = math.ceil(float(str(error)[:-1]))
+            t_left = math.ceil(float(str(error).split(" ")[-1][:-1]))
             await ctx.send(f"You're too tired to go mining, try again in {t_left} seconds.")
                            
     @commands.command()
