@@ -767,6 +767,93 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
     
     @commands.command()
+    @commands.cooldown(1, 600, BucketType.user)
+    async def hunt(self, ctx): 
+        
+        def check(m): 
+            if ctx.author != m.author:
+                return False
+            if m.content.lower() in ["fight", "flee"]
+                return True
+            else:
+                return False
+                           
+                           
+        sword = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 3", str(ctx.author.id), str(ctx.guild.id))
+        if len(sword) == 0: 
+            await ctx.send("You don't have a sword and you're too weak to hunt with your fists.")
+            ctx.command.reset_cooldown(ctx)
+            return
+        if random.randint(0, 20) == 17: 
+            await ctx.send("You go to slash at a rabbit but then the sword snapped. You go home with nothing but a broken sword.")
+            await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 3 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
+            return
+        else:
+            win = random.randint(0, 100)
+            if win <= 60: 
+                           
+                await ctx.send("While hunting you encounter a rabbit.\nWill you `fight` or `flee`")
+                msg = await self.client.wait_for('message', timeout=20.0, check=check)
+                if msg.content.lower() == "fight":]
+                    win = random.randint(10, 50)
+                    await ctx.send("You fought a rabbit and successfully won, how brave of you.")
+                else:
+                    await ctx.send("Did you just run away from a rabbit? I don't think this is the right job for you")
+                    win = 0
+                           
+            elif win <= 85: 
+                           
+                await ctx.send("While hunting you encounter a deer.\nWill you `fight` or `flee` (Success 90%)")
+                msg = await self.client.wait_for('message', timeout=20.0, check=check)
+                if msg.content.lower() == "fight":]
+                    if random.randint(0, 100) <= 90:
+                        win = random.randint(120, 180)
+                        await ctx.send("You hunted down the deer and went home with it!")
+                    else:
+                        win = -(random.randint(0, 200))
+                        await ctx.send("The deer spotted you and then proceeded to knock you out, you got robbed while you were knocked out.")
+                else:
+                    await ctx.send("You questioned your life choices and went home.")
+                    win = 0
+                           
+            elif win <= 99: 
+                           
+                await ctx.send("While hunting you encounter a boar.\nWill you `fight` or `flee` (Success 75%)")
+                msg = await self.client.wait_for('message', timeout=20.0, check=check)
+                if msg.content.lower() == "fight":]
+                    if random.randint(0, 100) <= 75:
+                        win = random.randint(250, 450)
+                        await ctx.send("After a tough fight, you won and went home with a boar!")
+                    else:
+                        win = -(random.randint(200, 500))
+                        await ctx.send("As soon as you go to slash at the boar, it headbutts you and then beats you up.")
+                else:
+                    await ctx.send("You decided you were to weak for such an enemy and ran home crying.")
+                    win = 0
+                           
+            else: 
+                await ctx.send("While hunting you encoun-WTF IS THAT A DRAGON? GET IT!\nWill you `fight` or `flee` (Success 50%)")
+                msg = await self.client.wait_for('message', timeout=20.0, check=check)
+                if msg.content.lower() == "fight":]
+                    if random.randint(0, 100) <= 50:
+                        win = random.randint(8000, 12000)
+                        await ctx.send("Did.. you just defeat a DRAGON?")
+                    else:
+                        win = -(random.randint(2000, 4000))
+                        await ctx.send("Why did you think fighting a dragon was a good idea? You were burned alive.")
+                else:
+                    await ctx.send("You didn't have a death wish so you went home, you look by to see the dragon flying to a nearby village, they can deal with it.")
+                    win = 0
+          
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
+            if win > 0: 
+                await ctx.send(f"You earned {win} coins!")
+            elif win < 0:
+                await ctx.send(f"You lost {win} coins!")
+            else:
+                await ctx.send(f"You went home with nothing!")        
+                           
+    @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
     async def inventory(self, ctx): 
         items = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
@@ -786,7 +873,7 @@ class Currency(commands.Cog):
     
     @shop.command()
     @commands.cooldown(1, 5, BucketType.user)
-    async def buy(self, ctx, *, i): 
+    async def buy(self, ctx, *, i:str): 
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))
         if len(user) == 0:
             await ctx.send("Silence, I don't want to hear what you want to buy, I can see you have no money")
