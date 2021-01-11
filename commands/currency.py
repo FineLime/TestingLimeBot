@@ -703,11 +703,15 @@ class Currency(commands.Cog):
             winmessage = f"You lost!"
         
         if win > 0: 
-            winmessage += f"\nYou won {win} coins"
+            winmessage += f"\n{ctx.author.mention} won {win} coins."
+            if bid == 0:
+                winmessage += f"\n{ctx.author.mention} won nothing, what a pepega for not bidding."
         else:
-            winmessage += f"\nYou lost {bid} coins"
+            winmessage += f"\n{ctx.author.mention} lost {bid} coins."
+            if bid == 0:
+                winmessage += f"\n{ctx.author.mention} lost nothing."
                            
-                           
+                          
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id)) 
         await ctx.send(f"|   {fslots1}{fslots2}{fslots3}\n\▶{slots1}{slots2}{slots3}\n|   {fslots4}{fslots5}{fslots6}\n{winmessage}")
 
@@ -862,7 +866,7 @@ class Currency(commands.Cog):
                         win = -(random.randint(2000, 4000))
                         await ctx.send("Why did you think fighting a dragon was a good idea? You were burned alive.")
                 else:
-                    await ctx.send("You didn't have a death wish so you went home, you look by to see the dragon flying to a nearby village, they can deal with it.")
+                    await ctx.send("You didn't have a death wish so you went home, you look back to see the dragon flying to a nearby village, uh oh.")
                     win = 0
           
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
