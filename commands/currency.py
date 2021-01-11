@@ -713,6 +713,57 @@ class Currency(commands.Cog):
             win = random.randint(10, 150) 
             await ctx.send(f"You successfully mined {win} coins worth of ore.")
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
+    
+    @mine.error
+    async def mine_error(self, ctx, error):
+        if isinstance(error, commands.errosrs.CommandOnCooldown):
+            await ctx.send("You're on cooldown")
+            print(e)
+            print(e.args)
+                           
+    @commands.command()
+    @commands.cooldown(1, 600, BucketType.user)
+    async def fish(self, ctx): 
+        
+        def check(m): 
+            if ctx.author != m.author:
+                return False
+            if m.content.lower() == "come to me, loch ness monster": 
+                return True
+            else:
+                return False
+                           
+                           
+        rod = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 2", str(ctx.author.id), str(ctx.guild.id))
+        if len(rod) == 0: 
+            await ctx.send("You don't have a fishing rod.")
+            return
+        if random.randint(0, 20) == 17: 
+            await ctx.send("Your fishing rod broke while fishing! You came home with nothing.")
+            await self.client.pg_con.execute("DELETE FROM useritems WHERE userid = $1 AND serverid = $2 AND itemid = 1 LIMIT 1", str(ctx.author.id), str(ctx.guild.id))
+            return
+        else:
+            win = random.randint(0, 100)
+            if win < 80: 
+                win = random.randint(25, 75)
+                await ctx.send(f"You went fishing and caught {win} coins worth of ore.")
+            elif win < 92: 
+                win = random.randint(75, 150)
+                await ctx.send(f"While fishing you caught a huge one worth {win} coins.")
+            elif win < 98: 
+                win = random.randint(150, 300)
+                await ctx.send(f"While fishing, you caught a MASSIVE one worth {win} coins.")
+            else: 
+                await ctx.send("Holy $#!t!? Is that the Loch Ness Monster? Quickly, type `come to me, loch ness monster`")
+                try:
+                    msg = await self.client.wait_for('message', timeout=60.0, check=check)
+                except:
+                    await ctx.send("The loch ness monster swam away! You returned home with nothing.")
+                    return
+                win = random.randint(1000, 2000)
+                await ctx.send(f"What?! You caught the Loch Ness Monster?!\nSold `Loch Ness Monster` for {win} coins.")
+                           
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", win, str(ctx.author.id), str(ctx.guild.id))
                            
     @commands.group()
     async def shop(self, ctx):
