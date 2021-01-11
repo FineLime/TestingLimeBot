@@ -716,7 +716,7 @@ class Currency(commands.Cog):
     
     @mine.error
     async def mine_error(self, ctx, error):
-        if isinstance(error, commands.errosrs.CommandOnCooldown):
+        if isinstance(error, commands.errors.CommandOnCooldown):
             await ctx.send("You're on cooldown")
             print(e)
             print(e.args)
@@ -744,13 +744,13 @@ class Currency(commands.Cog):
             return
         else:
             win = random.randint(0, 100)
-            if win < 80: 
+            if win <= 70: 
                 win = random.randint(25, 75)
                 await ctx.send(f"You went fishing and caught {win} coins worth of fish.")
-            elif win < 92: 
+            elif win <= 90: 
                 win = random.randint(75, 150)
                 await ctx.send(f"While fishing you caught a huge one worth {win} coins.")
-            elif win < 98: 
+            elif win <= 99: 
                 win = random.randint(150, 300)
                 await ctx.send(f"While fishing, you caught a MASSIVE one worth {win} coins.")
             else: 
