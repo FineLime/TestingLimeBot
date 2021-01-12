@@ -123,7 +123,7 @@ class Currency(commands.Cog):
                 
     @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
-    async def blackjack(self, ctx, bid:int):
+    async def blackjack(self, ctx, bid:int = 0):
         
         first_run = True
         double_down = False
@@ -133,7 +133,7 @@ class Currency(commands.Cog):
         current = 1
         natural = [False, False]
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
-        if bid < 250:
+        if bid < 250 and bid != 0:
             await ctx.send("Minimum bid is 250")
             return
         if len(user) == 0:
@@ -484,15 +484,17 @@ class Currency(commands.Cog):
                   
                 message+="\n\n"
                 if outcome == 0:
-                    message+="You earned nothing."
+                    if bid > 0:
+                        message+="You earned nothing."
                 elif outcome > 0:
                     message+=f"You earned {outcome}."
                 else:
-                    message+=f"You lost {0-outcome}."
+                    message+=f"You lost {abs(outcome)}."
                 
-                outcome += bid
-                outcome += bid2
-                await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", outcome, str(ctx.guild.id), str(ctx.author.id))
+                if bid > 0:
+                    outcome += bid
+                    outcome += bid2
+                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", outcome, str(ctx.guild.id), str(ctx.author.id))
                 embed = discord.Embed(title="BlackJack", description=message)
                 await ctx.send(embed=embed) 
                 return
@@ -507,7 +509,9 @@ class Currency(commands.Cog):
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nBUST - You Win"
-                if users_total == 21:
+                if bid > 0: 
+                    message += f"\nYou won!"
+                elif users_total == 21:
                     message += f"\nYou won {int(bid*2.5-bid)} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
@@ -534,7 +538,9 @@ class Currency(commands.Cog):
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nYou Win"
-                if users_total == 21:
+                if bid > 0: 
+                    message += f"\nYou won!"
+                elif users_total == 21:
                     message += f"\nYou won {int(bid*2.5-bid)} coins."
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", int(bid*2.5), str(ctx.guild.id), str(ctx.author.id)) 
                 else:
@@ -558,9 +564,9 @@ class Currency(commands.Cog):
             
     @commands.command(aliases=["flip", "coin", "flipcoin"])
     @commands.cooldown(1, 5, BucketType.user)
-    async def coinflip(self, ctx, guess, bid:int): 
+    async def coinflip(self, ctx, guess, bid:int = 0): 
         guess = guess.lower()
-        if bid < 250:
+        if bid < 250 and bid != 0:
             await ctx.send("Minimum bid for coinflipping is 250, this aint a children's game.")
             return
         if guess.lower() not in ["heads", "tails"]:
@@ -576,10 +582,12 @@ class Currency(commands.Cog):
         msg = f"I flipped a coin and it landed on {result}."
         if result != guess: 
             await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
-            msg+= "\nLooks like I'll be keeping your money, and don't you go crying to me about it."
+            if bid > 0:
+                msg+= "\nLooks like I'll be keeping your money, and don't you go crying to me about it."
         else:
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
-            msg += f"\nHuh, you won, well here you go, take my {bid} coins."
+            if bid > 0:
+                msg += f"\nHuh, you won, well here you go, take my {bid} coins."
         await ctx.send(msg)
             
     @commands.command()
@@ -643,7 +651,7 @@ class Currency(commands.Cog):
     async def slots(self, ctx, bid:int=0): 
         
         
-        if bid > 0 and bid < 50:
+        if bid != 0 and bid < 50:
             await ctx.send("Minimum bid is 50")
             return
                        
