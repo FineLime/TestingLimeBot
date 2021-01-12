@@ -49,7 +49,7 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
         await ctx.send("Done")
         
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, pass_context=True)
     @commands.cooldown(1, 10, BucketType.user)
     async def lottery(self, ctx):
         await ctx.send("type `;lottery buy` to buy a ticket")
@@ -60,7 +60,7 @@ class Currency(commands.Cog):
         pot = len(tickets)*100
         await ctx.send(f"Current lottery pot is: {pot}")
         
-    @lottery.command()
+    @lottery.command(pass_context=True)
     async def buy(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
         if len(user) == 0:
