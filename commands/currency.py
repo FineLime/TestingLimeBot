@@ -59,6 +59,7 @@ class Currency(commands.Cog):
         tickets = await self.client.pg_con.fetch("SELECT * FROM tickets")
         pot = len(tickets)*100
         await ctx.send(f"Current lottery pot is: {pot}")
+        
     @lottery.command()
     async def buy(self, ctx):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id))
@@ -484,14 +485,14 @@ class Currency(commands.Cog):
                   
                 message+="\n\n"
                 if outcome == 0:
-                    if bid > 0:
+                    if bid == 0:
                         message+="You earned nothing."
                 elif outcome > 0:
                     message+=f"You earned {outcome}."
                 else:
                     message+=f"You lost {abs(outcome)}."
                 
-                if bid > 0:
+                if bid == 0:
                     outcome += bid
                     outcome += bid2
                     await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", outcome, str(ctx.guild.id), str(ctx.author.id))
@@ -509,7 +510,7 @@ class Currency(commands.Cog):
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nBUST - You Win"
-                if bid > 0: 
+                if bid == 0: 
                     message += f"\nYou won!"
                 elif users_total == 21:
                     message += f"\nYou won {int(bid*2.5-bid)} coins."
@@ -538,7 +539,7 @@ class Currency(commands.Cog):
                 message += f"\n\n**{ctx.author.name.upper()}\'s CARDS:**" 
                 message += f"\n{'  '.join(users_cards)} (Total: {users_total})"
                 message += "\n\nYou Win"
-                if bid > 0: 
+                if bid == 0: 
                     message += f"\nYou won!"
                 elif users_total == 21:
                     message += f"\nYou won {int(bid*2.5-bid)} coins."
