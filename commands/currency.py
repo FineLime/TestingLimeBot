@@ -49,7 +49,7 @@ class Currency(commands.Cog):
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
         await ctx.send("Done")
         
-    @commands.group(invoke_without_command=True, pass_context=True)
+    @commands.group()
     @commands.cooldown(1, 10, BucketType.user)
     async def lottery(self, ctx):
         await ctx.send("type `;lottery buy` to buy a ticket")
