@@ -46,4 +46,4 @@ class Shop(commands.Cog):
 
         
 def setup(client):
-    client.add_cog((client))
+    client.add_cog(Shop(client))
