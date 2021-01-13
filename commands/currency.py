@@ -12,6 +12,7 @@ import time
 class Currency(commands.Cog): 
     
     #i regret this
+    #but i love you
     def __init__(self, client):
         self.client = client
         self.next_lottery = time.time() 
