@@ -12,7 +12,7 @@ class Shop(commands.Cog):
         message = ""
         items = item = await self.client.pg_con.fetch("SELECT * FROM items")
         for i in items: 
-            message += f"\n**{i['itemname']} - id:{i['itemid']}**
+            message += f"\n**{i['itemname']} - id:{i['itemid']}**"
             message += f"\nPrice: {i['price']} coins\n"
             
         embed = discord.Embed(title="SHOP", description=message)
