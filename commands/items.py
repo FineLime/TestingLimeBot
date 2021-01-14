@@ -61,7 +61,7 @@ class Items(commands.Cog):
             await ctx.send("You can't afford that.")
                            
     @commands.command()
-    @commands.is_owner()
+    @commands.cooldown(1, 60, BucketType.guild)
     async def coinbomb(self, ctx): 
         
         b = self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid=4", str(ctx.author.id), str(ctx.guild.id))
@@ -75,7 +75,7 @@ class Items(commands.Cog):
         await asyncio.sleep(20)
         await self.client.pg_con.execute('''DELETE FROM coinbombs WHERE btype='bomb' AND channelid = $1''', str(ctx.channel.id))
         users = await self.client.pg_con.fetch("SELECT DISTINCT * FROM coinbombs WHERE btype='user' AND channelid = $1", str(ctx.channel.id))
-        total_coins = random.randint(100, 200)
+        total_coins = random.randint(4000, 5900)
         coins = int(total_coins/len(users))
         for i in users: 
             await self.client.pg_con.execute('''UPDATE users SET coins = coins + $1 WHERE userid = $2 and serverid = $3''', coins, i['userid'], str(ctx.guild.id))
