@@ -64,6 +64,12 @@ class Items(commands.Cog):
     @commands.is_owner()
     async def coinbomb(self, ctx): 
         
+        b = self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid=4", str(ctx.author.id), str(ctx.guild.id))
+        if len(b) == 0:
+            await ctx.send("You don't have any coin bombs.")
+            return
+        
+        await self.client.pg_con.execute("DELETE FROM useritems WHERE ctid IN (SELECT ctid FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid = 4 LIMIT 1)", str(ctx.author.id), str(ctx.guild.id))
         msg = await ctx.send(f"{ctx.author.mention} dropped a coinbomb, type `i want money` to earn coins from it. Ends in 20 seconds.")
         await self.client.pg_con.execute('''INSERT INTO coinbombs (btype, userid, channelid) VALUES ('bomb', $1, $2)''', str(ctx.author.id), str(ctx.channel.id))
         await asyncio.sleep(20)
