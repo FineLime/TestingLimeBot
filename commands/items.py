@@ -20,7 +20,7 @@ class Items(commands.Cog):
         
         coin = await self.client.pg_con.fetch('''SELECT * FROM coinbombs WHERE btype = 'bomb' AND channelid = $1''', str(message.channel.id))
         if len(coin) > 0:
-            if coin[0]['userid'] != str(message.author.id):
+            if coin[0]['userid'] != str(message.author.id) and str(message.channel.id) == coin[0]['channelid']:
                 await self.client.pg_con.execute('''INSERT INTO coinbombs (btype, userid, channelid) VALUES ('user', $1, $2)''', str(author.id), str(message.channel.id))
                 
     @commands.group(invoke_without_command=True)
@@ -75,6 +75,7 @@ class Items(commands.Cog):
             await self.client.pg_con.execute('''UPDATE users SET coins = coins + $1 WHERE userid = $2 and serverid = $3''', coins, str(ctx.author.id), str(ctx.guild.id))
                            
         await ctx.send(f"Gave {total_coins} across {len(users)} users.")
+        await self.client.pg_con.execute('''DELETE FROM coinbombs WHERE channelid = $1''', str(ctx.channel.id))
         
         
         
