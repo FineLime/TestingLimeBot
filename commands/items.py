@@ -1,12 +1,27 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
+import asyncio
 
-class Shop(commands.Cog): 
+class Items(commands.Cog): 
 
     def __init__(self, client):
         self.client = client
-
+    
+    @commands.Cog.listener()
+    async def on_message(self, message): 
+        
+        author = message.author
+        if author.bot:
+            return
+        elif message.content.lower() != 'i want money':
+            return
+        
+        coin = await self.client.pg_con.fetch('''SELECT * FROM coinboms WHERE btype = 'bomb' AND channelid = $1''', str(message.channel.id))
+        if len(coin) > 0:
+            if coin[0]['userid'] != str(message.author.id):
+                await self.client.pg_con.execute('''INSERT INTO coinbombs (btype, userid, channelid) VALUES ('user', $1, $2)''', str(author.id), str(message.channel.id))
+                
     @commands.group(invoke_without_command=True)
     async def shop(self, ctx):
         message = ""
@@ -43,7 +58,25 @@ class Shop(commands.Cog):
             await ctx.send(f"Purchased {item[0]['itemname']} for {item[0]['price']} coins!")
         else:
             await ctx.send("You can't afford that.")
-
+                           
+    @commands.command()
+    @commands.is_owner()
+    async def coinbomb(self, ctx): 
+        
+        msg = await ctx.send(f"{ctx.author.mention} dropped a coinbomb, type `i want money` to earn coins from it. Ends in 20 seconds.")
+        await self.client.pg_con.execute('''INSERT INTO coinbomb (btype, userid, channelid) VALUES ('bomb', $1, $2)''', str(ctx.author.id), str(ctx.channel.id))
+        await asyncio.sleep(20)
+        await self.client.pg_con.execute('''DELETE FROM coinbomb WHERE btype='bomb' AND channeid = $1''', str(ctx.channel.id))
+        users = await self.client.pg_con.fetch("SELECT DISTINCT * FROM coinbomb WHERE btype='user' AND channelid = $1", str(ctx.channel.id))
+        total_coins = random.randint(100, 200)
+        coins = int(total_coins/len(users))
+        for i in users: 
+            await self.client.pg_con.execite('''UPDATE users SET coins = coins + $1 WHERE userid = $2 and serverid = $3''', coins, str(ctx.author.id), str(ctx.guild.id))
+                           
+        await ctx.send(f"Gave {total_coins} across {len(users)} users.")
+        
+        
+        
         
 def setup(client):
-    client.add_cog(Shop(client))
+    client.add_cog(Items(client))
