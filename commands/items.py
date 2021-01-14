@@ -72,7 +72,7 @@ class Items(commands.Cog):
         total_coins = random.randint(100, 200)
         coins = int(total_coins/len(users))
         for i in users: 
-            await self.client.pg_con.execute('''UPDATE users SET coins = coins + $1 WHERE userid = $2 and serverid = $3''', coins, str(ctx.author.id), str(ctx.guild.id))
+            await self.client.pg_con.execute('''UPDATE users SET coins = coins + $1 WHERE userid = $2 and serverid = $3''', coins, i['userid'], str(ctx.guild.id))
                            
         await ctx.send(f"Gave {total_coins} across {len(users)} users.")
         await self.client.pg_con.execute('''DELETE FROM coinbombs WHERE channelid = $1''', str(ctx.channel.id))
