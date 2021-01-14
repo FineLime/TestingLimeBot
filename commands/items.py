@@ -64,10 +64,10 @@ class Items(commands.Cog):
     async def coinbomb(self, ctx): 
         
         msg = await ctx.send(f"{ctx.author.mention} dropped a coinbomb, type `i want money` to earn coins from it. Ends in 20 seconds.")
-        await self.client.pg_con.execute('''INSERT INTO coinbomb (btype, userid, channelid) VALUES ('bomb', $1, $2)''', str(ctx.author.id), str(ctx.channel.id))
+        await self.client.pg_con.execute('''INSERT INTO coinbombs (btype, userid, channelid) VALUES ('bomb', $1, $2)''', str(ctx.author.id), str(ctx.channel.id))
         await asyncio.sleep(20)
-        await self.client.pg_con.execute('''DELETE FROM coinbomb WHERE btype='bomb' AND channeid = $1''', str(ctx.channel.id))
-        users = await self.client.pg_con.fetch("SELECT DISTINCT * FROM coinbomb WHERE btype='user' AND channelid = $1", str(ctx.channel.id))
+        await self.client.pg_con.execute('''DELETE FROM coinbombs WHERE btype='bomb' AND channeid = $1''', str(ctx.channel.id))
+        users = await self.client.pg_con.fetch("SELECT DISTINCT * FROM coinbombs WHERE btype='user' AND channelid = $1", str(ctx.channel.id))
         total_coins = random.randint(100, 200)
         coins = int(total_coins/len(users))
         for i in users: 
