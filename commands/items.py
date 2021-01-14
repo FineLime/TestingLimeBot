@@ -64,7 +64,7 @@ class Items(commands.Cog):
     @commands.cooldown(1, 60, BucketType.guild)
     async def coinbomb(self, ctx): 
         
-        b = self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid=4", str(ctx.author.id), str(ctx.guild.id))
+        b = await self.client.pg_con.fetch("SELECT * FROM useritems WHERE userid=$1 AND serverid=$2 AND itemid=4", str(ctx.author.id), str(ctx.guild.id))
         if len(b) == 0:
             await ctx.send("You don't have any coin bombs.")
             return
