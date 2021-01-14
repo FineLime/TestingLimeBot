@@ -17,7 +17,7 @@ class Items(commands.Cog):
         elif message.content.lower() != 'i want money':
             return
         
-        coin = await self.client.pg_con.fetch('''SELECT * FROM coinboms WHERE btype = 'bomb' AND channelid = $1''', str(message.channel.id))
+        coin = await self.client.pg_con.fetch('''SELECT * FROM coinbombs WHERE btype = 'bomb' AND channelid = $1''', str(message.channel.id))
         if len(coin) > 0:
             if coin[0]['userid'] != str(message.author.id):
                 await self.client.pg_con.execute('''INSERT INTO coinbombs (btype, userid, channelid) VALUES ('user', $1, $2)''', str(author.id), str(message.channel.id))
