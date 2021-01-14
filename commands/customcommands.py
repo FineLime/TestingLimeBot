@@ -37,7 +37,7 @@ class CustomCommands(commands.Cog):
     async def createcommand(self, ctx, name, perms, *, response):
         
         if perms not in ["everyone", "admin"]: 
-            await ctx.send("Perms must either `everyone` or `admin`"]
+            await ctx.send("Perms must either be `everyone` or `admin`")
             return
         
         await self.client.pg_con.execute('''INSERT INTO customcommands (commandname, response, perms, serverid) VALUES ($1, $2, $3, $4)''', name, response, perms, str(ctx.guild.id))
