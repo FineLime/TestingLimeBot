@@ -4,6 +4,7 @@ from discord.utils import get
 import os
 import random 
 import asyncpg
+from googleapiclient.discovery import build
 
 MyDB = os.getenv('DATABASE_URL')
 DB = MyDB.split(":")
@@ -25,6 +26,11 @@ intents.members = True
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=intents)
 client.remove_command("help")
+
+
+api_key = os.getenv('google_key')
+client.youtube = build('youtube', 'v3', developerKey=api_key)
+
 
 status = "for ;help commands"
 
