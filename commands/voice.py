@@ -18,7 +18,7 @@ class Voice(commands.Cog):
         response = request.execute()
         video_id = response['items'][0]['id']['videoId']
         
-        voice_channel = author.voice_channel
+        voice_channel = ctx.author.voice_channel
         vc = await client.join_voice_channel(voice_channel)
         print(vc)
         player = await vc.create_ytdl_player(f"https://www.youtube.com/watch?v={video_id}")
