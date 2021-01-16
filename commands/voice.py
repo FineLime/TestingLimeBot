@@ -26,4 +26,4 @@ class Voice(commands.Cog):
 
         
 def setup(client):
-    client.add_cog(Ping(client))
+    client.add_cog(Voice(client))
