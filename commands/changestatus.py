@@ -21,7 +21,7 @@ class Changestatus(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def play(self, ctx, *, p): 
+    async def playing(self, ctx, *, p): 
         await self.client.change_presence(activity=discord.Activity(name=p, type=discord.ActivityType.playing))
         await ctx.send(f"I am now playing **{p}**")
 
