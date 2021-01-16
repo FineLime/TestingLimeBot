@@ -13,12 +13,12 @@ class Voice(commands.Cog):
         request = self.client.youtube.search().list(
             maxResults=1,
             q=s,
-	        part="snippet"
+	    part="snippet"
         )
         response = request.execute()
         video_id = response['items'][0]['id']['videoId']
         
-        voice_channel = ctx.author.voice_channel
+        voice_channel = ctx.author.voice.channel
         vc = await client.join_voice_channel(voice_channel)
         print(vc)
         player = await vc.create_ytdl_player(f"https://www.youtube.com/watch?v={video_id}")
