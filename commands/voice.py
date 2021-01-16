@@ -16,7 +16,7 @@ class Voice(commands.Cog):
 	        part="snippet"
         )
         response = request.execute()
-        video_id = r['items'][0]['id']['videoId']
+        video_id = response['items'][0]['id']['videoId']
         
         voice_channel = author.voice_channel
         vc = await client.join_voice_channel(voice_channel)
