@@ -28,7 +28,7 @@ class Voice(commands.Cog):
 			video_id = response['items'][0]['id']['videoId']
 			async with ctx.typing():
 				player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
-				ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else await next_song())
+				ctx.voice_client.play(player, after=await next_song())
 			await ctx.send("Playing")
 		
 		request = self.client.youtube.search().list(
@@ -42,7 +42,7 @@ class Voice(commands.Cog):
 		if ctx.voice_client.is_playing() == False:
 			async with ctx.typing():
 				player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
-				ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else await next_song())
+				ctx.voice_client.play(player, after=await next_song())
 			await ctx.send("Playing")
 		else:
 			queue = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 ORDER BY qposition", str(ctx.guild.id))
