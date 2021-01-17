@@ -6,6 +6,21 @@ import random
 import asyncpg
 from googleapiclient.discovery import build
 import youtube_dl
+import ctypes
+import ctypes.util
+ 
+print("ctypes - Find opus:")
+a = ctypes.util.find_library('opus')
+print(a)
+ 
+print("Discord - Load Opus:")
+b = discord.opus.load_opus(a)
+print(b)
+ 
+print("Discord - Is loaded:")
+c = discord.opus.is_loaded()
+print(c)
+
 
 MyDB = os.getenv('DATABASE_URL')
 DB = MyDB.split(":")
@@ -56,7 +71,6 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
