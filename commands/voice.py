@@ -12,7 +12,8 @@ class Voice(commands.Cog):
 	async def play(self, ctx, *, s): 
 		
 		async def next_song(): 
-		
+			
+			await ctx.voice_client.stop()
 			s = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
 			if len(s) == 0:
 				return
