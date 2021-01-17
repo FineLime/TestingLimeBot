@@ -13,7 +13,7 @@ class Voice(commands.Cog):
 		
 		async def next_song(): 
 		
-			s = await self.client.fetch("SELECT * FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
+			s = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
 			if len(s) == 0:
 				return
 
@@ -22,8 +22,8 @@ class Voice(commands.Cog):
 				q=s,
 				part="snippet"
 			)
-			await self.client.execute("DELETE FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
-			await self.client.execute("UPDATE queue SET qposition = qposition - 1 WHERE serverid = $1", str(ctx.guild.id))
+			await self.client.pg_con.execute("DELETE FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
+			await self.client.pg_con.execute("UPDATE queue SET qposition = qposition - 1 WHERE serverid = $1", str(ctx.guild.id))
 			response = request.execute()
 			video_id = response['items'][0]['id']['videoId']
 			async with ctx.typing():
