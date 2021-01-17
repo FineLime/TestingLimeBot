@@ -24,7 +24,7 @@ class Voice(commands.Cog):
 
 			request = self.client.youtube.search().list(
 				maxResults=1,
-				q=s,
+				q=s[0]['squery'],
 				part="snippet"
 			)
 			await self.client.pg_con.execute("DELETE FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
