@@ -6,10 +6,32 @@ class Voice(commands.Cog):
 
 	def __init__(self, client):
 		self.client = client
+		
+	async def next_song(self, ctx): 
+		
+		s = await self.client.fetch("SELECT * FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
+		if len(s) == 0:
+			return
+		
+		request = self.client.youtube.search().list(
+			maxResults=1,
+			q=s,
+			part="snippet"
+		)
+		await self.client.execute("DELETE FROM queue WHERE serverid = $1 AND qposition = 1", str(ctx.guild.id))
+		await self.client.execute("UPDATE queue SET qposition = qposition - 1 WHERE serverid = $1", str(ctx.guild.id))
+		response = request.execute()
+		video_id = response['items'][0]['id']['videoId']
+		async with ctx.typing():
+			player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
+			ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else next_song(self, ctx))
+		await ctx.send("Playing")
 
 	@commands.command()
 	@commands.cooldown(1, 10, BucketType.user)
 	async def play(self, ctx, *, s): 
+		
+		
 		request = self.client.youtube.search().list(
 			maxResults=1,
 			q=s,
@@ -17,12 +39,17 @@ class Voice(commands.Cog):
 		)
 		response = request.execute()
 		video_id = response['items'][0]['id']['videoId']
-
-		async with ctx.typing():
-			player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
-			ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-		await ctx.send("Playing")
 		
+		if ctx.voice_client.is_playing() == False:
+			async with ctx.typing():
+				player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
+				ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else next_song(self, ctx))
+			await ctx.send("Playing")
+		else:
+			queue = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 ORDER BY qposition")
+			await self.client.pg_con.execute("INSERT INTO queue (serverid, userid, squery, qposition) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), str(ctx.author.id), s, len(queue)+1)
+			await ctx.send("Added to queue")
+			
 	@play.before_invoke
 	async def ensure_voice(self, ctx):
 		if ctx.voice_client is None:
@@ -31,8 +58,6 @@ class Voice(commands.Cog):
 			else:
 				await ctx.send("You are not connected to a voice channel.")
 				raise commands.CommandError("Author not connected to a voice channel.")
-		elif ctx.voice_client.is_playing():
-			ctx.voice_client.stop()
 
 
         
