@@ -6,8 +6,6 @@ import random
 import asyncpg
 from googleapiclient.discovery import build
 import youtube_dl
-import ctypes
-import ctypes.util
 
 MyDB = os.getenv('DATABASE_URL')
 DB = MyDB.split(":")
@@ -54,7 +52,8 @@ ytdl_format_options = {
 }
 
 ffmpeg_options = {
-    'options': '-vn'
+    'options': '-vn',
+    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
