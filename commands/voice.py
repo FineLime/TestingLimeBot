@@ -11,16 +11,16 @@ class Voice(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user)
     async def play(self, ctx, *, s): 
         request = self.client.youtube.search().list(
-            maxResults=1,
-            q=s,
-	    part="snippet"
+       		maxResults=1,
+            	q=s,
+	    	part="snippet"
         )
-        response = request.execute()
-        video_id = response['items'][0]['id']['videoId']
-        
-        voice_channel = ctx.author.voice.channel
-        vc = await voice_channel.connect()
-        print(vc)
+       	response = request.execute()
+       	video_id = response['items'][0]['id']['videoId']
+       	
+       	voice_channel = ctx.author.voice.channel
+       	vc = await voice_channel.connect()
+       	print(vc)
 	player = await YTDLSource.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
 	ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
