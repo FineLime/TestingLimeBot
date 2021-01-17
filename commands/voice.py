@@ -21,7 +21,7 @@ class Voice(commands.Cog):
 		voice_channel = ctx.author.voice.channel
 		vc = await voice_channel.connect()
 		print(vc)
-		player = await YTDLSource.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
+		player = await self.client.yt_play.from_url(f"https://www.youtube.com/watch?v={video_id}", loop=self.client.loop, stream=True)
 		ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
 
