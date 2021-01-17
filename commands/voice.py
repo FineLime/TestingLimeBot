@@ -46,7 +46,7 @@ class Voice(commands.Cog):
 				ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else next_song(self, ctx))
 			await ctx.send("Playing")
 		else:
-			queue = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 ORDER BY qposition")
+			queue = await self.client.pg_con.fetch("SELECT * FROM queue WHERE serverid = $1 ORDER BY qposition", str(ctx.guild.id))
 			await self.client.pg_con.execute("INSERT INTO queue (serverid, userid, squery, qposition) VALUES ($1, $2, $3, $4)", str(ctx.guild.id), str(ctx.author.id), s, len(queue)+1)
 			await ctx.send("Added to queue")
 			
