@@ -5,6 +5,7 @@ from discord.ext.commands.cooldowns import BucketType
 import random
 import string
 import asyncio
+from copy import copy
 
 class Eval(commands.Cog): 
 
@@ -62,24 +63,12 @@ class Eval(commands.Cog):
             
     @commands.command()
     @commands.is_owner()
-    async def mimic(self, ctx, user:discord.User, command, *, params=None):
-        command = self.client.get_command(command) 
-        p = ""
-        if params:
-            params = params.split("$")
-            count = 0;
-            for i in command.params.items(): 
-                try:
-                    print(params[count])
-                except:
-                    break;
-                
-                if i[0] not in ["ctx", "self"]:
-                    p += f", {i[0]}={params[count]}"
-                    count += 1
-                
-        ctx.author = user
-        await eval(f"ctx.invoke(self.client.get_command('{command}'){p})")
+    async def sudo(self, ctx, user:discord.User, command):
+        
+        new_message = copy(ctx.message)
+        new_message.author = user
+        new_message.content = ctx.prefix + command
+        await self.client.process_commands(new_message)
         
 def setup(client):
     client.add_cog(Eval(client))
