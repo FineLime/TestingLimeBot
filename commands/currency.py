@@ -666,9 +666,9 @@ class Currency(commands.Cog):
                
                        
                        
-        choices1 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":money_with_wings:", ":apple:", ":grapes:", ":banana:", ":pear:", ":pineapple:"]
-        choices2 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":money_with_wings:", ":apple:", ":grapes:", ":banana:", ":pear:", ":pineapple:"]
-        choices3 = [":seven:", ":cherries:", ":moneybag:", ":gem:", ":money_with_wings:", ":apple:", ":grapes:", ":banana:", ":pear:", ":pineapple:"]
+        choices1 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
+        choices2 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
+        choices3 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
 
         slots1 = random.choice(choices1)
         slots2 = random.choice(choices2)
@@ -699,16 +699,16 @@ class Currency(commands.Cog):
         elif slots1 == slots2 == slots3: 
             if fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6: 
                 winmessage = "That's amazing!" 
-                win = bid*200
+                win = bid*225
             else:
                 winmessage = "Winner!!!"
-                win = bid*120
+                win = bid*125
         elif fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6:  
             winmessage = "Hey, that's pretty cool!" 
             win = bid*80
         elif fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6:
             winmessage = "Not a dub but have a bonus"
-            win = bid*20
+            win = bid*15
         else: 
             winmessage = f"You lost!"
         
