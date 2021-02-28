@@ -1,10 +1,10 @@
 import discord
 import os
-import rule34
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 import random, requests
 import json
+from xml.etree import ElementTree
 
 class Nsfw(commands.Cog): 
 
@@ -34,17 +34,24 @@ class Nsfw(commands.Cog):
             await ctx.send("Sorry, those tags are not allowed")
     
     @commands.command()
-    async def rule34(self, ctx, *, tags): 
+    async def rule34(self, ctx, *, search): 
       if ctx.channel.is_nsfw(): 
         badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
+        r = requests.get(f"https://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=50&tags={search}")
+        r = ElementTree.fromstring(r.content)
+        if int(r.attrib['count']) == 0: 
+            await ctx.send("No posts with those tags found.")
+            return
+        
+        post = r[random.randint(0, int(r.attrib['count'])-1)]
         allowed = True
         for i in badwords:
-            if i in tags.lower():
+            if i in post.attrib['tags'].lower():
                 allowed = False
-        if allowed == True:
-            r34 = rule34.Rule34(self.client.loop)
-            images = await r34.getImageURLS(tags=tags)
-            await ctx.send(random.choice(images))
+                break
+        if allowed:
+            image = post.attrib['file_url']
+            await ctx.send(image)
         else:
             await ctx.send("Sorry, those tags are not allowed")
         
