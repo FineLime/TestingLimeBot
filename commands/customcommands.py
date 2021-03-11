@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
+import random
 
 class CustomCommands(commands.Cog): 
 
@@ -29,6 +30,19 @@ class CustomCommands(commands.Cog):
             response = response.replace("{$2}", params[2])
         except:
             pass
+            
+        while True:
+            
+            rchoice = re.search(r'''{r\.choice\[("[a-zA-Z0-9.,_=+()£$!?' -]+",( |))+"[a-zA-Z0-9.,_=+()£$!?' -]+"\]}''', response)
+            if not r.choice:
+                break
+                
+            choices = response[rchoice.start():rchoice.end()]
+            choices = choices[10:-3]
+            choices = choices.split('",')
+            choice = random.choice(choices).strip()[1:]
+            response = response[0:rchoice.start()] + choice + response[rchoice.end():]
+            
             
         await message.channel.send(response)
          
