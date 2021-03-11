@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 import random
+import re
 
 class CustomCommands(commands.Cog): 
 
