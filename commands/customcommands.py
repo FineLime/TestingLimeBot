@@ -35,7 +35,7 @@ class CustomCommands(commands.Cog):
         while True:
             
             rchoice = re.search(r'''{r\.choice\[("[a-zA-Z0-9.,_=+()£$!?' -]+",( |))+"[a-zA-Z0-9.,_=+()£$!?' -]+"\]}''', response)
-            if not r.choice:
+            if not rchoice:
                 break
                 
             choices = response[rchoice.start():rchoice.end()]
