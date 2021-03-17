@@ -37,6 +37,7 @@ class Nsfw(commands.Cog):
     async def rule34(self, ctx, *, search): 
       if ctx.channel.is_nsfw(): 
         badwords = ['cub', 'shota', 'loli', 'little', 'young', 'age_difference']
+        search = search.replace(" ", "+")
         r = requests.get(f"https://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=50&tags={search}")
         r = ElementTree.fromstring(r.content)
         if int(r.attrib['count']) == 0: 
