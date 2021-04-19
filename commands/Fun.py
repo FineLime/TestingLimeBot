@@ -24,7 +24,7 @@ class Fun(commands.Cog):
             pass
     
     @commands.command()
-    @commands.cooldown(1, 20, BucketType.user)
+    @commands.cooldown(1, 10, BucketType.user)
     async def hex(self, ctx, hex): 
         
         webhexcolor = hex
