@@ -47,7 +47,7 @@ class CustomCommands(commands.Cog):
         while True:
             
             ifs = re.search(r'''{if {\$[1-9]} == [a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+:[a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+}''', response)
-            if not rchoice:
+            if not ifs:
                 break
                 
             ifs = response[rchoice.start():rchoice.end()]
@@ -65,6 +65,8 @@ class CustomCommands(commands.Cog):
                 response = response[0:rchoice.start()] + response + response[rchoice.end():]
             else: 
                 response = response[0:rchoice.start()] + response[rchoice.end():]
+                
+            #response = f'Check 1: {check1} \nCheck2: {check2} \nCheckTrueOrFalse: {check1.lower() == check2.lower()} \nResponse:{response}'
             
             
         await message.channel.send(response)
