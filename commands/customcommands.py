@@ -46,11 +46,11 @@ class CustomCommands(commands.Cog):
             
         while True:
             
-            ifs = re.search(r'''{if {\$[1-9]} == [a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+:[a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+}''', response)
-            if not ifs:
+            ifr = re.search(r'''{if {\$[1-9]} == [a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+:[a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+}''', response)
+            if not ifr:
                 break
                 
-            ifs = response[rchoice.start():rchoice.end()]
+            ifs = response[ifr.start():ifr.end()]
             ifs = ifs[4:-1]
             ifs = ifs.split(' == ')
             check1 = ifs[0]
@@ -62,9 +62,9 @@ class CustomCommands(commands.Cog):
             print(check1 == check2)
             print(response)
             if check1.lower() == check2.lower():
-                response = response[0:rchoice.start()] + response + response[rchoice.end():]
+                response = response[0:ifr.start()] + response + response[ifr.end():]
             else: 
-                response = response[0:rchoice.start()] + response[rchoice.end():]
+                response = response[0:ifr.start()] + response[ifr.end():]
                 
             #response = f'Check 1: {check1} \nCheck2: {check2} \nCheckTrueOrFalse: {check1.lower() == check2.lower()} \nResponse:{response}'
             
