@@ -44,6 +44,22 @@ class CustomCommands(commands.Cog):
             choice = random.choice(choices).strip()[1:]
             response = response[0:rchoice.start()] + choice + response[rchoice.end():]
             
+        while True:
+            
+            ifs = re.search(r'''{if {\$[1-9]} == [a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+:[a-zA-Z0-9!?,.@';#~+=_$%^&()" -]+}''', response)
+            if not rchoice:
+                break
+                
+            ifs = response[rchoice.start():rchoice.end()]
+            ifs = ifs[4:-1]
+            ifs = ifs.split(' == ')
+            check1 = ifs[0]
+            ifs = ifs[1].split(":")
+            check2 = ifs[0]
+            response = ifs[1]
+            if check.lower() == check2.lower():
+                response = response[0:rchoice.start()] + response + response[rchoice.end():]
+            
             
         await message.channel.send(response)
          
