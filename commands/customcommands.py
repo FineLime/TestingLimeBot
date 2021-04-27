@@ -57,7 +57,11 @@ class CustomCommands(commands.Cog):
             ifs = ifs[1].split(":")
             check2 = ifs[0]
             response = ifs[1]
-            if check.lower() == check2.lower():
+            print(check1)
+            print(check2)
+            print(check1 == check2)
+            print(response)
+            if check1.lower() == check2.lower():
                 response = response[0:rchoice.start()] + response + response[rchoice.end():]
             else: 
                 response = response[0:rchoice.start()] + response[rchoice.end():]
