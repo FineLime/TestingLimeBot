@@ -59,6 +59,8 @@ class CustomCommands(commands.Cog):
             response = ifs[1]
             if check.lower() == check2.lower():
                 response = response[0:rchoice.start()] + response + response[rchoice.end():]
+            else: 
+                response = response[0:rchoice.start()] + response[rchoice.end():]
             
             
         await message.channel.send(response)
