@@ -56,13 +56,13 @@ class CustomCommands(commands.Cog):
             check1 = ifs[0]
             ifs = ifs[1].split(":")
             check2 = ifs[0]
-            response = ifs[1]
+            r = ifs[1]
             print(check1)
             print(check2)
             print(check1 == check2)
-            print(response)
+            print(r)
             if check1.lower() == check2.lower():
-                response = response[0:ifr.start()] + response + response[ifr.end():]
+                response = response[0:ifr.start()] + r + response[ifr.end():]
             else: 
                 response = response[0:ifr.start()] + response[ifr.end():]
                 
