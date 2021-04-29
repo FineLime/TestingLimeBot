@@ -51,15 +51,6 @@ class CustomCommands(commands.Cog):
             else: 
                 response = response[0:ifr.start()] + response[ifr.end():]
         
-        try:
-            response = response.replace("{$1}", params[1])
-        except:
-            pass
-        try:
-            response = response.replace("{$2}", params[2])
-        except:
-            pass
-        
         dontGetStuckInLoop = []
         while True: 
             
@@ -75,7 +66,7 @@ class CustomCommands(commands.Cog):
             
             paramNum = response[userparam.start():userparam.end()]
             paramNum = paramNum[2:-1]
-            r = params[int(paraNum)]
+            r = params[int(paramNum)]
             response = response[0:userparam.start()] + r + response[userparam.end():]
             
             
