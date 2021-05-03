@@ -35,7 +35,7 @@ class Currency(commands.Cog):
             user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
         
             if len(user) == 0: 
-                await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time) VALUES ($1, $2, $3, $4)", str(author.id), str(message.guild.id), 100, str(int(time.time())))
+                await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time, coinsf) VALUES ($1, $2, $3, $4, $5)", str(author.id), str(message.guild.id), 100, str(int(time.time())), 0)
                 return
             
             user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
