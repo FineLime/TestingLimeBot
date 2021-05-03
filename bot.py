@@ -27,10 +27,6 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=inte
 client.remove_command("help")
 
 
-api_key = os.getenv('google_key')
-client.youtube = build('youtube', 'v3', developerKey=api_key)
-
-
 status = "for ;help commands"
 
 @client.event
