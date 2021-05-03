@@ -32,7 +32,7 @@ class Crypto(commands.Cog):
         for i in coins: 
             crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={i["crypto"]}USDT')
             price = float(json.loads(crypto.content)['price'])
-            total = "{:.5f}".format(i["amount"]*float(price))
+            total = "{:.5f}".format(float(i["amount"])*float(price))
             msg += f'Crypto: {i["crypto"]} - Price: {price} - Amount: {i["amount"]} - Total: ${total} \n'
                 
         await ctx.send(f"Your wallet: \n\n{msg}")
