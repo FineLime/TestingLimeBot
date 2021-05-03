@@ -50,7 +50,7 @@ class Crypto(commands.Cog):
             await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
             return
         price = json.loads(crypto.content)['price'] 
-        wallet = await self.client.pg_con.fetch("SELECT * FROM crypto WHERE serverid=$1 AND userid=$2 AND crypto = $3", str(ctx.guild.id), str(ctx.uthor.id), c.upper())
+        wallet = await self.client.pg_con.fetch("SELECT * FROM crypto WHERE serverid=$1 AND userid=$2 AND crypto = $3", str(ctx.guild.id), str(ctx.author.id), c.upper())
         if len(wallet) == 0: 
             await self.client.pg_con.execute("INSERT INTO crypto (userid, serverid, crypto, amount) VALUES ($1, $2, $3, $4)", str(ctx.author.id), str(ctx.guild.id), c.upper(), 0)
         
