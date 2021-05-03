@@ -564,7 +564,7 @@ class Currency(commands.Cog):
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE serverid = $2 AND userid = $3", bid, str(ctx.guild.id), str(ctx.author.id)) 
 
             
-    @commands.command(aliases=["flip", "coin", "flipcoin"])
+    @commands.command(aliases=["flip", "flipcoin"])
     @commands.cooldown(1, 5, BucketType.user)
     async def coinflip(self, ctx, guess, bid:int = 0): 
         guess = guess.lower()
