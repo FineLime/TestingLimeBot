@@ -85,7 +85,7 @@ class Crypto(commands.Cog):
         
         await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", lcoins, str(ctx.author.id), str(ctx.guild.id))
-        await ctx.send(f"Sold {amount} {c.upper} for {lcoins} coins.") 
+        await ctx.send(f"Sold {amount} {c.upper()} for {lcoins} coins.") 
         
 def setup(client):
     client.add_cog(Crypto(client))
