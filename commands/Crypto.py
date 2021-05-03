@@ -18,7 +18,7 @@ class Crypto(commands.Cog):
             return
             
         price = json.loads(crypto.content)['price']
-        await ctx.send(f"The average price of {c.upper()} over the last 5 minutes is \${price}."}
+        await ctx.send(f"The average price of {c.upper()} over the last 5 minutes is \${price}.")
 
         
 def setup(client):
