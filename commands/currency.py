@@ -602,9 +602,9 @@ class Currency(commands.Cog):
             await ctx.send(f"{u.name} has 0 coins.")
             return
         if u == ctx.author:
-            await ctx.send(f"{u.mention}, you have {user[0]['coins']} coin(s)")
+            await ctx.send(f"{u.mention}, you have {user[0]['coins']}{(':.2f'.format(user[0]['coinsf']/(10**str(len(user[0]['coins'])))))[1:]} coins")
         else: 
-            await ctx.send(f"{u.name} has {user[0]['coins']} coin(s)")               
+            await ctx.send(f"{u.name} has {user[0]['coins']}{(':.2f'.format(user[0]['coinsf']/(10**str(len(user[0]['coins'])))))[1:]} coins")               
                            
     @commands.command()
     @commands.cooldown(1, 3, BucketType.user)
