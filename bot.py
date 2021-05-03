@@ -4,8 +4,6 @@ from discord.utils import get
 import os
 import random 
 import asyncpg
-from googleapiclient.discovery import build
-import youtube_dl
 
 MyDB = os.getenv('DATABASE_URL')
 DB = MyDB.split(":")
