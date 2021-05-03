@@ -1,7 +1,4 @@
-discord.py[voice]
-asyncpg==0.18.3
+discord.py
 rule34
 requests
 Pillow
-google-api-python-client
-youtube_dl
