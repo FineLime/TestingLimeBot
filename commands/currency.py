@@ -643,7 +643,7 @@ class Currency(commands.Cog):
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1ORDER BY coins DESC LIMIT 5", str(ctx.guild.id))
         msg = ""    
         for u in range(0, len(user)):
-            msg += f"{u+1}. <@!{user[u]['userid']}> - {user[u]['coins']}\n"            
+            msg += f"{u+1}. <@!{user[u]['userid']}> - {int(user[u]['coins'])}\n"            
         embed = discord.Embed(title=f"Richest in Server", description=msg, color=0x00ff00)
                        
         await ctx.send(embed=embed)
