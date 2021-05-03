@@ -39,6 +39,11 @@ class Crypto(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user) 
     async def buy(self, ctx, c, lcoins:int): 
         
+        try:
+            lcoins = int(lcoins)
+        except: 
+            await ctx.send("No")
+            return
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if len(user) == 0: 
             await ctx.send("You don't have any limecoins") 
