@@ -35,7 +35,7 @@ class Currency(commands.Cog):
             user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
         
             if len(user) == 0: 
-                await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time, coinsf) VALUES ($1, $2, $3, $4, $5)", str(author.id), str(message.guild.id), 100, str(int(time.time())), 0)
+                await self.client.pg_con.execute("INSERT INTO users (userid, serverid, coins, time) VALUES ($1, $2, $3, $4)", str(author.id), str(message.guild.id), 100, str(int(time.time())))
                 return
             
             user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(message.guild.id), str(author.id))
@@ -602,9 +602,9 @@ class Currency(commands.Cog):
             await ctx.send(f"{u.name} has 0 coins.")
             return
         if u == ctx.author:
-            await ctx.send(f"{u.mention}, you have {user[0]['coins']}{(':.2f'.format(user[0]['coinsf']/(10**str(len(user[0]['coins'])))))[1:]} coins")
+            await ctx.send(f"{u.mention}, you have {user[0]['coins']} coins")
         else: 
-            await ctx.send(f"{u.name} has {user[0]['coins']}{(':.2f'.format(user[0]['coinsf']/(10**str(len(user[0]['coins'])))))[1:]} coins")               
+            await ctx.send(f"{u.name} has {user[0]['coins']} coins")               
                            
     @commands.command()
     @commands.cooldown(1, 3, BucketType.user)
