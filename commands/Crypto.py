@@ -39,11 +39,6 @@ class Crypto(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user) 
     async def buy(self, ctx, c, lcoins:int): 
         
-        try:
-            lcoins = int(lcoins)
-        except: 
-            await ctx.send("No")
-            return
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if len(user) == 0: 
             await ctx.send("You don't have any limecoins") 
@@ -59,7 +54,7 @@ class Crypto(commands.Cog):
         if len(wallet) == 0: 
             await self.client.pg_con.execute("INSERT INTO crypto (userid, serverid, crypto, amount) VALUES ($1, $2, $3, $4)", str(ctx.author.id), str(ctx.guild.id), c.upper(), 0)
         
-        amount = float("{:.5f}".format(lcoins/price))
+        amount = float("{:.5f}".format(lcoins/float(price)))
         await self.client.pg_con.execute("UPDATE crypto SET amount = amount + $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", lcoins, str(ctx.author.id), str(ctx.guild.id))
         await ctx.send(f"Bought {amount} {c} for {lcoins}!")
