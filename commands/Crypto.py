@@ -30,7 +30,7 @@ class Crypto(commands.Cog):
         
         msg = ""
         for i in coins: 
-            msg += f'Crypto: {i["crypto"]} - Amount: {i['amount']} \n'
+            msg += f'Crypto: {i["crypto"]} - Amount: {i["amount"]} \n'
                 
         await ctx.send(f"Your wallet: \n\n{msg}")
         
