@@ -1,4 +1,5 @@
 discord.py
+asyncpg
 rule34
 requests
 Pillow
