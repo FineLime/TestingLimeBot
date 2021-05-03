@@ -9,7 +9,7 @@ class Crypto(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(aliases=["crypto"])
     @commands.cooldown(1, 10, BucketType.user)
     async def coin(self, ctx, c): 
         crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
