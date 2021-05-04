@@ -36,14 +36,14 @@ class Crypto(commands.Cog):
             crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={i["crypto"]}USDT')
             if crypto.status_code != 200: 
                 busd = True
-                crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+                crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={i["crypto"]}BUSD') 
                                   
             price = float(json.loads(crypto.content)['price'])
             total = "{:.5f}".format(float(i["amount"])*float(price))
             msg += f'[${i["crypto"]}](https://www.binance.com/en/trade/{i["crypto"]}_{"BUSD" if busd else "USDT"}?type=spot) - Price: {price} - Amount: {i["amount"]} - Total: ${total} \n'
         
-        embed = discord.Embed(title=f"{ctx.author.name}'{'' if ctx.author.name[-1:] == 's' else 's'} Crypto Wallet", description=msg, color=0x00ff00)
-        embed.set_thumbnail(url=ctx.author.avatar_url)                                      
+        embed = discord.Embed(title=f"", description=msg, color=0x00ff00)     
+        embed.set_author(name=f"{ctx.author.name}'{'' if ctx.author.name[-1:] == 's' else 's'} Crypto Wallet", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
         
    
