@@ -14,8 +14,10 @@ class Crypto(commands.Cog):
     async def coin(self, ctx, c): 
         crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
         if crypto.status_code != 200: 
-            await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
-            return
+            crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+            if crypto.status_code != 200:
+                await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
+                return
             
         price = json.loads(crypto.content)['price']
         await ctx.send(f"The average price of {c.upper()} over the last 5 minutes is \${price}.")
@@ -30,12 +32,19 @@ class Crypto(commands.Cog):
         
         msg = ""
         for i in coins: 
+            busd = False
             crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={i["crypto"]}USDT')
+            if crypto.status_code != 200: 
+                busd = True
+                crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+                                  
             price = float(json.loads(crypto.content)['price'])
             total = "{:.5f}".format(float(i["amount"])*float(price))
-            msg += f'Crypto: {i["crypto"]} - Price: {price} - Amount: {i["amount"]} - Total: ${total} \n'
-                
-        await ctx.send(f"Your wallet: \n\n{msg}")
+            msg += f'[${i["crypto"]}](https://www.binance.com/en/trade/{i["crypto"]}_{"BUSD" if busd else "USDT"}?type=spot) - Price: {price} - Amount: {i["amount"]} - Total: ${total} \n'
+        
+        embed = discord.Embed(title=f"{ctx.author.name}'{'' if ctx.author.name[-1:] == 's' else 's'} Crypto Wallet", description=msg, color=0x00ff00)
+        embed.set_thumbnail(url=ctx.author.avatar_url)                                      
+        await ctx.send(embed=embed)
         
    
     @commands.command()
@@ -46,12 +55,21 @@ class Crypto(commands.Cog):
         if len(user) == 0: 
             await ctx.send("You don't have any limecoins") 
             return
+                                  
         if user[0]['coins'] < lcoins: 
             await ctx.send("You don't have that many limecoins") 
+                                  
         crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
+                                  
         if crypto.status_code != 200: 
-            await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
-            return
+                                  
+            crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+                                  
+            if crypto.status_code != 200: 
+                                  
+                await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
+                return
+                                  
         price = json.loads(crypto.content)['price'] 
         wallet = await self.client.pg_con.fetch("SELECT * FROM crypto WHERE serverid=$1 AND userid=$2 AND crypto = $3", str(ctx.guild.id), str(ctx.author.id), c.upper())
         if len(wallet) == 0: 
@@ -80,6 +98,8 @@ class Crypto(commands.Cog):
             return
         
         crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
+        if crypto.status_code != 200: 
+            crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
         price = json.loads(crypto.content)['price'] 
         lcoins = float("{:.5f}".format(amount*float(price)))
         
