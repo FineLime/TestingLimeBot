@@ -62,6 +62,7 @@ class Crypto(commands.Cog):
                                   
         if user[0]['coins'] < lcoins: 
             await ctx.send("You don't have that many limecoins") 
+            return
                                   
         crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
                                   
