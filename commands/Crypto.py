@@ -51,6 +51,10 @@ class Crypto(commands.Cog):
     @commands.cooldown(1, 10, BucketType.user) 
     async def buy(self, ctx, c, lcoins:int): 
         
+        if lcoins <= 0: 
+            await ctx.send("You must invest at least 1 limecoin")
+            return
+                         
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE serverid=$1 AND userid=$2", str(ctx.guild.id), str(ctx.author.id)) 
         if len(user) == 0: 
             await ctx.send("You don't have any limecoins") 
@@ -78,12 +82,16 @@ class Crypto(commands.Cog):
         amount = float("{:.5f}".format(lcoins/float(price)))
         await self.client.pg_con.execute("UPDATE crypto SET amount = amount + $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
         await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", lcoins, str(ctx.author.id), str(ctx.guild.id))
-        await ctx.send(f"Bought {amount} {c} for {lcoins}!")
+        await ctx.send(f"Bought {amount} {c} for {lcoins} limecoins!")
 
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
     async def sell(self, ctx, c, amount:float): 
         
+        if amount <= 0: 
+            await ctx.send(f"You must withdraw at least 1 {c.upper()}")
+            return
+                         
         if len(str(amount).split('.')[1]) > 5: 
             await ctx.send("Max 5 decimal places")
             return 
