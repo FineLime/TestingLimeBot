@@ -98,7 +98,7 @@ class Crypto(commands.Cog):
             amount = float(amount)
         except: 
             if amount in ["*", "max", "all"]: 
-                amount = wallet[0]["amount"]
+                amount = float(wallet[0]["amount"])
             else:
                 await ctx.send("Amount must be a number or 'all'")
                 return
