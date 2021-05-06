@@ -98,7 +98,7 @@ class Crypto(commands.Cog):
             amount = float(amount)
         except: 
             if amount in ["*", "max", "all"]: 
-                await self.client.pg_con.execute("DELETE FROM crypto WHERE WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
+                await self.client.pg_con.execute("DELETE FROM crypto WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
                 amount = float(wallet[0]["amount"])
                          
                 crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
@@ -134,7 +134,7 @@ class Crypto(commands.Cog):
         lcoins = float("{:.5f}".format(amount*float(price)))
         
         if wallet[0]['amount'] - amount == 0: 
-            await self.client.pg_con.execute("DELETE FROM crypto WHERE WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
+            await self.client.pg_con.execute("DELETE FROM crypto WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
         else:
             await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
         
