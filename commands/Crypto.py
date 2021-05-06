@@ -87,8 +87,22 @@ class Crypto(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 10, BucketType.user)
-    async def sell(self, ctx, c, amount:float): 
+    async def sell(self, ctx, c, amount): 
         
+        wallet = await self.client.pg_con.fetch("SELECT * FROM crypto WHERE serverid=$1 AND userid=$2 AND crypto = $3", str(ctx.guild.id), str(ctx.author.id), c.upper())
+        if len(wallet) == 0: 
+            await ctx.send("Crypto not found in your wallet") 
+            return
+                         
+        try: 
+            amount = float(amount)
+        except: 
+            if amount in ["*", "max", "all"]: 
+                amount = wallet[0]["amount"]
+            else:
+                await ctx.send("Amount must be a number or 'all'")
+                return
+                         
         if amount <= 0: 
             await ctx.send(f"You must withdraw at least 1 {c.upper()}")
             return
@@ -96,11 +110,6 @@ class Crypto(commands.Cog):
         if len(str(amount).split('.')[1]) > 5: 
             await ctx.send("Max 5 decimal places")
             return 
-        
-        wallet = await self.client.pg_con.fetch("SELECT * FROM crypto WHERE serverid=$1 AND userid=$2 AND crypto = $3", str(ctx.guild.id), str(ctx.author.id), c.upper())
-        if len(wallet) == 0: 
-            await ctx.send("Crypto not found in your wallet") 
-            return
         
         if amount > wallet[0]['amount']: 
             await ctx.send(f"You don't have that much {c.upper()}.")
@@ -112,7 +121,11 @@ class Crypto(commands.Cog):
         price = json.loads(crypto.content)['price'] 
         lcoins = float("{:.5f}".format(amount*float(price)))
         
-        await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
+        if wallet[0]['amount'] - amount == 0: 
+            await self.client.pg_con.execute("DELETE FROM crypto WHERE WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
+        else:
+            await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", amount, str(ctx.author.id), str(ctx.guild.id), c.upper())
+        
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", lcoins, str(ctx.author.id), str(ctx.guild.id))
         await ctx.send(f"Sold {amount} {c.upper()} for {lcoins} coins.") 
         
