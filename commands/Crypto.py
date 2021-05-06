@@ -98,13 +98,25 @@ class Crypto(commands.Cog):
             amount = float(amount)
         except: 
             if amount in ["*", "max", "all"]: 
+                await self.client.pg_con.execute("DELETE FROM crypto WHERE WHERE userid = $1 AND serverid = $2 AND crypto = $3", str(ctx.author.id), str(ctx.guild.id), c.upper())
                 amount = float(wallet[0]["amount"])
+                         
+                crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
+                if crypto.status_code != 200: 
+                    crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+                price = json.loads(crypto.content)['price'] 
+                lcoins = float("{:.5f}".format(amount*float(price)))
+                         
+                await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", lcoins, str(ctx.author.id), str(ctx.guild.id))
+                await ctx.send(f"Sold all of your {c.upper()} for {lcoins}")
+                return
+                         
             else:
                 await ctx.send("Amount must be a number or 'all'")
                 return
                          
         if amount <= 0: 
-            await ctx.send(f"You must withdraw at least 1 {c.upper()}")
+            await ctx.send(f"You must withdraw more than 0 {c.upper()}")
             return
                          
         if len(str(amount).split('.')[1]) > 5: 
