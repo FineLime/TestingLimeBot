@@ -8,18 +8,48 @@ class Crypto(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
+    
+    @tasks.loop(seconds=61)
+    async def update_crypto(self):
+        
+        cryptoList = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
+        for c in self.client.crypto: 
+            
+            crypto = self.client.crypto[c]
+            compare = cryptoList[crypto['id']] 
+            if compare['symbol'][:-4] == crypto['symbol'] and compare['symbol'].endswith(("BUSD", "USDT", "USDC")): 
+                cryptoid = crypto['id']
+                self.client.crypto[c] = compare
+                self.client.crypto[c]['id'] = cryptoid
+                continue 
+          
+            await asyncio.sleep(60/len(self.client.crypto))
+                
+        crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
+        for index, i in enumerate(crypto): 
+        if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in client.crypto: 
+            self.client.crypto[i['symbol'][:-4]] = i
+            self.client.crypto[i['symbol'][:-4]]['id'] = index
+            
+        break
+    
     @commands.command(aliases=["crypto"])
     @commands.cooldown(1, 10, BucketType.user)
     async def coin(self, ctx, c): 
-        crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
-        if crypto.status_code != 200: 
-            crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
-            if crypto.status_code != 200:
-                await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
-                return
+        
+        #crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}USDT')
+        #if crypto.status_code != 200: 
+        #    crypto = requests.get(f'https://api.binance.com/api/v3/avgPrice?symbol={c.upper()}BUSD') 
+        #    if crypto.status_code != 200:
+        #        await ctx.send("An error occurred trying to retrieve this crypto, please make sure it exists.")
+        #        return
             
-        price = json.loads(crypto.content)['price']
+        #price = json.loads(crypto.content)['price']
+        
+        try:
+            price = self.client.crypto[c.upper()]['lastPrice']
+        except: 
+            await ctx.send("Crypto not found.")
         await ctx.send(f"The average price of {c.upper()} over the last 5 minutes is \${price}.")
         
     @commands.command()
