@@ -22,17 +22,17 @@ class Crypto(commands.Cog):
                 cryptoid = crypto['id']
                 self.client.crypto[c] = compare
                 self.client.crypto[c]['id'] = cryptoid
+                await asyncio.sleep(60/len(self.client.crypto))
                 continue 
           
-            await asyncio.sleep(60/len(self.client.crypto))
-                
+            break
+            
         crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
         for index, i in enumerate(crypto): 
             if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in client.crypto: 
                 self.client.crypto[i['symbol'][:-4]] = i
                 self.client.crypto[i['symbol'][:-4]]['id'] = index
             
-        break
     
     @commands.command(aliases=["crypto"])
     @commands.cooldown(1, 10, BucketType.user)
