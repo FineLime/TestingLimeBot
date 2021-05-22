@@ -1,5 +1,5 @@
 discord.py
-asyncpg
+asyncpg=0.21.0
 rule34
 requests
 Pillow
