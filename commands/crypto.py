@@ -8,6 +8,7 @@ class Crypto(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.update_crypto.start()
     
     @tasks.loop(seconds=61)
     async def update_crypto(self):
