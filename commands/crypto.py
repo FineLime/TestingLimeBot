@@ -29,7 +29,7 @@ class Crypto(commands.Cog):
             
         crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
         for index, i in enumerate(crypto): 
-            if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in client.crypto: 
+            if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in self.client.crypto: 
                 self.client.crypto[i['symbol'][:-4]] = i
                 self.client.crypto[i['symbol'][:-4]]['id'] = index
             
