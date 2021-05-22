@@ -4,6 +4,8 @@ from discord.utils import get
 import os
 import random 
 import asyncpg
+import requests
+import json
 
 MyDB = os.getenv('DATABASE_URL')
 DB = MyDB.split(":")
@@ -28,6 +30,14 @@ client.remove_command("help")
 
 
 status = "for ;help commands"
+
+client.crypto = {}
+crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
+for index, i in enumerate(crypto): 
+    if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in client.crypto: 
+        client[i['symbol'][:-4]] = i
+        client[i['symbol'][:-4]]['id'] = index
+
 
 @client.event
 async def on_ready():
