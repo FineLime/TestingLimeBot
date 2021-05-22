@@ -35,8 +35,8 @@ client.crypto = {}
 crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
 for index, i in enumerate(crypto): 
     if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in client.crypto: 
-        client[i['symbol'][:-4]] = i
-        client[i['symbol'][:-4]]['id'] = index
+        client.crypto[i['symbol'][:-4]] = i
+        client.crypto[i['symbol'][:-4]]['id'] = index
 
 
 @client.event
