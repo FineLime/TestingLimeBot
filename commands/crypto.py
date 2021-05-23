@@ -10,6 +10,7 @@ class Crypto(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.update_crypto.start()
+        asyncio.sleep(10)
         self.do_limits.start()
     
     @tasks.loop(seconds=61)
