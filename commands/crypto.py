@@ -22,7 +22,7 @@ class Crypto(commands.Cog):
             print(f"Crypto: {crypto}")
             compare = cryptoList[crypto['id']] 
             print(compare) 
-            if compare['symbol'][:-4] == crypto['symbol'] and compare['symbol'].endswith(("BUSD", "USDT", "USDC")): 
+            if compare['symbol'] == crypto['symbol']: 
                 cryptoid = crypto['id']
                 self.client.crypto[c] = compare
                 self.client.crypto[c]['id'] = cryptoid
@@ -37,6 +37,7 @@ class Crypto(commands.Cog):
         
         print("Resetting crypto list")
         crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
+        self.client.crypto = {}
         for index, i in enumerate(crypto): 
             if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in self.client.crypto: 
                 self.client.crypto[i['symbol'][:-4]] = i
