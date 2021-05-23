@@ -13,20 +13,29 @@ class Crypto(commands.Cog):
     @tasks.loop(seconds=61)
     async def update_crypto(self):
         
+        print("updating crypto prices")
         cryptoList = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
+        dontRefresh = True
         for c in self.client.crypto: 
             
             crypto = self.client.crypto[c]
+            print(f"Crypto: {crypto}")
             compare = cryptoList[crypto['id']] 
+            print(compare) 
             if compare['symbol'][:-4] == crypto['symbol'] and compare['symbol'].endswith(("BUSD", "USDT", "USDC")): 
                 cryptoid = crypto['id']
                 self.client.crypto[c] = compare
                 self.client.crypto[c]['id'] = cryptoid
                 await asyncio.sleep(60/len(self.client.crypto))
                 continue 
-          
-            break
             
+            dontRefresh = False
+            break
+        
+        if dontRefresh: 
+            return
+        
+        print("Resetting crypto list")
         crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
         for index, i in enumerate(crypto): 
             if i['symbol'].endswith(("BUSD", "USDT", "USDC")) and i['symbol'][:-4] not in self.client.crypto: 
