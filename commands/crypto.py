@@ -88,7 +88,7 @@ class Crypto(commands.Cog):
                     await user.send(f"You sold {coinsAmount} of {limit['coin']} for {price} limecoins in {server.name} with your limit sell.")
                     
                     
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, pass_context=True)
     @commands.cooldown(1, 5, BucketType.user)
     async def limit(self, ctx): 
         
