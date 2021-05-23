@@ -95,7 +95,7 @@ class Crypto(commands.Cog):
         await ctx.send("You can automatically buy/sell crypto with limits, i will add info on how it works later") 
         
     @limit.command()
-    async def buy(self, coin, price:float, percentage:int): 
+    async def buy(self, ctx, coin, price:float, percentage:int): 
         
         coin = coin.upper()
         try: 
