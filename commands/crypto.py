@@ -48,45 +48,49 @@ class Crypto(commands.Cog):
     @tasks.loop(seconds=61)
     async def do_limits(self): 
         
-        limits = await self.client.pg_con.fetch("SELECT * FROM limits")
-        for limit in limits: 
-            coin = self.client.crypto[limit['coin']]
-            if not coin['lastPrice'] <= limit['price'] and limit['type'] == 'buy': 
-                continue
-            if not coin['lastPrice'] >= limit['price'] and limit['type'] == 'sell': 
-                continue
-                
-            server = discord.utils.get(self.client.guilds, id=int(limit['serverid']))
-            user = discord.utils.get(server.members, id=int(limit['userid']))
-            userDB = self.client.pg_con.fetch('SELECT * FROM users WHERE userid = $1 AND serverid = $2', limit['userid'], limit['serverid'])[0]
-            
-            if limit['type'] == 'buy':
-                
-                if userDB['coins'] <= 0: 
-                    await user.send(f"You set up a limit to buy {limit['coin']} for {limit['percentage']} of your coins in {server.name} but you don't have any.")
-                else: 
-                    price = userDB['coins']/100*limit['percentage']
-                    coinsAmount = price/coin['lastPrice']
-                    await self.client.pg_con.execute("UPDATE crypto SET amount = amount + $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", coinsAmount, limit['userid'], limit['serverid'], limit['coin'])
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", price, limit['userid'], limit['serverid'])
-                    await user.send(f"You bought {coinsAmount} of {limit['coin']} for {price} limecoins in {server.name} with your limit buy.")
+        try:
+            limits = await self.client.pg_con.fetch("SELECT * FROM limits")
+            for limit in limits: 
+                coin = self.client.crypto[limit['coin']]
+                if not coin['lastPrice'] <= limit['price'] and limit['type'] == 'buy': 
+                    continue
+                if not coin['lastPrice'] >= limit['price'] and limit['type'] == 'sell': 
+                    continue
+
+                server = discord.utils.get(self.client.guilds, id=int(limit['serverid']))
+                user = discord.utils.get(server.members, id=int(limit['userid']))
+                userDB = self.client.pg_con.fetch('SELECT * FROM users WHERE userid = $1 AND serverid = $2', limit['userid'], limit['serverid'])[0]
+
+                if limit['type'] == 'buy':
+
+                    if userDB['coins'] <= 0: 
+                        await user.send(f"You set up a limit to buy {limit['coin']} for {limit['percentage']} of your coins in {server.name} but you don't have any.")
+                    else: 
+                        price = userDB['coins']/100*limit['percentage']
+                        coinsAmount = price/coin['lastPrice']
+                        await self.client.pg_con.execute("UPDATE crypto SET amount = amount + $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", coinsAmount, limit['userid'], limit['serverid'], limit['coin'])
+                        await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", price, limit['userid'], limit['serverid'])
+                        await user.send(f"You bought {coinsAmount} of {limit['coin']} for {price} limecoins in {server.name} with your limit buy.")
+
+                    await self.client.pg_con.execute("DELETE FROM limits WHERE userid = $1 AND serverid = $2 AND coin = $3 AND price = $4 AND limittype = $5", limit['userid'], limit['serverid'], limit['coin'], limit['price'], limit['limittype'])
+
+                elif limit['type'] == 'sell': 
                     
-                await self.client.pg_con.execute("DELETE FROM limits WHERE userid = $1 AND serverid = $2 AND coin = $3 AND price = $4 AND limittype = $5", limit['userid'], limit['serverid'], limit['coin'], limit['price'], limit['limittype'])
-                
-            elif limit['type'] == 'sell': 
-                
-                crypto = self.client.pg_con.fetch('SELECT * FROM crypto WHERE userid = $1 AND serverid = $2 AND coin = $3', limit['userid'], limit['serverid'], limit['coin']) 
-                if len(crypto) == 0: 
-                    await user.send(f"You set up a limit to sell {limit['percentage']} of your {limit['coin']} in {server.name} but you don't have any.")
-                elif crypto['amount'] <= 0: 
-                    await user.send(f"You set up a limit to sell {limit['percentage']} of your {limit['coin']} in {server.name} but you don't have any.")
-                else: 
-                    crypto = crypto[0]
-                    coinsAmount = crypto['amount']/100*limit['percentage']
-                    limecoins = coinsAmount*coin['lastPrice']
-                    await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", coinsAmount, limit['userid'], limit['serverid'], limit['coin'])
-                    await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", limecoins, limit['userid'], limit['serverid'])
-                    await user.send(f"You sold {coinsAmount} of {limit['coin']} for {price} limecoins in {server.name} with your limit sell.")
+                    crypto = self.client.pg_con.fetch('SELECT * FROM crypto WHERE userid = $1 AND serverid = $2 AND coin = $3', limit['userid'], limit['serverid'], limit['coin']) 
+                    if len(crypto) == 0: 
+                        await user.send(f"You set up a limit to sell {limit['percentage']} of your {limit['coin']} in {server.name} but you don't have any.")
+                    elif crypto['amount'] <= 0: 
+                        await user.send(f"You set up a limit to sell {limit['percentage']} of your {limit['coin']} in {server.name} but you don't have any.")
+                    else: 
+                        crypto = crypto[0]
+                        coinsAmount = crypto['amount']/100*limit['percentage']
+                        limecoins = coinsAmount*coin['lastPrice']
+                        await self.client.pg_con.execute("UPDATE crypto SET amount = amount - $1 WHERE userid = $2 AND serverid = $3 AND crypto = $4", coinsAmount, limit['userid'], limit['serverid'], limit['coin'])
+                        await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", limecoins, limit['userid'], limit['serverid'])
+                        await user.send(f"You sold {coinsAmount} of {limit['coin']} for {price} limecoins in {server.name} with your limit sell.")
+                        
+        except Exception as e: 
+            print(e)
                     
                     
     @commands.group()
