@@ -52,9 +52,9 @@ class Crypto(commands.Cog):
             limits = await self.client.pg_con.fetch("SELECT * FROM limits")
             for limit in limits: 
                 coin = self.client.crypto[limit['coin']]
-                if not coin['lastPrice'] <= limit['price'] and limit['type'] == 'buy': 
+                if not float(coin['lastPrice']) <= float(limit['price']) and limit['type'] == 'buy': 
                     continue
-                if not coin['lastPrice'] >= limit['price'] and limit['type'] == 'sell': 
+                if not float(coin['lastPrice']) >= float(limit['price']) and limit['type'] == 'sell': 
                     continue
 
                 server = discord.utils.get(self.client.guilds, id=int(limit['serverid']))
@@ -63,7 +63,7 @@ class Crypto(commands.Cog):
 
                 if limit['type'] == 'buy':
 
-                    if userDB['coins'] <= 0: 
+                    if float(userDB['coins']) <= 0: 
                         await user.send(f"You set up a limit to buy {limit['coin']} for {limit['percentage']} of your coins in {server.name} but you don't have any.")
                     else: 
                         price = userDB['coins']/100*limit['percentage']
