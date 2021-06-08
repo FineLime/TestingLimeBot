@@ -9,7 +9,7 @@ class AutoMod(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member): 
-		if "twitter.com/h0nde" in member.name: 
+		if "twitter.com/h0nde" in member.name.lower(): 
 			try:
 				await member.ban(reason="spam account") 
 			except: 
