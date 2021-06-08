@@ -4,9 +4,9 @@ from discord.ext.commands.cooldowns import BucketType
 
 class AutoMod(commands.Cog): 
 
-    def __init__(self, client):
-        self.client = client
-
+	def __init__(self, client):
+		self.client = client
+		
 	@commands.Cog.listener()
 	async def on_member_join(self, member): 
 		if "twitter.com/h0nde" in member.name.lower(): 
