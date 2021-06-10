@@ -36,7 +36,6 @@ class FFmpeg(commands.Cog):
 			)
 			asyncio.sleep(10)
 			await ctx.send(file=filename)
-			os.remove(filename)
 
         
 def setup(client):
