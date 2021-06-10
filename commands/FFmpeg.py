@@ -31,9 +31,11 @@ class FFmpeg(commands.Cog):
 			process = (
 				ffmpeg
 				.input("http://cdn.discordapp.com/attachments/481802328702189569/852674636219023420/4efgwu78a0s51.mp4")
-				.output(discord.File(filename), format='mp4', vcodec="libx264", crf="28")
+				.output(filename, format='mp4', vcodec="libx264", crf="28")
 				.run_async()
 			)
+			asyncio.sleep(10)
+			await ctx.send(file=discord.File(filename))
 
         
 def setup(client):
