@@ -16,10 +16,12 @@ class FFmpeg(commands.Cog):
 		try: 
 			file = ctx.message.attachments[0].url 
 		except:
-			pass
+			print("no file")
+			return
 		
 		if not file.endswith((".avi", ".mp4", ".webm", ".mov")): 
-			pass
+			print("REEE")
+			return
 		
 		filename = f'{ctx.message.attachments[0].filename.split(".")[0]}_{random.randint(100, 1000)}_optimized'
 		process = (
