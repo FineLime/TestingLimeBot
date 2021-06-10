@@ -34,8 +34,6 @@ class FFmpeg(commands.Cog):
 				.output(discord.File(filename), format='mp4', vcodec="libx264", crf="28")
 				.run_async()
 			)
-			asyncio.sleep(10)
-			await ctx.send(file=filename)
 
         
 def setup(client):
