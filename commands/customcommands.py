@@ -15,11 +15,14 @@ class CustomCommands(commands.Cog):
         if message.author.bot:
             return
             
-        name = message.content.split(" ")[0].lower()
-        cmd = await self.client.pg_con.fetch('''SELECT * FROM customcommands WHERE commandname = $1 AND serverid = $2''', name, str(message.guild.id))
-        if len(cmd) == 0: 
-            return 
-         
+        try:
+            name = message.content.split(" ")[0].lower()
+            cmd = await self.client.pg_con.fetch('''SELECT * FROM customcommands WHERE commandname = $1 AND serverid = $2''', name, str(message.guild.id))
+            if len(cmd) == 0: 
+                return 
+        except:
+            return
+        
         params = message.content.split(" ")
         response = cmd[0]['response']
         response = response.replace("{user}", message.author.mention)
