@@ -63,11 +63,11 @@ class Eval(commands.Cog):
             
     @commands.command()
     @commands.is_owner()
-    async def sudo(self, ctx, user:discord.User, text):
+    async def sudo(self, ctx, user:discord.User, *, text):
         
         await ctx.message.delete()
         webhook = await ctx.channel.create_webhook(name=user.name)
-        await webhook.send(str(message), username=user.name, avatar_url=user.avatar_url)
+        await webhook.send(str(text), username=user.name, avatar_url=user.avatar_url)
         asyncio.sleep(60)
         await webhook.delete()
         
