@@ -63,12 +63,13 @@ class Eval(commands.Cog):
             
     @commands.command()
     @commands.is_owner()
-    async def sudo(self, ctx, user:discord.User, command):
+    async def sudo(self, ctx, user:discord.User, text):
         
-        new_message = copy(ctx.message)
-        new_message.author = user
-        new_message.content = ctx.prefix + command
-        await self.client.process_commands(new_message)
+        await ctx.message.delete()
+        webhook = await ctx.channel.create_webhook(name=user.name)
+        await webhook.send(str(message), username=user.name, avatar_url=user.avatar_url)
+        asyncio.sleep(60)
+        await webhook.delete()
         
 def setup(client):
     client.add_cog(Eval(client))
