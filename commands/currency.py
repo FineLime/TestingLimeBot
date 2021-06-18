@@ -666,9 +666,9 @@ class Currency(commands.Cog):
                
                        
                        
-        choices1 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
-        choices2 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
-        choices3 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":eggplant:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
+        choices1 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
+        choices2 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
+        choices3 = [":grapes:", ":pear:", ":apple:", ":tangerine:", ":lemon:", ":cherries:", ":avocado:", ":pineapple:", ":peach:", ":strawberry:"]
 
         slots1 = random.choice(choices1)
         slots2 = random.choice(choices2)
@@ -694,7 +694,7 @@ class Currency(commands.Cog):
         win = 0
         if slots1 == slots2 == slots3 and fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6: 
             winmessage = "Holy shit, what the fuck!"
-            win = bid*1500
+            win = bid*4321
                            
         elif slots1 == slots2 == slots3: 
             if fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6: 
@@ -702,10 +702,10 @@ class Currency(commands.Cog):
                 win = bid*225
             else:
                 winmessage = "Winner!!!"
-                win = bid*125
+                win = bid*120
         elif fslots1 == fslots2 == fslots3 and fslots4 == fslots5 == fslots6:  
             winmessage = "Hey, that's pretty cool!" 
-            win = bid*80
+            win = bid*175
         elif fslots1 == fslots2 == fslots3 or fslots4 == fslots5 == fslots6:
             winmessage = "Not a dub but have a bonus"
             win = bid*15
