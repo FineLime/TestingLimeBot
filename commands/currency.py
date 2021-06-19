@@ -694,7 +694,6 @@ class Currency(commands.Cog):
         
         if msg == treasure: 
             
-            temp.remove(f"{treasure}.:door:") 
             reveal = random.choice(temp)
             rnum = int(reveal[0])
             show[rnum-1] = f"{rnum}.:poop:"
