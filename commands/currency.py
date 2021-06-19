@@ -648,6 +648,91 @@ class Currency(commands.Cog):
                        
         await ctx.send(embed=embed)
     
+    
+    @commands.command()
+    @commands.cooldown(1, 5, BucketType.user) 
+    async def montyhall(self, ctx, bid:int=0):
+        
+        def check_door(m): 
+            if ctx.author != m.author:
+                  return False
+                
+            return m.content.lower() in ["1", "2", "3"]
+        
+        def check_choice(m): 
+            if ctx.author != m.author:
+                  return False
+                
+            return m.content.lower() in ["yes", "no"]
+        
+        if bid != 0 and bid < 250: 
+            await ctx.send("Minimum bid is 250")
+            
+        user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
+        if bid > user[0]["coins"]:
+            await ctx.send("You're too poor to bid that much.")
+            return
+        else:
+            await self.client.pg_con.execute("UPDATE users SET coins = coins - $1 WHERE userid = $2 AND serverid = $3", bid, str(ctx.author.id), str(ctx.guild.id))
+            
+        doors = [":poop:", ":poop:", ":poop:"]
+        show = ["1.:door:", "2.:door:", "3.:door:"]
+        fshow = ["1.:poop:", "2.:poop:", "3.:poop:"]
+        
+        treasure = random.randint(1, 3)
+        doors[treasure-1] = ":coin:"
+        fshow[treasure-1] = fshow[treasure-1][0] + ".:coin"
+        
+        embed = discord.Embed(title="Monty Hall", description=f"Behind one of these doors is treasure{' worth ' + str(int(bid/3*2)) + 'coins' if bid > 0 else ' '}, simply select one of these doors for you to open\n\n1.:door: 2.:door: 3.:door:")
+        await ctx.send(embed=embed)
+        msg = await self.client.wait_for('message', timeout=60.0, check=check_door)
+        msg = int(msg)
+        
+        temp = show 
+        temp.remove(f"{str(msg}.:door:")
+        
+        if msg == treasure: 
+            
+            reveal = random.choice(temp)
+            rnum = int(reveal[0])
+            show[rnum-1] = f"{rnum}.:poop:"
+            temp.remove(f"{treasure}.:door:") 
+            final = temp[0]
+            fnum = int(final[0])
+                   
+        else: 
+            
+            temp.remove(f"{treasure}.:door:") 
+            reveal = temp[0]
+            rnum = int(reveal[0]) 
+            show[rnum-1] = f"{rnum}.:poop:"
+            final = f"{treasure}.:door:"
+            fnum = int(final[0])
+                       
+        
+        embed = discord.Embed(title="Monty Hall", description=f"You selelected door {msg}\nI've opened door {rnum} revealing :poop:\nI now give you a choice to switch doors before revealing the treasure. (yes/no)\n\n{show[0]} {show[1]} {show[2]}")
+        await ctx.send(embed=embed)
+        choice = await self.client.wait_for('message', timeout=60.0, check=check_choice)
+                       
+        if choice == "yes": 
+            choice = int(msg)
+        else: 
+            choice = int(fnum)
+                       
+        if choice == treasure: 
+            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is the treasure!\nYou won{' ' + str(int(bid/3*2)) + ' coins' if bid > 0 else ' '}!\n\n{fshow[0]}{fshow[1]}{fshow[2]}")
+            await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bid+int(bid/3*2), str(ctx.author.id), str(ctx.guild.id))           
+        
+        else: 
+            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is :poop:!\nYou lost!\n\n{fshow[0]}{fshow[1]}{fshow[2]}")            
+        
+        await ctx.send(embed=embed)
+        
+            
+            
+        
+        
+    
     @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
     async def slots(self, ctx, bid:int=0): 
@@ -907,7 +992,8 @@ class Currency(commands.Cog):
             message += f"[{i['itemid']}] {i['itemname']}\n"
         embed = discord.Embed(title=f"{ctx.author.name}'s Inventory", description=message)
         await ctx.send(embed=embed)
-            
+         
+    
                            
 def setup(client):
     client.add_cog(Currency(client))
