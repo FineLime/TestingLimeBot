@@ -689,7 +689,7 @@ class Currency(commands.Cog):
         msg = int(msg)
         
         temp = show 
-        temp.remove(f"{str(msg}.:door:")
+        temp.remove(f"{str(msg)}.:door:")
         
         if msg == treasure: 
             
