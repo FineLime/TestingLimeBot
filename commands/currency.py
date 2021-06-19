@@ -714,7 +714,7 @@ class Currency(commands.Cog):
         await ctx.send(embed=embed)
         choice = await self.client.wait_for('message', timeout=60.0, check=check_choice)
                        
-        if choice.content.lower() == "yes": 
+        if choice.content.lower() == "no": 
             choice = int(msg)
         else: 
             choice = int(fnum)
