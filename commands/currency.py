@@ -667,6 +667,7 @@ class Currency(commands.Cog):
         
         if bid != 0 and bid < 250: 
             await ctx.send("Minimum bid is 250")
+            return
             
         user = await self.client.pg_con.fetch("SELECT * FROM users WHERE userid = $1 AND serverid = $2", str(ctx.author.id), str(ctx.guild.id))              
         if bid > user[0]["coins"]:
@@ -681,7 +682,7 @@ class Currency(commands.Cog):
         
         treasure = random.randint(1, 3)
         doors[treasure-1] = ":coin:"
-        fshow[treasure-1] = fshow[treasure-1][0] + ".:coin"
+        fshow[treasure-1] = fshow[treasure-1][0] + ".:coin:"
         
         embed = discord.Embed(title="Monty Hall", description=f"Behind one of these doors is treasure{' worth ' + str(int(bid/3*2)) + 'coins' if bid > 0 else ' '}, simply select one of these doors for you to open\n\n1.:door: 2.:door: 3.:door:")
         await ctx.send(embed=embed)
@@ -720,11 +721,11 @@ class Currency(commands.Cog):
             choice = int(fnum)
                        
         if choice == treasure: 
-            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is the treasure!\nYou won{' ' + str(int(bid/3*2)) + ' coins' if bid > 0 else ' '}!\n\n{fshow[0]}{fshow[1]}{fshow[2]}")
+            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is the treasure!\nYou won{' ' + str(int(bid/3*2)) + ' coins' if bid > 0 else ''}!\n\n{fshow[0]} {fshow[1]} {fshow[2]}")
             await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", bid+int(bid/3*2), str(ctx.author.id), str(ctx.guild.id))           
         
         else: 
-            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is :poop:!\nYou lost!\n\n{fshow[0]}{fshow[1]}{fshow[2]}")            
+            embed = discord.Embed(title="Monty Hall", description=f"All the doors are opened, and behind your choice, door {choice}, is :poop:!\nYou lost!\n\n{fshow[0]} {fshow[1]} {fshow[2]}")            
         
         await ctx.send(embed=embed)
         
