@@ -688,7 +688,7 @@ class Currency(commands.Cog):
         msg = await self.client.wait_for('message', timeout=60.0, check=check_door)
         msg = int(msg.content)
         
-        temp = show 
+        temp = show.copy() 
         temp.remove(f"{str(msg)}.:door:")
         
         if msg == treasure: 
