@@ -686,7 +686,7 @@ class Currency(commands.Cog):
         embed = discord.Embed(title="Monty Hall", description=f"Behind one of these doors is treasure{' worth ' + str(int(bid/3*2)) + 'coins' if bid > 0 else ' '}, simply select one of these doors for you to open\n\n1.:door: 2.:door: 3.:door:")
         await ctx.send(embed=embed)
         msg = await self.client.wait_for('message', timeout=60.0, check=check_door)
-        msg = int(msg)
+        msg = int(msg.content)
         
         temp = show 
         temp.remove(f"{str(msg)}.:door:")
@@ -714,7 +714,7 @@ class Currency(commands.Cog):
         await ctx.send(embed=embed)
         choice = await self.client.wait_for('message', timeout=60.0, check=check_choice)
                        
-        if choice == "yes": 
+        if choice.content.lower() == "yes": 
             choice = int(msg)
         else: 
             choice = int(fnum)
