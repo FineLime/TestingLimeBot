@@ -46,7 +46,7 @@ class Nsfw(commands.Cog):
         
         print(r.attrib['count'])
         print(f"https://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=50&tags={search}")
-        post = r[random.randint(0, int(r.attrib['count'])-1)]
+        post = r[random.randint(0, min(50, int(r.attrib['count'])-1))]
         allowed = True
         for i in badwords:
             if i in post.attrib['tags'].lower():
