@@ -45,7 +45,7 @@ class Currency(commands.Cog):
                 await self.client.pg_con.execute("UPDATE Users SET coins = coins + $1, time = $2 WHERE userid = $3 AND serverid = $4", random.randint(10, 25), str(int(time.time())), str(author.id), str(message.guild.id))
     
     @commands.command()
-    @commands.is_owner()
+    @commands.has_permissions(manage_guild=True)
     async def give(self, ctx, user:discord.User, coins:int):
         await self.client.pg_con.execute("UPDATE users SET coins = coins + $1 WHERE userid = $2 AND serverid = $3", coins, str(user.id), str(ctx.guild.id))
         await ctx.send("Done")
