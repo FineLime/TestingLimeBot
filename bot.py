@@ -29,7 +29,7 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=inte
 client.remove_command("help")
 
 
-status = "for ;help commands"
+status = "anime"
 
 client.crypto = {}
 crypto = json.loads(requests.get("https://api.binance.com/api/v3/ticker/24hr").content)
@@ -49,7 +49,7 @@ async def create_db_pool():
 
 @client.command()
 async def help(ctx):
-    await ctx.send("Find the list of commands at https://finelime.github.io/docs")
+    await ctx.send("Soon")
     
 @client.event
 async def on_guild_remove(guild):
