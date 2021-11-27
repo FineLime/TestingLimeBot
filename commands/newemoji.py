@@ -29,5 +29,24 @@ class NewEmoji(commands.Cog):
         newemote = await ctx.guild.create_custom_emoji(image=img, name=name)
         await ctx.send(f"Created a new emoji! {str(newemote)}")
         
+    @client.command()
+    @commands.has_permissions(manage_emojis=True)
+    async def lotsofemojis(ctx, *, emojis): 
+        emojis = emojis.split(' ')
+        msg = await ctx.send("Creating emojis, please wait...")
+        for i in emojis: 
+            try:
+                i = await PartialEmojiConverter.convert(PartialEmojiConverter, ctx, i)
+                response = requests.get(i.url)
+                print(response)
+                img = BytesIO(response.content).read()
+                newemote = await ctx.guild.create_custom_emoji(image=img, name=i.name)
+                await msg.edit(f"{msg.content} {newemote}")
+                await asyncio.sleep(1.5)
+            except: 
+                await ctx.send(f"Something went wrong trying to steal {i}")
+                continue
+        await ctx.send("Created emojis")
+        
 def setup(client):
     client.add_cog(NewEmoji(client))
