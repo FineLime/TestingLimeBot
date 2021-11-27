@@ -29,9 +29,9 @@ class NewEmoji(commands.Cog):
         newemote = await ctx.guild.create_custom_emoji(image=img, name=name)
         await ctx.send(f"Created a new emoji! {str(newemote)}")
         
-    @client.command()
+    @commands.command()
     @commands.has_permissions(manage_emojis=True)
-    async def lotsofemojis(ctx, *, emojis): 
+    async def lotsofemojis(self, ctx, *, emojis): 
         emojis = emojis.split(' ')
         msg = await ctx.send("Creating emojis, please wait...")
         for i in emojis: 
