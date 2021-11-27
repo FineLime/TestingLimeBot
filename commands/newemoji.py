@@ -19,7 +19,7 @@ class NewEmoji(commands.Cog):
         
     @commands.command()
     @commands.has_permissions(manage_emojis=True)
-    async def ripemoji(ctx, emoji:discord.PartialEmoji, name=None): 
+    async def ripemoji(self, ctx, emoji:discord.PartialEmoji, name=None): 
         if not name: 
             name = emoji.name
 
