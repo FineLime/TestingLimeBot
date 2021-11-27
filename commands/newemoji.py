@@ -14,5 +14,16 @@ class NewEmoji(commands.Cog):
         newemote = await ctx.guild.create_custom_emoji(name=emojiname, image=image)
         await ctx.send(f"Created a new emoji! {str(newemote)}")
         
+    @commands.command()
+    @commands.has_permissions(manage_emojis=True)
+    async def ripemoji(ctx, emoji:discord.PartialEmoji, name=None): 
+
+        if not name:
+            name = emoji.name
+        response = requests.get(emoji.url)
+        img = Image.open(BytesIO(response.content))
+        newemote = await ctx.guild.create_custom_emoji(name=name, image=img)
+        await ctx.send(f"Created a new emoji! {str(newemote)}")
+        
 def setup(client):
     client.add_cog(NewEmoji(client))
